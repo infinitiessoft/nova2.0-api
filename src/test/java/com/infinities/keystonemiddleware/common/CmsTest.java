@@ -1,0 +1,180 @@
+package com.infinities.keystonemiddleware.common;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertPathBuilderException;
+import java.security.cert.CertificateException;
+import java.util.zip.DataFormatException;
+
+import org.bouncycastle.cms.CMSException;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.BaseEncoding;
+import com.google.common.io.Resources;
+import com.infinities.keystonemiddleware.common.Cms.Algorithm;
+import com.infinities.keystonemiddleware.model.RevokedToken;
+import com.infinities.keystonemiddleware.ssl.CertificateVerificationException;
+import com.infinities.skyport.util.JsonUtil;
+import com.infinities.skyport.util.PropertiesHolder;
+
+public class CmsTest {
+
+	private String signed;
+	private String token, token2;
+	private String signingCertFileName;
+	private String signingCaFileName;
+
+
+	@Before
+	public void setUp() throws Exception {
+		URL tokenUrl = Thread.currentThread().getContextClassLoader().getResource("token.txt");
+		token = Resources.toString(tokenUrl, Charsets.UTF_8);
+		
+		URL tokenUrl2 = Thread.currentThread().getContextClassLoader().getResource("token2.txt");
+		token2 = Resources.toString(tokenUrl2, Charsets.UTF_8);
+
+		URL revokedUrl = Thread.currentThread().getContextClassLoader().getResource("revokedwrapper2.txt");
+		RevokedToken revokedWrapper = JsonUtil.readJson(new File(revokedUrl.getPath()), RevokedToken.class);
+		signed = revokedWrapper.getSigned();
+		signingCertFileName = PropertiesHolder.CONFIG_FOLDER + File.separator + "signing_cert.pem";
+		signingCaFileName = PropertiesHolder.CONFIG_FOLDER + File.separator + "cacert.pem";
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testCmsVerifyStringStringString() throws CertificateException, OperatorCreationException,
+			NoSuchAlgorithmException, NoSuchProviderException, CertPathBuilderException, InvalidAlgorithmParameterException,
+			CMSException, IOException, CertificateVerificationException {
+		String verify = Cms.cmsVerify(signed, this.signingCertFileName, this.signingCaFileName);
+		assertEquals("{\"revoked\": []}", verify);
+	}
+
+	@Test
+	public void testCmsVerifyStringStringStringString() throws CertificateException, OperatorCreationException,
+			NoSuchAlgorithmException, NoSuchProviderException, CertPathBuilderException, InvalidAlgorithmParameterException,
+			CMSException, IOException, CertificateVerificationException {
+		String inform = Cms.PKI_ASN1_FORM;
+		String verify = Cms.cmsVerify(signed, this.signingCertFileName, this.signingCaFileName, inform);
+		assertEquals("{\"revoked\": []}", verify);
+	}
+
+	@Test
+	public void testCmsVerifyStringStringStringString2() throws CertificateException, OperatorCreationException,
+			NoSuchAlgorithmException, NoSuchProviderException, CertPathBuilderException, InvalidAlgorithmParameterException,
+			CMSException, IOException, CertificateVerificationException {
+		String inform = Cms.PKI_ASN1_FORM;
+		token = Cms.tokenToCms(this.token);
+		String verify = Cms.cmsVerify(token, this.signingCertFileName, this.signingCaFileName, inform);
+		URL novaUrl = Thread.currentThread().getContextClassLoader().getResource("nova.txt");
+		String expect = Resources.toString(novaUrl, Charsets.UTF_8);
+		assertEquals(expect, verify.trim());
+	}
+
+	@Test
+	public void testCmsVerifyStringStringStringString3() throws CertificateException, OperatorCreationException,
+			NoSuchAlgorithmException, NoSuchProviderException, CertPathBuilderException, InvalidAlgorithmParameterException,
+			CMSException, IOException, CertificateVerificationException {
+		String inform = Cms.PKI_ASN1_FORM;
+		token2 = Cms.tokenToCms(this.token2);
+		String verify = Cms.cmsVerify(token2, this.signingCertFileName, this.signingCaFileName, inform);
+		URL novaUrl = Thread.currentThread().getContextClassLoader().getResource("nova2.txt");
+		String expect = Resources.toString(novaUrl, Charsets.UTF_8);
+		assertEquals(expect, verify.trim());
+	}
+	
+	@Test
+	public void testCmsVerifyStringStringStringString4() throws CertificateException, OperatorCreationException,
+			NoSuchAlgorithmException, NoSuchProviderException, CertPathBuilderException, InvalidAlgorithmParameterException,
+			CMSException, IOException, CertificateVerificationException {
+		URL revokedUrl = Thread.currentThread().getContextClassLoader().getResource("revokedwrapper3.txt");
+		RevokedToken revokedWrapper = JsonUtil.readJson(new File(revokedUrl.getPath()), RevokedToken.class);
+		String signed = revokedWrapper.getSigned();
+		String inform = Cms.PKI_ASN1_FORM;
+		String verify = Cms.cmsVerify(signed, this.signingCertFileName, this.signingCaFileName, inform);
+		assertEquals("{\"revoked\": []}", verify);
+	}
+
+	// @Test
+	// public void testCmsVerifyStringStringStringString3() throws
+	// CertificateException, OperatorCreationException,
+	// NoSuchAlgorithmException, NoSuchProviderException,
+	// CertPathBuilderException, InvalidAlgorithmParameterException,
+	// CMSException, IOException, CertificateVerificationException {
+	// String key = PropertiesHolder.CONFIG_FOLDER + File.separator + "ssl" +
+	// File.separator + "private" + File.separator
+	// + "signing_key.pem";
+	// URL novaUrl =
+	// Thread.currentThread().getContextClassLoader().getResource("nova.txt");
+	// String expect = Resources.toString(novaUrl, Charsets.UTF_8);
+	// Cms.sign(expect, signingCertFileName, key);
+	// }
+
+	@Test
+	public void testIsPkiz() {
+		String tokenid1 = "PKIZ12345";
+		String tokenid2 = "12345";
+		assertTrue(Cms.isPkiz(tokenid1));
+		assertFalse(Cms.isPkiz(tokenid2));
+	}
+
+	@Test
+	public void testIsAsn1Token() {
+		String tokenid1 = "MII12345";
+		String tokenid2 = "12345";
+		assertTrue(Cms.isAsn1Token(tokenid1));
+		assertFalse(Cms.isAsn1Token(tokenid2));
+	}
+
+	@Test
+	public void testPkizUncompress() throws DataFormatException {
+		String tokenid = "12345678910";
+		byte[] compress = CompressionUtils.compress(tokenid.getBytes());
+		String encoded = "PKIZ" + BaseEncoding.base64Url().encode(compress);
+		// String pkiz = "PKIZ" + new String(compress);
+		String ret = Cms.pkizUncompress(encoded);
+		assertEquals(tokenid, ret);
+	}
+
+	@Test
+	public void testTokenToCms() {
+		String tokenid = "12345";
+		String tokenid1 = "-----BEGIN CMS-----\n" + tokenid + "\n-----END CMS-----\n";
+		assertEquals(tokenid1, Cms.tokenToCms(tokenid));
+	}
+
+	@Test
+	public void testCmsHashToken() {
+		String tokenid = "PKIZ12345";
+		assertTrue(Cms.cmsHashToken(tokenid, Algorithm.md5).matches("[a-fA-F0-9]{32}"));
+		String tokenid2 = "12345";
+		assertEquals(tokenid2, Cms.cmsHashToken(tokenid2, Algorithm.md5));
+		String tokenid3 = "MII12345";
+		assertTrue(Cms.cmsHashToken(tokenid3, Algorithm.md5).matches("[a-fA-F0-9]{32}"));
+		assertTrue(Cms.cmsHashToken(tokenid, Algorithm.sha1).matches("[a-fA-F0-9]{40}"));
+		assertEquals(tokenid2, Cms.cmsHashToken(tokenid2, Algorithm.sha1));
+		assertTrue(Cms.cmsHashToken(tokenid3, Algorithm.sha1).matches("[a-fA-F0-9]{40}"));
+
+		assertTrue(Cms.cmsHashToken(tokenid, Algorithm.sha256).matches("[a-fA-F0-9]{64}"));
+		assertEquals(tokenid2, Cms.cmsHashToken(tokenid2, Algorithm.sha256));
+		assertTrue(Cms.cmsHashToken(tokenid, Algorithm.sha256).matches("[a-fA-F0-9]{64}"));
+		assertTrue(Cms.cmsHashToken(tokenid, Algorithm.sha512).matches("[a-fA-F0-9]{128}"));
+		assertEquals(tokenid2, Cms.cmsHashToken(tokenid2, Algorithm.sha512));
+		assertTrue(Cms.cmsHashToken(tokenid, Algorithm.sha512).matches("[a-fA-F0-9]{128}"));
+	}
+
+}

@@ -1,0 +1,89 @@
+package com.infinities.nova.resource;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.api.openstack.common.template.MetaItemTemplate;
+import com.infinities.nova.api.openstack.common.template.MetadataTemplate;
+import com.infinities.nova.api.openstack.compute.servers.metadata.ServerMetadataController;
+import com.infinities.nova.api.openstack.wsgi.Resource;
+
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class ServerMetadataResource {
+
+	private final ServerMetadataController controller;
+
+
+	@Inject
+	public ServerMetadataResource(ServerMetadataController controller) {
+		this.controller = controller;
+	}
+
+	@GET
+	public MetadataTemplate index(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
+			@Context ContainerRequestContext requestContext) throws Exception {
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
+		return controller.index(requestContext, serverId);
+	}
+
+	@POST
+	public MetadataTemplate create(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
+			MetadataTemplate metadata, @Context ContainerRequestContext requestContext) throws Exception {
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
+		return controller.create(requestContext, serverId, metadata);
+	}
+
+	@PUT
+	@Path("{key}")
+	public MetaItemTemplate update(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
+			@PathParam("key") String key, MetaItemTemplate meta, @Context ContainerRequestContext requestContext)
+			throws Exception {
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
+		return controller.update(requestContext, serverId, key, meta);
+	}
+
+	@PUT
+	public MetadataTemplate updateAll(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
+			MetadataTemplate metadata, @Context ContainerRequestContext requestContext) throws Exception {
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
+		return controller.updateAll(requestContext, serverId, metadata);
+	}
+
+	@GET
+	@Path("{key}")
+	public MetaItemTemplate show(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
+			@PathParam("key") String key, @Context ContainerRequestContext requestContext) throws Exception {
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
+		return controller.show(requestContext, serverId, key);
+	}
+
+	@DELETE
+	@Path("{key}")
+	public Response delete(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
+			@PathParam("key") String key, @Context ContainerRequestContext requestContext) throws Exception {
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
+		controller.delete(requestContext, serverId, key);
+		return Response.status(Status.NO_CONTENT).build();
+	}
+
+}
