@@ -13,6 +13,16 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>nova2.0-api</name>
+	<organization>
+		<name>InfinitiesSoft, Inc.</name>
+		<url>http://www.infinitiessoft.com/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
 
 	<dependencies>
 		<dependency>
