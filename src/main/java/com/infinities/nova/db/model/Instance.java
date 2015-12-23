@@ -45,6 +45,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.google.common.base.Strings;
 import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.skyport.compute.entity.NovaStyleVirtualMachine;
+import com.infinities.skyport.network.SkyportRawAddress;
 
 @Entity
 @Table(name = "INSTANCES")
@@ -222,10 +224,9 @@ public class Instance extends AbstractModel implements Target {
 
 	@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.EAGER, orphanRemoval = true)
 	// @JoinColumn(name="USER_ID", nullable=false)
-			@PrimaryKeyJoinColumn
-			// @JoinColumn(name = "INSTANCE_ID")
-			public
-			Fault getFault() {
+	@PrimaryKeyJoinColumn
+	// @JoinColumn(name = "INSTANCE_ID")
+	public Fault getFault() {
 		return fault;
 	}
 
@@ -416,6 +417,67 @@ public class Instance extends AbstractModel implements Target {
 
 	public void setFlavorId(String flavorId) {
 		this.flavorId = flavorId;
+	}
+
+	public static Instance toInstance(NovaStyleVirtualMachine vm) {
+		Instance instance = new Instance();
+		List<Address> addresses = new ArrayList<Address>();
+		String ipv4 = null;
+		String ipv6 = null;
+		for (SkyportRawAddress raw : vm.getPublicAddresses()) {
+			Address address = new Address();
+			address.setAddr(raw.getIpAddress());
+			address.setIpVersion(raw.getVersion().toString());
+			address.setNetwork(raw.getVlanName());
+			addresses.add(address);
+			if (Strings.isNullOrEmpty(ipv4) && IPVersion.IPV4.equals(raw.getVersion())) {
+				ipv4 = raw.getIpAddress();
+			}
+			if (Strings.isNullOrEmpty(ipv6) && IPVersion.IPV6.equals(raw.getVersion())) {
+				ipv6 = raw.getIpAddress();
+			}
+		}
+		for (SkyportRawAddress raw : vm.getPrivateAddresses()) {
+			Address address = new Address();
+			address.setAddr(raw.getIpAddress());
+			address.setIpVersion(raw.getVersion().toString());
+			address.setNetwork(raw.getVlanName());
+			addresses.add(address);
+			if (Strings.isNullOrEmpty(ipv4) && IPVersion.IPV4.equals(raw.getVersion())) {
+				ipv4 = raw.getIpAddress();
+			}
+			if (Strings.isNullOrEmpty(ipv6) && IPVersion.IPV6.equals(raw.getVersion())) {
+				ipv6 = raw.getIpAddress();
+			}
+		}
+		instance.setAccessIpV4(ipv4);
+		instance.setAccessIpV6(ipv6);
+
+		instance.setAddresses(addresses);
+		instance.setTenantId(vm.getProviderOwnerId());
+		instance.setInstanceId(vm.getProviderVirtualMachineId());
+		instance.setName(vm.getName());
+		instance.setMetadata(vm.getTags());
+		instance.setTaskState(vm.getTags().get("OS-EXT-STS:task_state"));
+		instance.setHostId(vm.getTags().get("host"));
+		instance.setImageId(vm.getProviderMachineImageId());
+		instance.setFlavorId(vm.getProductId());
+		instance.setAdminPass(vm.getRootPassword());
+		instance.setProgress(0);
+		if (vm.getProviderShellKeyIds() != null && vm.getProviderShellKeyIds().length > 0) {
+			instance.setKeyName(vm.getProviderShellKeyIds()[0]);
+		}
+
+		instance.setVmState(STATUS_MAP.get(vm.getCurrentState()).toLowerCase());
+		instance.setStatus(STATUS_MAP.get(vm.getCurrentState()));
+		if (vm.getCreationTimestamp() > 0) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(vm.getCreationTimestamp());
+			instance.setCreatedAt(calendar);
+		}
+
+		return instance;
+
 	}
 
 	public static Instance toInstance(VirtualMachine vm) {

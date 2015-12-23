@@ -63,6 +63,7 @@ import com.infinities.skyport.async.AsyncResult;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedMachineImageSupport;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
+import com.infinities.skyport.compute.entity.NovaStyleVirtualMachine;
 import com.infinities.skyport.service.ConfigurationHome;
 
 public class DaseinComputeApi implements ComputeApi {
@@ -152,13 +153,14 @@ public class DaseinComputeApi implements ComputeApi {
 			sortDir = "desc";
 		}
 
-		AsyncResult<Iterable<VirtualMachine>> result = getSupport(context.getProjectId()).listVirtualMachines();
-		Iterable<VirtualMachine> iterable = result.get();
-		Iterator<VirtualMachine> iterator = iterable.iterator();
+		AsyncResult<Iterable<NovaStyleVirtualMachine>> result = getSupport(context.getProjectId())
+				.listNovaStyleVirtualMachines();
+		Iterable<NovaStyleVirtualMachine> iterable = result.get();
+		Iterator<NovaStyleVirtualMachine> iterator = iterable.iterator();
 
 		List<Instance> instances = new ArrayList<Instance>();
 		while (iterator.hasNext()) {
-			VirtualMachine vm = iterator.next();
+			NovaStyleVirtualMachine vm = iterator.next();
 			instances.add(Instance.toInstance(vm));
 		}
 
@@ -261,17 +263,15 @@ public class DaseinComputeApi implements ComputeApi {
 			}, null);
 		}
 
-		Entry<CreateVmBaseOptions, Integer> options =
-				validateAndBuildBaseOptions(context, instType, bootMeta, imageHref, imageId, kernelId, ramDiskId,
-						displayName, displayDescription, keyName, keyData, securityGroups, availabilityZone, forcedHost,
-						userData, metadata, injectedFiles, accessIpV4, accessIpV6, requestedNetworks, configDrive,
-						autoDiskConfig, reservationId, maxCount);
+		Entry<CreateVmBaseOptions, Integer> options = validateAndBuildBaseOptions(context, instType, bootMeta, imageHref,
+				imageId, kernelId, ramDiskId, displayName, displayDescription, keyName, keyData, securityGroups,
+				availabilityZone, forcedHost, userData, metadata, injectedFiles, accessIpV4, accessIpV6, requestedNetworks,
+				configDrive, autoDiskConfig, reservationId, maxCount);
 		CreateVmBaseOptions baseOptions = options.getKey();
 		int num = options.getValue();
 
-		List<Instance> instances =
-				computeTaskApi.buildInstances(context, baseOptions, num, bootMeta, adminPassword, injectedFiles,
-						requestedNetworks, securityGroups);
+		List<Instance> instances = computeTaskApi.buildInstances(context, baseOptions, num, bootMeta, adminPassword,
+				injectedFiles, requestedNetworks, securityGroups);
 
 		return Maps.immutableEntry(instances, reservationId);
 	}
@@ -571,8 +571,8 @@ public class DaseinComputeApi implements ComputeApi {
 	public void snapshot(NovaRequestContext context, Instance instance, String imageName, Map<String, String> metadata)
 			throws Exception {
 		checkPolicy(context, "snapshot", instance, null);
-		VirtualMachine fromVirtualMachine =
-				this.getSupport(context.getProjectId()).getVirtualMachine(instance.getInstanceId()).get();
+		VirtualMachine fromVirtualMachine = this.getSupport(context.getProjectId())
+				.getVirtualMachine(instance.getInstanceId()).get();
 		ImageCreateOptions options = ImageCreateOptions.getInstance(fromVirtualMachine, imageName, null);
 		this.getImageSupport(context.getProjectId()).captureImage(options);
 	}
