@@ -427,7 +427,11 @@ public class Instance extends AbstractModel implements Target {
 		for (SkyportRawAddress raw : vm.getPublicAddresses()) {
 			Address address = new Address();
 			address.setAddr(raw.getIpAddress());
-			address.setIpVersion(raw.getVersion().toString());
+			if (IPVersion.IPV4.equals(raw.getVersion())) {
+				address.setIpVersion("4");
+			} else if (IPVersion.IPV6.equals(raw.getVersion())) {
+				address.setIpVersion("6");
+			}
 			address.setNetwork(raw.getVlanName());
 			addresses.add(address);
 			if (Strings.isNullOrEmpty(ipv4) && IPVersion.IPV4.equals(raw.getVersion())) {
@@ -440,7 +444,11 @@ public class Instance extends AbstractModel implements Target {
 		for (SkyportRawAddress raw : vm.getPrivateAddresses()) {
 			Address address = new Address();
 			address.setAddr(raw.getIpAddress());
-			address.setIpVersion(raw.getVersion().toString());
+			if (IPVersion.IPV4.equals(raw.getVersion())) {
+				address.setIpVersion("4");
+			} else if (IPVersion.IPV6.equals(raw.getVersion())) {
+				address.setIpVersion("6");
+			}
 			address.setNetwork(raw.getVlanName());
 			addresses.add(address);
 			if (Strings.isNullOrEmpty(ipv4) && IPVersion.IPV4.equals(raw.getVersion())) {

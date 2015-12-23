@@ -49,14 +49,12 @@ public class ObjectMapperTest {
 		AnnotationIntrospector introspector = new JaxbAnnotationIntrospector(TypeFactory.defaultInstance());
 		// if using BOTH JAXB annotations AND Jackson annotations:
 		AnnotationIntrospector secondary = new JacksonAnnotationIntrospector();
-		ObjectMapper mapper =
-				new ObjectMapper().registerModule(new Hibernate4Module())
-						.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-						.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"))
-						.enable(SerializationFeature.INDENT_OUTPUT)
-						.setAnnotationIntrospector(new AnnotationIntrospectorPair(introspector, secondary));
+		ObjectMapper mapper = new ObjectMapper().registerModule(new Hibernate4Module())
+				.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+				.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")).enable(SerializationFeature.INDENT_OUTPUT)
+				.setAnnotationIntrospector(new AnnotationIntrospectorPair(introspector, secondary));
 		String text = "{\"pause\":null}";
 		JsonNode node = mapper.readTree(text);
-		Pause p = mapper.treeToValue(node.get("pause"), Pause.class);
+		mapper.treeToValue(node.get("pause"), Pause.class);
 	}
 }
