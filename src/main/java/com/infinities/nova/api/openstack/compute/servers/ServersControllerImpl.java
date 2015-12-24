@@ -55,6 +55,7 @@ import com.infinities.nova.api.exception.http.HTTPForbiddenException;
 import com.infinities.nova.api.exception.http.HTTPNotFoundException;
 import com.infinities.nova.api.exception.http.HTTPUnauthorizedException;
 import com.infinities.nova.api.openstack.Common;
+import com.infinities.nova.api.openstack.compute.extensions.Extensions;
 import com.infinities.nova.api.openstack.compute.servers.api.ComputeApi;
 import com.infinities.nova.common.Config;
 import com.infinities.nova.db.model.Instance;
@@ -381,10 +382,9 @@ public class ServersControllerImpl implements ServersController {
 		boolean checkServerGroupQuota = true;
 
 		Map<String, String> metadata = server.getMetadata();
-		Entry<List<Instance>, UUID> entry =
-				computeApi.create(novaContext, instType, imageUuid, null, null, minCount, maxCount, name, name, keyName,
-						null, sgNames, availabilityZone, userData, metadata, injectedFiles, password, accessIpV4,
-						accessIpV6, requestedNetworks, configDrive, autoDiskConfig, checkServerGroupQuota);
+		Entry<List<Instance>, UUID> entry = computeApi.create(novaContext, instType, imageUuid, null, null, minCount,
+				maxCount, name, name, keyName, null, sgNames, availabilityZone, userData, metadata, injectedFiles, password,
+				accessIpV4, accessIpV6, requestedNetworks, configDrive, autoDiskConfig, checkServerGroupQuota);
 		// .create(novaContext, instType, imageUuid, name, name, keyName,
 		// metadata, accessIpV4, accessIpV6, injectedFiles, password, minCount,
 		// maxCount, requestedNetworks,
@@ -682,9 +682,8 @@ public class ServersControllerImpl implements ServersController {
 	}
 
 	@Override
-	public Response
-			changePassword(String serverId, ContainerRequestContext requestContext, ServerAction.ChangePassword body)
-					throws Exception {
+	public Response changePassword(String serverId, ContainerRequestContext requestContext, ServerAction.ChangePassword body)
+			throws Exception {
 		if (Strings.isNullOrEmpty(body.getAdminPass())) {
 			String msg = "No adminPass was specified";
 			logger.error(msg);
@@ -881,37 +880,7 @@ public class ServersControllerImpl implements ServersController {
 
 	private void authorize(NovaRequestContext context, String actionName) throws Exception {
 		String action = String.format("admin_actions:%s", actionName);
-		extensionAuthorizer("compute", action).authorize(context, null, null);
-	}
-
-	private CoreAuthorizer extensionAuthorizer(String apiName, String extensionName) {
-		return new CoreAuthorizer(String.format("%s_extension", apiName), extensionName);
-	}
-
-
-	private class CoreAuthorizer {
-
-		private String apiName;
-		private String extensionName;
-
-
-		public CoreAuthorizer(String apiName, String extensionName) {
-			this.apiName = apiName;
-			this.extensionName = extensionName;
-		}
-
-		public void authorize(final NovaRequestContext context, Target target, String action) throws Exception {
-			if (target == null) {
-				target = context;
-			}
-			String act;
-			if (Strings.isNullOrEmpty(action)) {
-				act = String.format("%s:%s", apiName, extensionName);
-			} else {
-				act = String.format("%s:%s", apiName, extensionName, action);
-			}
-			Policy.enforce(context, act, target, true, null);
-		}
+		Extensions.extensionAuthorizer("compute", action).authorize(context, null, null);
 	}
 
 }

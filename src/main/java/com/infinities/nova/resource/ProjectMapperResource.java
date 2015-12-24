@@ -45,4 +45,9 @@ public class ProjectMapperResource {
 	public Class<ServersResource> getServersResource() {
 		return ServersResource.class;
 	}
+
+	@Path("os-keypairs")
+	public Class<KeyPairsResource> getKeyPairsResource() {
+		return KeyPairsResource.class;
+	}
 }

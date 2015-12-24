@@ -65,6 +65,16 @@ public class ExtensionsResource {
 		serverStartStopUpdated.setTime(FormatUtil.getDateWithoutMiliSecond("2012-01-23T00:00:00Z"));
 		serverStartStopExtension.setUpdated(serverStartStopUpdated);
 		extensions.getList().add(serverStartStopExtension);
+
+		Extension keyPairsExtension = new Extension();
+		keyPairsExtension.setAlias("os-keypairs");
+		keyPairsExtension.setName("Keypairs");
+		keyPairsExtension.setDescription("Generates, imports, and deletes SSH keys.");
+		keyPairsExtension.setNamespace("http://docs.openstack.org/compute/ext/keypairs/api/v1.1");
+		Calendar keyPairsUpdated = Calendar.getInstance();
+		keyPairsUpdated.setTime(FormatUtil.getDateWithoutMiliSecond("2011-08-08T00:00:00Z"));
+		keyPairsExtension.setUpdated(keyPairsUpdated);
+		extensions.getList().add(keyPairsExtension);
 	}
 
 

@@ -62,9 +62,8 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 			String adminPassword, List<Entry<String, String>> injectedFiles, List<NetworkForCreate> requestedNetworks,
 			List<String> securityGroups) throws CloudException, InternalException, ConcurrentException,
 			InterruptedException, ExecutionException {
-		VMLaunchOptions withLaunchOptions =
-				VMLaunchOptions.getInstance(options.getInstanceTypeId(), bootMeta.getId(), options.getDisplayName(),
-						options.getDisplayDescription());
+		VMLaunchOptions withLaunchOptions = VMLaunchOptions.getInstance(options.getInstanceTypeId(), bootMeta.getId(),
+				options.getDisplayName(), options.getDisplayDescription());
 		String[] firewallIds = new String[securityGroups.size()];
 		try {
 			AsyncFirewallSupport firewallSupport = getNetworkSupport(context.getProjectId());
@@ -191,9 +190,8 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void
-			resizeInstance(NovaRequestContext context, Instance instance, String newInstanceTypeId, boolean cleanShutdown)
-					throws Exception {
+	public void resizeInstance(NovaRequestContext context, Instance instance, String newInstanceTypeId, boolean cleanShutdown)
+			throws Exception {
 		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getInstanceId(), newInstanceTypeId);
 	}
 

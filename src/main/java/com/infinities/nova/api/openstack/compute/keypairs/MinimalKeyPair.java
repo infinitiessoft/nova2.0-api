@@ -13,25 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.api.openstack.compute.keypairs;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * @author pohsun
+ *
+ */
 @XmlRootElement(name = "keypair")
-public class KeyPair implements Serializable {
+public class MinimalKeyPair implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	private String name;
-
-	@XmlElement(name = "user_id")
-	private String userId;
 
 	@XmlElement(name = "public_key")
 	private String publicKey;
@@ -41,19 +41,6 @@ public class KeyPair implements Serializable {
 
 	private String fingerprint;
 
-
-	public KeyPair() {
-		super();
-	}
-
-	public KeyPair(String name) {
-		this.name = name;
-	}
-
-	public KeyPair(String name, String publicKey) {
-		this(name);
-		this.publicKey = publicKey;
-	}
 
 	/**
 	 * @return the name
@@ -68,13 +55,6 @@ public class KeyPair implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the userId
-	 */
-	public String getUserId() {
-		return userId;
 	}
 
 	/**
@@ -93,33 +73,10 @@ public class KeyPair implements Serializable {
 	}
 
 	/**
-	 * @return the privateKey
-	 */
-	public String getPrivateKey() {
-		return privateKey;
-	}
-
-	/**
 	 * @return the fingerprint
 	 */
 	public String getFingerprint() {
 		return fingerprint;
-	}
-
-	/**
-	 * @param userId
-	 *            the userId to set
-	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	/**
-	 * @param privateKey
-	 *            the privateKey to set
-	 */
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
 	}
 
 	/**
@@ -130,15 +87,19 @@ public class KeyPair implements Serializable {
 		this.fingerprint = fingerprint;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the privateKey
 	 */
-	@Override
-	public String toString() {
-		return "KeyPair [name=" + name + ", userId=" + userId + ", publicKey=" + publicKey + ", privateKey=" + privateKey
-				+ ", fingerprint=" + fingerprint + "]";
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	/**
+	 * @param privateKey
+	 *            the privateKey to set
+	 */
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
 	}
 
 }
