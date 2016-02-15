@@ -1,0 +1,14 @@
+1.add server
+
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -d '{"server":{"name":"demo","imageRef":"b1222a92-3bb1-4065-a9ca-cd11caef568f", "flavorRef":"922faa0a-ae78-499c-a494-bfc6e2c26a00","metadata":{"My Server Name":"Apache1"}, "networks":[{"uuid":"ce31c600-7f4c-45f7-8e3b-1b237e52eaa4"}]}}' -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers
+
+response:
+HTTP/1.1 202 Accepted
+Location: http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3
+Content-Type: application/json
+Content-Length: 440
+X-Compute-Request-Id: req-7f71637a-be94-4aab-a356-f4926902122e
+Date: Fri, 05 Feb 2016 08:29:25 GMT
+
+{"server": {"security_groups": [{"name": "default"}], "OS-DCF:diskConfig": "MANUAL", "id": "1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "rel": "bookmark"}], "adminPass": "mrU4Kx9cFsLi"}}

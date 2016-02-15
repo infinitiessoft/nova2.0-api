@@ -153,8 +153,8 @@ public class DaseinComputeApi implements ComputeApi {
 			sortDir = "desc";
 		}
 
-		AsyncResult<Iterable<NovaStyleVirtualMachine>> result = getSupport(context.getProjectId())
-				.listNovaStyleVirtualMachines();
+		AsyncResult<Iterable<NovaStyleVirtualMachine>> result =
+				getSupport(context.getProjectId()).listNovaStyleVirtualMachines();
 		Iterable<NovaStyleVirtualMachine> iterable = result.get();
 		Iterator<NovaStyleVirtualMachine> iterator = iterable.iterator();
 
@@ -200,7 +200,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public Entry<List<Instance>, UUID> create(NovaRequestContext context, InstanceType instType, String imageHref,
+	public Entry<List<Instance>, UUID> create(NovaRequestContext context, String flavorId, String imageHref,
 			String kernelId, String ramDiskId, Integer minCount, Integer maxCount, String displayName,
 			String displayDescription, String keyName, String keyData, List<String> securityGroup, String availabilityZone,
 			String userData, Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
@@ -214,13 +214,13 @@ public class DaseinComputeApi implements ComputeApi {
 		}
 
 		boolean shutdownTerminate = false;
-		return createInstance(context, instType, imageHref, kernelId, ramDiskId, minCount, maxCount, displayName,
+		return createInstance(context, flavorId, imageHref, kernelId, ramDiskId, minCount, maxCount, displayName,
 				displayDescription, keyName, keyData, securityGroup, availabilityZone, userData, metadata, injectedFiles,
 				adminPassword, accessIpV4, accessIpV6, requestedNetworks, configDrive, autoDiskConfig, shutdownTerminate,
 				checkServerGroupQuota);
 	}
 
-	private Entry<List<Instance>, UUID> createInstance(NovaRequestContext context, InstanceType instType, String imageHref,
+	private Entry<List<Instance>, UUID> createInstance(NovaRequestContext context, String flavorId, String imageHref,
 			String kernelId, String ramDiskId, Integer minCount, Integer maxCount, String displayName,
 			String displayDescription, String keyName, String keyData, List<String> securityGroups, String availabilityZone,
 			String userData, Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
@@ -247,6 +247,8 @@ public class DaseinComputeApi implements ComputeApi {
 			imageId = bootMeta.getId();
 		}
 
+		InstanceType instanceType = flavorsApi.getFlavorByFlavorId(flavorId, context, "no");
+
 		AvailabilityZone az = handleAvailabilityZone(context, availabilityZone);
 		availabilityZone = az.getZone();
 		String forcedHost = az.getHost();
@@ -263,15 +265,17 @@ public class DaseinComputeApi implements ComputeApi {
 			}, null);
 		}
 
-		Entry<CreateVmBaseOptions, Integer> options = validateAndBuildBaseOptions(context, instType, bootMeta, imageHref,
-				imageId, kernelId, ramDiskId, displayName, displayDescription, keyName, keyData, securityGroups,
-				availabilityZone, forcedHost, userData, metadata, injectedFiles, accessIpV4, accessIpV6, requestedNetworks,
-				configDrive, autoDiskConfig, reservationId, maxCount);
+		Entry<CreateVmBaseOptions, Integer> options =
+				validateAndBuildBaseOptions(context, instanceType, bootMeta, imageHref, imageId, kernelId, ramDiskId,
+						displayName, displayDescription, keyName, keyData, securityGroups, availabilityZone, forcedHost,
+						userData, metadata, injectedFiles, accessIpV4, accessIpV6, requestedNetworks, configDrive,
+						autoDiskConfig, reservationId, maxCount);
 		CreateVmBaseOptions baseOptions = options.getKey();
 		int num = options.getValue();
 
-		List<Instance> instances = computeTaskApi.buildInstances(context, baseOptions, num, bootMeta, adminPassword,
-				injectedFiles, requestedNetworks, securityGroups);
+		List<Instance> instances =
+				computeTaskApi.buildInstances(context, baseOptions, num, bootMeta, adminPassword, injectedFiles,
+						requestedNetworks, securityGroups);
 
 		return Maps.immutableEntry(instances, reservationId);
 	}
@@ -571,8 +575,8 @@ public class DaseinComputeApi implements ComputeApi {
 	public void snapshot(NovaRequestContext context, Instance instance, String imageName, Map<String, String> metadata)
 			throws Exception {
 		checkPolicy(context, "snapshot", instance, null);
-		VirtualMachine fromVirtualMachine = this.getSupport(context.getProjectId())
-				.getVirtualMachine(instance.getInstanceId()).get();
+		VirtualMachine fromVirtualMachine =
+				this.getSupport(context.getProjectId()).getVirtualMachine(instance.getInstanceId()).get();
 		ImageCreateOptions options = ImageCreateOptions.getInstance(fromVirtualMachine, imageName, null);
 		this.getImageSupport(context.getProjectId()).captureImage(options);
 	}

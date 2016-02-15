@@ -27,35 +27,35 @@ public class CreateVmBaseOptions {
 	private String imageRef;
 	private String kernelId;
 	private String ramDiskId;
-	private int powerState = PowerState.NOSTATE;
+	private Integer powerState = PowerState.NOSTATE;
 	private String vmState = VmStates.BUILDING;
-	private boolean configDrive;
+	private Boolean configDrive;
 	private String userId;
 	private String projectId;
 	private String instanceTypeId;
-	private int memoryMb;
-	private int vpus;
-	private int rootGb;
-	private int ephemeralGb;
+	private Integer memoryMb;
+	private Integer vpus;
+	private Integer rootGb;
+	private Integer ephemeralGb;
 	private String displayName;
 	private String displayDescription;
 	private String userData;
 	private String keyName;
 	private String keyData;
-	private boolean locked = false;
+	private Boolean locked = false;
 	private Map<String, String> metadata;
 	private String accessIpV4;
 	private String accessIpV6;
 	private String availabilityZone;
 	private String rootDeviceName;
-	private int progress = 0;
+	private Integer progress = 0;
 	private String pciRequestInfo;
 	private String numaTopology;
 	private Map<String, String> systemMetadata;
 	private String osType;
 	private String architecture;
 	private String vmMode;
-	private boolean autoDiskConfig;
+	private Boolean autoDiskConfig;
 
 
 	public UUID getReservationId() {
@@ -90,11 +90,11 @@ public class CreateVmBaseOptions {
 		this.ramDiskId = ramDiskId;
 	}
 
-	public int getPowerState() {
+	public Integer getPowerState() {
 		return powerState;
 	}
 
-	public void setPowerState(int powerState) {
+	public void setPowerState(Integer powerState) {
 		this.powerState = powerState;
 	}
 
@@ -106,11 +106,11 @@ public class CreateVmBaseOptions {
 		this.vmState = vmState;
 	}
 
-	public boolean isConfigDrive() {
+	public Boolean isConfigDrive() {
 		return configDrive;
 	}
 
-	public void setConfigDrive(boolean configDrive) {
+	public void setConfigDrive(Boolean configDrive) {
 		this.configDrive = configDrive;
 	}
 
@@ -138,35 +138,35 @@ public class CreateVmBaseOptions {
 		this.instanceTypeId = instanceTypeId;
 	}
 
-	public int getMemoryMb() {
+	public Integer getMemoryMb() {
 		return memoryMb;
 	}
 
-	public void setMemoryMb(int memoryMb) {
+	public void setMemoryMb(Integer memoryMb) {
 		this.memoryMb = memoryMb;
 	}
 
-	public int getVpus() {
+	public Integer getVpus() {
 		return vpus;
 	}
 
-	public void setVpus(int vpus) {
+	public void setVpus(Integer vpus) {
 		this.vpus = vpus;
 	}
 
-	public int getRootGb() {
+	public Integer getRootGb() {
 		return rootGb;
 	}
 
-	public void setRootGb(int rootGb) {
+	public void setRootGb(Integer rootGb) {
 		this.rootGb = rootGb;
 	}
 
-	public int getEphemeralGb() {
+	public Integer getEphemeralGb() {
 		return ephemeralGb;
 	}
 
-	public void setEphemeralGb(int ephemeralGb) {
+	public void setEphemeralGb(Integer ephemeralGb) {
 		this.ephemeralGb = ephemeralGb;
 	}
 
@@ -210,11 +210,11 @@ public class CreateVmBaseOptions {
 		this.keyData = keyData;
 	}
 
-	public boolean isLocked() {
+	public Boolean isLocked() {
 		return locked;
 	}
 
-	public void setLocked(boolean locked) {
+	public void setLocked(Boolean locked) {
 		this.locked = locked;
 	}
 
@@ -258,11 +258,11 @@ public class CreateVmBaseOptions {
 		this.rootDeviceName = rootDeviceName;
 	}
 
-	public int getProgress() {
+	public Integer getProgress() {
 		return progress;
 	}
 
-	public void setProgress(int progress) {
+	public void setProgress(Integer progress) {
 		this.progress = progress;
 	}
 
@@ -314,11 +314,11 @@ public class CreateVmBaseOptions {
 		this.vmMode = vmMode;
 	}
 
-	public boolean isAutoDiskConfig() {
+	public Boolean isAutoDiskConfig() {
 		return autoDiskConfig;
 	}
 
-	public void setAutoDiskConfig(boolean autoDiskConfig) {
+	public void setAutoDiskConfig(Boolean autoDiskConfig) {
 		this.autoDiskConfig = autoDiskConfig;
 	}
 

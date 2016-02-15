@@ -23,7 +23,6 @@ import java.util.UUID;
 import com.infinities.nova.api.NovaRequestContext;
 import com.infinities.nova.api.openstack.compute.servers.ServersFilter;
 import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.response.model.NetworkForCreate;
 
 public interface ComputeApi {
@@ -74,7 +73,7 @@ public interface ComputeApi {
 
 	void stop(NovaRequestContext context, Instance instance) throws Exception;
 
-	Entry<List<Instance>, UUID> create(NovaRequestContext context, InstanceType instType, String imageHref, String kernelId,
+	Entry<List<Instance>, UUID> create(NovaRequestContext context, String flavorId, String imageHref, String kernelId,
 			String ramDiskId, Integer minCount, Integer maxCount, String displayName, String displayDescription,
 			String keyName, String keyData, List<String> securityGroup, String availabilityZone, String userData,
 			Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,

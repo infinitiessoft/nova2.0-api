@@ -46,6 +46,7 @@ import com.infinities.nova.api.NovaRequestContext;
 import com.infinities.nova.api.exception.http.HTTPBadRequestException;
 import com.infinities.nova.api.exception.http.HTTPNotImplementedException;
 import com.infinities.nova.api.openstack.compute.servers.MinimalServersTemplate;
+import com.infinities.nova.api.openstack.compute.servers.ServerForCreateTemplate;
 import com.infinities.nova.api.openstack.compute.servers.ServerTemplate;
 import com.infinities.nova.api.openstack.compute.servers.ServersController;
 import com.infinities.nova.api.openstack.compute.servers.ServersTemplate;
@@ -105,10 +106,10 @@ public class ServersResource {
 
 	@POST
 	public Response create(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext,
-			ServerForCreate server) throws Exception {
+			ServerForCreateTemplate serverTemplate) throws Exception {
 		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
 		Resource.processStack(requestContext, projectId, novaContext);
-		return controller.create(requestContext, server);
+		return controller.create(requestContext, serverTemplate.getServer());
 	}
 
 	@PUT

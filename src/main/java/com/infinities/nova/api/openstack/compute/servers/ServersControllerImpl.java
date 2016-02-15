@@ -59,9 +59,6 @@ import com.infinities.nova.api.openstack.compute.extensions.Extensions;
 import com.infinities.nova.api.openstack.compute.servers.api.ComputeApi;
 import com.infinities.nova.common.Config;
 import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.db.model.InstanceType;
-import com.infinities.nova.model.home.InstanceTypeHome;
-import com.infinities.nova.model.home.impl.InstanceTypeHomeImpl;
 import com.infinities.nova.network.model.NetworkRequest;
 import com.infinities.nova.openstack.common.policy.Target;
 import com.infinities.nova.response.model.NetworkForCreate;
@@ -87,10 +84,12 @@ public class ServersControllerImpl implements ServersController {
 	// private final static List<String> SEARCH_OPTIONS;
 	private final ComputeApi computeApi;
 	private final ViewBuilder viewBuilder = new ViewBuilder();
+
+
 	// private final static String B64_REGEX =
 	// "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$";
-	private final InstanceTypeHome instanceTypeHome = new InstanceTypeHomeImpl();
-
+	// private final InstanceTypeHome instanceTypeHome = new
+	// InstanceTypeHomeImpl();
 
 	// static {
 	// List<String> list = new ArrayList<String>();
@@ -377,14 +376,16 @@ public class ServersControllerImpl implements ServersController {
 			throw new HTTPBadRequestException(msg);
 		}
 
-		InstanceType instType = instanceTypeHome.flavorGetByFlavorId(novaContext, flavorId, "no");
+		// InstanceType instType =
+		// instanceTypeHome.flavorGetByFlavorId(novaContext, flavorId, "no");
 
 		boolean checkServerGroupQuota = true;
 
 		Map<String, String> metadata = server.getMetadata();
-		Entry<List<Instance>, UUID> entry = computeApi.create(novaContext, instType, imageUuid, null, null, minCount,
-				maxCount, name, name, keyName, null, sgNames, availabilityZone, userData, metadata, injectedFiles, password,
-				accessIpV4, accessIpV6, requestedNetworks, configDrive, autoDiskConfig, checkServerGroupQuota);
+		Entry<List<Instance>, UUID> entry =
+				computeApi.create(novaContext, flavorId, imageUuid, null, null, minCount, maxCount, name, name, keyName,
+						null, sgNames, availabilityZone, userData, metadata, injectedFiles, password, accessIpV4,
+						accessIpV6, requestedNetworks, configDrive, autoDiskConfig, checkServerGroupQuota);
 		// .create(novaContext, instType, imageUuid, name, name, keyName,
 		// metadata, accessIpV4, accessIpV6, injectedFiles, password, minCount,
 		// maxCount, requestedNetworks,

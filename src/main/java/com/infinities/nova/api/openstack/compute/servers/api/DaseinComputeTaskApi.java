@@ -62,8 +62,9 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 			String adminPassword, List<Entry<String, String>> injectedFiles, List<NetworkForCreate> requestedNetworks,
 			List<String> securityGroups) throws CloudException, InternalException, ConcurrentException,
 			InterruptedException, ExecutionException {
-		VMLaunchOptions withLaunchOptions = VMLaunchOptions.getInstance(options.getInstanceTypeId(), bootMeta.getId(),
-				options.getDisplayName(), options.getDisplayDescription());
+		VMLaunchOptions withLaunchOptions =
+				VMLaunchOptions.getInstance(options.getInstanceTypeId(), bootMeta.getId(), options.getDisplayName(),
+						options.getDisplayDescription());
 		String[] firewallIds = new String[securityGroups.size()];
 		try {
 			AsyncFirewallSupport firewallSupport = getNetworkSupport(context.getProjectId());
