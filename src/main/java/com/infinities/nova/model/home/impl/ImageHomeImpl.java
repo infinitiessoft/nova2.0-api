@@ -39,11 +39,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.exception.ImageNotFoundException;
-import com.infinities.nova.api.openstack.Common.PaginationParams;
-import com.infinities.nova.api.openstack.compute.images.ImagesFilter;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.Common.PaginationParams;
 import com.infinities.nova.db.model.Image;
+import com.infinities.nova.exception.ImageNotFoundException;
+import com.infinities.nova.images.controller.ImagesFilter;
 import com.infinities.nova.model.home.ImageHome;
 
 public class ImageHomeImpl extends AbstractHome implements ImageHome {

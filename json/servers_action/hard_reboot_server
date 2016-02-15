@@ -1,0 +1,9 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -d '{"reboot":{"type":"HARD"}}' -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/action
+
+response:
+HTTP/1.1 202 Accepted
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+X-Compute-Request-Id: req-98a17c25-2721-441a-b2ef-01bcb5a62c62
+Date: Mon, 15 Feb 2016 08:54:54 GMT

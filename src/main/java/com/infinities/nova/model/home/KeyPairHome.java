@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.infinities.nova.model.home;
 
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 
 
 public interface KeyPairHome {

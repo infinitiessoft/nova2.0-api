@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import com.infinities.nova.api.exception.PolicyNotAuthorizedException;
 import com.infinities.nova.common.Config;
+import com.infinities.nova.exception.PolicyNotAuthorizedException;
 
 public class EnforcerImpl implements Enforcer {
 

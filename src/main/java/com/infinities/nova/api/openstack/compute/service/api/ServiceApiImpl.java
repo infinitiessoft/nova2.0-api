@@ -17,8 +17,8 @@ package com.infinities.nova.api.openstack.compute.service.api;
 
 import java.util.List;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.availablity_zones.api.AvailabilityZoneApiImpl;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.availablity_zones.api.AvailabilityZoneApiImpl;
 import com.infinities.nova.db.model.Service;
 import com.infinities.nova.model.home.impl.ServiceHomeImpl;
 

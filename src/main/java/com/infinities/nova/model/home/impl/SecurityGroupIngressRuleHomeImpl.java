@@ -24,7 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.SecurityGroupIngressRule;
 import com.infinities.nova.model.home.SecurityGroupIngressRuleHome;
 

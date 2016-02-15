@@ -17,9 +17,9 @@ package com.infinities.nova.model.home;
 
 import java.util.List;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.servers.ServersFilter;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.Instance;
+import com.infinities.nova.servers.controller.ServersFilter;
 
 public interface InstanceHome {
 

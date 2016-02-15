@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.ProjectUserQuota;
 import com.infinities.nova.db.model.Quota;
 import com.infinities.nova.db.model.QuotaClass;

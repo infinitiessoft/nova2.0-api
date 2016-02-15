@@ -28,11 +28,11 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.servers.ips.ServerIpsController;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.api.openstack.wsgi.Resource;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
+import com.infinities.nova.servers.ips.controller.ServerIpsController;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

@@ -30,11 +30,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.common.template.MetaItemTemplate;
-import com.infinities.nova.api.openstack.common.template.MetadataTemplate;
-import com.infinities.nova.api.openstack.compute.servers.metadata.ServerMetadataController;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
+import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
 import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.servers.metadata.controller.ServerMetadataController;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

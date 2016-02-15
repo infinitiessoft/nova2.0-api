@@ -17,10 +17,10 @@ package com.infinities.nova.model.home;
 
 import java.util.List;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.Common.PaginationParams;
-import com.infinities.nova.api.openstack.compute.images.ImagesFilter;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.Common.PaginationParams;
 import com.infinities.nova.db.model.Image;
+import com.infinities.nova.images.controller.ImagesFilter;
 
 public interface ImageHome {
 

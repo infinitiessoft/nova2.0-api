@@ -32,6 +32,8 @@ import org.junit.Test;
 import com.infinities.keystonemiddleware.model.Access.Service;
 import com.infinities.keystonemiddleware.model.Access.Service.Endpoint;
 import com.infinities.keystonemiddleware.model.Link;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.Policy;
 import com.infinities.nova.openstack.common.policy.Target;
 
 public class PolicyTest {

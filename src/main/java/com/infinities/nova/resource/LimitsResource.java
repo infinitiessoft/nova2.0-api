@@ -24,10 +24,10 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.limits.LimitsController;
-import com.infinities.nova.api.openstack.compute.limits.LimitsTemplate;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.limits.LimitsController;
+import com.infinities.nova.limits.model.LimitsTemplate;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

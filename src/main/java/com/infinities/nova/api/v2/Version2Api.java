@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.infinities.nova.api.VersionsApi;
+import com.infinities.nova.VersionsApi;
 import com.infinities.nova.model.wrapper.VersionWrapper;
 import com.infinities.nova.views.version.ViewBuilder;
 

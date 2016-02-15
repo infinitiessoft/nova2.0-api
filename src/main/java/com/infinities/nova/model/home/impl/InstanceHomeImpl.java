@@ -36,12 +36,12 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.exception.InstanceNotFoundException;
-import com.infinities.nova.api.exception.InvalidIDException;
-import com.infinities.nova.api.openstack.compute.servers.ServersFilter;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.Instance;
+import com.infinities.nova.exception.InstanceNotFoundException;
+import com.infinities.nova.exception.InvalidIDException;
 import com.infinities.nova.model.home.InstanceHome;
+import com.infinities.nova.servers.controller.ServersFilter;
 
 public class InstanceHomeImpl extends AbstractHome implements InstanceHome {
 

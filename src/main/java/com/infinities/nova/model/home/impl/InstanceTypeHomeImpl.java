@@ -37,11 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.exception.FlavorNotFoundByNameException;
-import com.infinities.nova.api.exception.FlavorNotFoundException;
-import com.infinities.nova.api.openstack.compute.flavors.FlavorsFilter;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.InstanceType;
+import com.infinities.nova.exception.FlavorNotFoundByNameException;
+import com.infinities.nova.exception.FlavorNotFoundException;
+import com.infinities.nova.flavors.controller.FlavorsFilter;
 import com.infinities.nova.model.home.InstanceTypeHome;
 
 public class InstanceTypeHomeImpl extends AbstractHome implements InstanceTypeHome {

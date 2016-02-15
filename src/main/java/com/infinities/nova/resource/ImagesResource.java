@@ -29,16 +29,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.exception.http.HTTPMethodNotAllowException;
-import com.infinities.nova.api.openstack.common.template.MetaItemTemplate;
-import com.infinities.nova.api.openstack.common.template.MetadataTemplate;
-import com.infinities.nova.api.openstack.compute.images.ImageMetadataController;
-import com.infinities.nova.api.openstack.compute.images.ImageTemplate;
-import com.infinities.nova.api.openstack.compute.images.ImagesController;
-import com.infinities.nova.api.openstack.compute.images.ImagesTemplate;
-import com.infinities.nova.api.openstack.compute.images.MinimalImagesTemplate;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
+import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
 import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.exception.http.HTTPMethodNotAllowException;
+import com.infinities.nova.images.controller.ImagesController;
+import com.infinities.nova.images.metadata.controller.ImageMetadataController;
+import com.infinities.nova.images.model.ImageTemplate;
+import com.infinities.nova.images.model.ImagesTemplate;
+import com.infinities.nova.images.model.MinimalImagesTemplate;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

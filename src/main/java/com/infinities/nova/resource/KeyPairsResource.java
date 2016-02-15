@@ -29,12 +29,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.keypairs.KeyPairTemplate;
-import com.infinities.nova.api.openstack.compute.keypairs.KeyPairsController;
-import com.infinities.nova.api.openstack.compute.keypairs.MinimalKeyPairTemplate;
-import com.infinities.nova.api.openstack.compute.keypairs.MinimalKeyPairsTemplate;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.keypairs.controller.KeyPairsController;
+import com.infinities.nova.keypairs.model.KeyPairTemplate;
+import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
+import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
 
 /**
  * @author pohsun

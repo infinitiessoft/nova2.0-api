@@ -42,15 +42,10 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.exception.http.HTTPBadRequestException;
-import com.infinities.nova.api.exception.http.HTTPNotImplementedException;
-import com.infinities.nova.api.openstack.compute.servers.MinimalServersTemplate;
-import com.infinities.nova.api.openstack.compute.servers.ServerForCreateTemplate;
-import com.infinities.nova.api.openstack.compute.servers.ServerTemplate;
-import com.infinities.nova.api.openstack.compute.servers.ServersController;
-import com.infinities.nova.api.openstack.compute.servers.ServersTemplate;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.exception.http.HTTPBadRequestException;
+import com.infinities.nova.exception.http.HTTPNotImplementedException;
 import com.infinities.nova.response.model.ServerAction.ChangePassword;
 import com.infinities.nova.response.model.ServerAction.ConfirmResize;
 import com.infinities.nova.response.model.ServerAction.CreateImage;
@@ -65,6 +60,11 @@ import com.infinities.nova.response.model.ServerAction.Stop;
 import com.infinities.nova.response.model.ServerAction.Suspend;
 import com.infinities.nova.response.model.ServerAction.Unpause;
 import com.infinities.nova.response.model.ServerForCreate;
+import com.infinities.nova.servers.controller.ServersController;
+import com.infinities.nova.servers.model.MinimalServersTemplate;
+import com.infinities.nova.servers.model.ServerForCreateTemplate;
+import com.infinities.nova.servers.model.ServerTemplate;
+import com.infinities.nova.servers.model.ServersTemplate;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -174,9 +174,9 @@ public class ServersResource {
 			} else if (node.has("resume")) {
 				return controller.resume(serverId, requestContext, toValue(Resume.class, node.get("resume")));
 			} else if (node.has("os-start")) {
-				return controller.start(serverId, requestContext, toValue(Start.class, node.get("start")));
+				return controller.start(serverId, requestContext, toValue(Start.class, node.get("os-start")));
 			} else if (node.has("os-stop")) {
-				return controller.stop(serverId, requestContext, toValue(Stop.class, node.get("stop")));
+				return controller.stop(serverId, requestContext, toValue(Stop.class, node.get("os-stop")));
 			} else if (node.has("migrate")) {
 				throw new HTTPNotImplementedException("action not support");
 			} else if (node.has("resetNetwork")) {
@@ -214,6 +214,7 @@ public class ServersResource {
 						.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
 						.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"))
 						.enable(SerializationFeature.INDENT_OUTPUT)
+						.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
 						.setAnnotationIntrospector(new AnnotationIntrospectorPair(introspector, secondary));
 		R object = mapper.treeToValue(node, c);
 		return object;

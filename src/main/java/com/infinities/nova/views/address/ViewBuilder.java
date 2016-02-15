@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.infinities.nova.api.openstack.Common;
-import com.infinities.nova.api.openstack.Common.CommonNetwork;
+import com.infinities.nova.Common;
+import com.infinities.nova.Common.CommonNetwork;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.views.AbstractViewBuilder;

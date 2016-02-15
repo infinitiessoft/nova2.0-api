@@ -18,7 +18,7 @@ package com.infinities.nova.quota;
 import javax.ws.rs.NotFoundException;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.Config;
 
 public abstract class BaseResource {

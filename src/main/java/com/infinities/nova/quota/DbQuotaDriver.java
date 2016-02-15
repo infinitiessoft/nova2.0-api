@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.Config;
 import com.infinities.nova.db.model.ProjectUserQuota;
 import com.infinities.nova.db.model.Quota;

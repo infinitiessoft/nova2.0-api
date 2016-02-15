@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.api.openstack.wsgi.Resource;
 import com.infinities.nova.model.wrapper.ExtensionWrapper;
 import com.infinities.nova.response.model.Extension;

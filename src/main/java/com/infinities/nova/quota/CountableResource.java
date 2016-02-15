@@ -18,7 +18,7 @@ package com.infinities.nova.quota;
 import java.util.Map.Entry;
 
 import com.google.common.base.Function;
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 
 public class CountableResource extends AbsoluteResource {
 

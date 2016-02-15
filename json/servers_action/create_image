@@ -1,0 +1,10 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -d '{"createImage":{"name":"foo-image","metadata":{"meta_var":"meta_val"}}}' -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/action
+
+response:
+HTTP/1.1 202 Accepted
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+Location: http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/940d789c-f65b-48b3-959c-c02aa6135b8c
+X-Compute-Request-Id: req-a75a4885-e520-4486-8dc7-1f2d7a8a1c3f
+Date: Mon, 15 Feb 2016 09:08:32 GMT

@@ -26,6 +26,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.infinities.nova.limits.model.Limit;
+import com.infinities.nova.limits.model.LimitWrapper;
 import com.infinities.skyport.util.JsonUtil;
 
 public class LimitTest {

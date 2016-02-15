@@ -25,12 +25,12 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.flavors.FlavorTemplate;
-import com.infinities.nova.api.openstack.compute.flavors.FlavorsController;
-import com.infinities.nova.api.openstack.compute.flavors.FlavorsTemplate;
-import com.infinities.nova.api.openstack.compute.flavors.MinimalFlavorsTemplate;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.flavors.controller.FlavorsController;
+import com.infinities.nova.flavors.model.FlavorTemplate;
+import com.infinities.nova.flavors.model.FlavorsTemplate;
+import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,0 +1,9 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -d '{"os-stop":null}' -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/action
+
+response:
+HTTP/1.1 202 Accepted
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+X-Compute-Request-Id: req-139ebba2-78a9-453d-975a-8c77492c9d16
+Date: Mon, 15 Feb 2016 08:21:34 GMT

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.infinities.nova.api.NovaRequestContext;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.skyport.jpa.AbstractJpaHome;
 import com.infinities.skyport.jpa.EntityManagerHelper;
 

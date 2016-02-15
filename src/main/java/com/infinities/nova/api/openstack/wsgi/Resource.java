@@ -21,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.exception.http.HTTPBadRequestException;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.exception.http.HTTPBadRequestException;
 
 public class Resource {
 

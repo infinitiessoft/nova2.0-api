@@ -17,9 +17,9 @@ package com.infinities.nova.model.home;
 
 import java.util.List;
 
-import com.infinities.nova.api.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.flavors.FlavorsFilter;
+import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.InstanceType;
+import com.infinities.nova.flavors.controller.FlavorsFilter;
 
 public interface InstanceTypeHome {
 
