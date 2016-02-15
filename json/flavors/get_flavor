@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/flavors/1664db0d-c5e1-4480-be72-6b24d5280f3e
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 528
+X-Compute-Request-Id: req-673434b5-00f9-4300-af9d-2813baa8a1f6
+Date: Mon, 15 Feb 2016 03:44:38 GMT
+
+{"flavor": {"name": "m1.small", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/flavors/1664db0d-c5e1-4480-be72-6b24d5280f3e", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/flavors/1664db0d-c5e1-4480-be72-6b24d5280f3e", "rel": "bookmark"}], "ram": 1024, "OS-FLV-DISABLED:disabled": false, "vcpus": 1, "swap": 1, "os-flavor-access:is_public": true, "rxtx_factor": 1.0, "OS-FLV-EXT-DATA:ephemeral": 0, "disk": 0, "id": "1664db0d-c5e1-4480-be72-6b24d5280f3e"}}

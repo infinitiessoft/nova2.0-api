@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/017546d4-2741-4ced-9729-cd8295647e0e
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 1814
+X-Compute-Request-Id: req-80cc8ddc-d50c-4a42-98f4-c25e8aeaec48
+Date: Mon, 15 Feb 2016 02:38:36 GMT
+
+{"server": {"status": "ACTIVE", "updated": "2016-02-05T08:33:53Z", "hostId": "7a26c93e5c1a6c570c8288366b50cb127b0e2f22a2a537dfa6fbe76b", "OS-EXT-SRV-ATTR:host": "d00-0c-29-5f-bb-81", "addresses": {"floating": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:80:51:86", "version": 4, "addr": "192.168.126.174", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/017546d4-2741-4ced-9729-cd8295647e0e", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/servers/017546d4-2741-4ced-9729-cd8295647e0e", "rel": "bookmark"}], "key_name": null, "image": {"id": "b1222a92-3bb1-4065-a9ca-cd11caef568f", "links": [{"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/images/b1222a92-3bb1-4065-a9ca-cd11caef568f", "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state": "active", "OS-EXT-SRV-ATTR:instance_name": "instance-0000007c", "OS-SRV-USG:launched_at": "2016-02-05T08:33:53.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname": "d00-0c-29-5f-bb-81.cloud.default.net", "flavor": {"id": "922faa0a-ae78-499c-a494-bfc6e2c26a00", "links": [{"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/flavors/922faa0a-ae78-499c-a494-bfc6e2c26a00", "rel": "bookmark"}]}, "id": "017546d4-2741-4ced-9729-cd8295647e0e", "security_groups": [{"name": "default"}], "OS-SRV-USG:terminated_at": null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "7e84a35aed5c41a491c0aee8b7c7a9be", "name": "demo", "created": "2016-02-05T08:33:46Z", "tenant_id": "0d284d59ec704b1690d70c773c4e16bc", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive": "", "metadata": {"My Server Name": "Apache1"}}}

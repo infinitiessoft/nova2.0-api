@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 701
+X-Compute-Request-Id: req-874fb814-253e-47d8-bcc9-288292ce5d5b
+Date: Mon, 15 Feb 2016 02:34:29 GMT
+
+{"servers": [{"id": "017546d4-2741-4ced-9729-cd8295647e0e", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/017546d4-2741-4ced-9729-cd8295647e0e", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/servers/017546d4-2741-4ced-9729-cd8295647e0e", "rel": "bookmark"}], "name": "demo"}, {"id": "1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "rel": "bookmark"}], "name": "demo"}]}

@@ -756,25 +756,8 @@ public class ServersControllerImpl implements ServersController {
 			throws Exception {
 		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
 		String name = server.getName();
-
-		if (!Strings.isNullOrEmpty(name)) {
-			validateServerName(name);
-		}
-
 		String ipv4 = server.getAccessIPv4();
-		if (!Strings.isNullOrEmpty(ipv4)) {
-			validateAccessIpv4(ipv4);
-		}
-
 		String ipv6 = server.getAccessIPv6();
-		if (!Strings.isNullOrEmpty(ipv6)) {
-			validateAccessIpv6(server.getAccessIPv6());
-		}
-
-		if (server.getPersonality() != null) {
-			String msg = "Personality cannot be updated";
-			throw new HTTPBadRequestException(msg);
-		}
 
 		try {
 			Instance instance = computeApi.get(context, serverId, null);

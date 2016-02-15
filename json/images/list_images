@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 1119
+X-Compute-Request-Id: req-ebe16297-395e-4526-99bc-3a956c5bde1d
+Date: Mon, 15 Feb 2016 03:48:27 GMT
+
+{"images": [{"id": "017bec68-05d4-42e8-834a-b3a64ba7341e", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e", "rel": "bookmark"}, {"href": "http://d00-0c-29-02-45-a8.cloud.default.net:9292/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e", "type": "application/vnd.openstack.image", "rel": "alternate"}], "name": "cirros-snapshot-jcnet"}, {"id": "b1222a92-3bb1-4065-a9ca-cd11caef568f", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/b1222a92-3bb1-4065-a9ca-cd11caef568f", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/images/b1222a92-3bb1-4065-a9ca-cd11caef568f", "rel": "bookmark"}, {"href": "http://d00-0c-29-02-45-a8.cloud.default.net:9292/0d284d59ec704b1690d70c773c4e16bc/images/b1222a92-3bb1-4065-a9ca-cd11caef568f", "type": "application/vnd.openstack.image", "rel": "alternate"}], "name": "cirros"}]}

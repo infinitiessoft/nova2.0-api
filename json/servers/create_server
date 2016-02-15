@@ -1,5 +1,3 @@
-1.add server
-
 request:
 curl -si -H"X-Auth-Token:$TOKEN" -X POST -d '{"server":{"name":"demo","imageRef":"b1222a92-3bb1-4065-a9ca-cd11caef568f", "flavorRef":"922faa0a-ae78-499c-a494-bfc6e2c26a00","metadata":{"My Server Name":"Apache1"}, "networks":[{"uuid":"ce31c600-7f4c-45f7-8e3b-1b237e52eaa4"}]}}' -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers
 

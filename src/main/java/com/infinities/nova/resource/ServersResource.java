@@ -113,6 +113,7 @@ public class ServersResource {
 	}
 
 	@PUT
+	@Path("{serverId}")
 	public ServerTemplate update(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext, ServerForCreate server) throws Exception {
 		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
@@ -144,7 +145,6 @@ public class ServersResource {
 	@Path("{serverId}/action")
 	public Response action(@PathParam("serverId") String serverId, @Context ContainerRequestContext requestContext,
 			JsonNode node) throws JsonProcessingException, Exception {
-		System.err.println(node.toString());
 		if (node != null) {
 			if (node.has("changePassword")) {
 				return controller.changePassword(serverId, requestContext,

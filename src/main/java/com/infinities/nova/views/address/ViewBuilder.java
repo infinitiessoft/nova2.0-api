@@ -60,7 +60,8 @@ public class ViewBuilder extends AbstractViewBuilder {
 	private Address basic(com.infinities.nova.db.model.Address ip) {
 		Address address = new Address();
 		address.setAddr(ip.getAddr());
-		address.setVersion(Integer.parseInt(ip.getIpVersion()));
+		String version = ip.getIpVersion().replace("IPV", "");
+		address.setVersion(Integer.parseInt(version));
 		return address;
 	}
 

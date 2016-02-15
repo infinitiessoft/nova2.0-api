@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/flavors
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 708
+X-Compute-Request-Id: req-d8f382ed-757e-4fd6-9f55-d688f50680ec
+Date: Mon, 15 Feb 2016 03:42:29 GMT
+
+{"flavors": [{"id": "1664db0d-c5e1-4480-be72-6b24d5280f3e", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/flavors/1664db0d-c5e1-4480-be72-6b24d5280f3e", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/flavors/1664db0d-c5e1-4480-be72-6b24d5280f3e", "rel": "bookmark"}], "name": "m1.small"}, {"id": "922faa0a-ae78-499c-a494-bfc6e2c26a00", "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/flavors/922faa0a-ae78-499c-a494-bfc6e2c26a00", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/flavors/922faa0a-ae78-499c-a494-bfc6e2c26a00", "rel": "bookmark"}], "name": "m1.tiny"}]}
