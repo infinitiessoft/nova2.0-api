@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 
 public abstract class NovaException extends SafeException {
 

@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.infinities.nova.common.Config;
-import com.infinities.nova.common.Config.Type;
+import com.infinities.nova.common.config.Config;
+import com.infinities.nova.common.config.Config.Type;
 
 public class FileScanner {
 

@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 429
+X-Compute-Request-Id: req-22c189cf-34a9-4a7b-ac00-156556902bad
+Date: Wed, 17 Feb 2016 08:07:55 GMT
+
+{"version": {"status": "CURRENT", "updated": "2011-01-21T11:33:21Z", "media-types": [{"base": "application/xml", "type": "application/vnd.openstack.compute+xml;version=2"}, {"base": "application/json", "type": "application/vnd.openstack.compute+json;version=2"}], "id": "v2.0", "links": [{"href": "http://192.168.0.96:8774/v2/", "rel": "self"}, {"href": "http://docs.openstack.org/", "type": "text/html", "rel": "describedby"}]}}

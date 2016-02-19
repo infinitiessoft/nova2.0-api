@@ -44,7 +44,7 @@ import org.dasein.cloud.network.RawAddress;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Target;
 import com.infinities.skyport.compute.entity.NovaStyleVirtualMachine;
 import com.infinities.skyport.network.SkyportRawAddress;
 

@@ -30,7 +30,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.common.Resource;
 import com.infinities.nova.keypairs.controller.KeyPairsController;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;

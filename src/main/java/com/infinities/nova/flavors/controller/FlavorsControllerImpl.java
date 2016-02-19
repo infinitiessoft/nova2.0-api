@@ -30,11 +30,11 @@ import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
 import com.infinities.nova.exception.http.HTTPNotFoundException;
-import com.infinities.nova.flavoers.views.ViewBuilder;
 import com.infinities.nova.flavors.api.FlavorsApi;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
+import com.infinities.nova.flavors.views.ViewBuilder;
 
 public class FlavorsControllerImpl implements FlavorsController {
 

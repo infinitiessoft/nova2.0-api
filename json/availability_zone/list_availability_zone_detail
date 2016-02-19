@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-availability-zone/detail
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 702
+X-Compute-Request-Id: req-f73dd94b-abad-4f38-945e-5d61c50e1099
+Date: Fri, 19 Feb 2016 06:21:22 GMT
+
+{"availabilityZoneInfo": [{"zoneState": {"available": true}, "hosts": {"d00-0c-29-02-45-a8": {"nova-conductor": {"available": true, "active": true, "updated_at": "2016-02-19T06:21:21.582238"}, "nova-cert": {"available": true, "active": true, "updated_at": "2016-02-19T06:21:22.079764"}, "nova-consoleauth": {"available": true, "active": true, "updated_at": "2016-02-19T06:21:18.272235"}, "nova-scheduler": {"available": true, "active": true, "updated_at": "2016-02-19T06:21:12.250887"}}}, "zoneName": "internal"}, {"zoneState": {"available": true}, "hosts": {"d00-0c-29-5f-bb-81": {"nova-compute": {"available": true, "active": true, "updated_at": "2016-02-19T06:21:21.025684"}}}, "zoneName": "nova"}]}

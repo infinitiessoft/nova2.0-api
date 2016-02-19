@@ -29,12 +29,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.infinities.keystonemiddleware.model.Access.Service;
-import com.infinities.keystonemiddleware.model.Access.Service.Endpoint;
-import com.infinities.keystonemiddleware.model.Link;
+import com.infinities.keystone4j.middleware.model.Access.Service;
+import com.infinities.keystone4j.middleware.model.Access.Service.Endpoint;
+import com.infinities.keystone4j.middleware.model.Link;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.Policy;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Target;
 
 public class PolicyTest {
 
@@ -79,8 +79,9 @@ public class PolicyTest {
 		link.setType("type");
 		service.getEndpointsLinks().add(link);
 		serviceCatalog.add(service);
-		requestContext = new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken,
-				true, null, userName, projectName, serviceCatalog, false);
+		requestContext =
+				new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken, true,
+						null, userName, projectName, serviceCatalog, false);
 
 		target = context.mock(Target.class);
 	}
@@ -97,8 +98,9 @@ public class PolicyTest {
 	@Test
 	public void testCheckIsAdmin2() throws Exception {
 		roles = new String[] { "admin" };
-		requestContext = new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken,
-				true, null, userName, projectName, serviceCatalog, false);
+		requestContext =
+				new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken, true,
+						null, userName, projectName, serviceCatalog, false);
 		assertTrue(Policy.checkIsAdmin(requestContext));
 	}
 
@@ -124,8 +126,9 @@ public class PolicyTest {
 	public void testEnforce4() throws Exception {
 		String action = "context_is_admin";
 		roles = new String[] { "admin" };
-		requestContext = new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken,
-				true, null, userName, projectName, serviceCatalog, false);
+		requestContext =
+				new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken, true,
+						null, userName, projectName, serviceCatalog, false);
 		assertTrue(Policy.enforce(requestContext, action, target, true, new IllegalStateException("test")));
 	}
 }

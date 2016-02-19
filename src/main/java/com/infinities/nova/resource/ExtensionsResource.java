@@ -31,8 +31,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.wsgi.Resource;
-import com.infinities.nova.model.wrapper.ExtensionWrapper;
+import com.infinities.nova.common.Resource;
 import com.infinities.nova.response.model.Extension;
 import com.infinities.nova.response.model.Extensions;
 import com.infinities.skyport.util.FormatUtil;
@@ -101,6 +100,30 @@ public class ExtensionsResource {
 
 		String msg = String.format("Extension %s could not be found.", alias);
 		throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(msg).build());
+	}
+
+
+	public class ExtensionWrapper {
+
+		private Extension extension;
+
+
+		public ExtensionWrapper() {
+
+		}
+
+		public ExtensionWrapper(Extension extension) {
+			this.extension = extension;
+		}
+
+		public Extension getExtension() {
+			return extension;
+		}
+
+		public void setExtension(Extension extension) {
+			this.extension = extension;
+		}
+
 	}
 
 }

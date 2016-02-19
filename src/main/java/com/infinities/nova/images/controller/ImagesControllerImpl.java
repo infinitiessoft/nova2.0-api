@@ -28,16 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.keystonemiddleware.ImageNotAuthorizedException;
-import com.infinities.keystonemiddleware.ImageNotFoundException;
 import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.Common.PaginationParams;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.exception.ImageNotFoundException;
 import com.infinities.nova.exception.InvalidException;
 import com.infinities.nova.exception.InvalidImageRefException;
 import com.infinities.nova.exception.NotFoundException;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPForbiddenException;
 import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.images.api.ImagesApi;
 import com.infinities.nova.images.model.ImageTemplate;
@@ -119,9 +117,6 @@ public class ImagesControllerImpl implements ImagesController {
 		} catch (ImageNotFoundException e) {
 			String msg = "Image not found";
 			throw new HTTPNotFoundException(msg);
-		} catch (ImageNotAuthorizedException e) {
-			String msg = "You are not allowed to delete the image.";
-			throw new HTTPForbiddenException(msg);
 		}
 		return Response.status(Status.NO_CONTENT).build();
 	}

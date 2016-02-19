@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-availability-zone
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 97
+X-Compute-Request-Id: req-7f6d32e7-417e-40ed-9298-6429defadd99
+Date: Fri, 19 Feb 2016 06:20:55 GMT
+
+{"availabilityZoneInfo": [{"zoneState": {"available": true}, "hosts": null, "zoneName": "nova"}]}

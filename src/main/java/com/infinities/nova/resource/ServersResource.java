@@ -43,7 +43,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.common.Resource;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
 import com.infinities.nova.exception.http.HTTPNotImplementedException;
 import com.infinities.nova.response.model.ServerAction.ChangePassword;

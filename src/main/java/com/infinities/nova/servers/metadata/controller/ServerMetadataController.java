@@ -17,8 +17,8 @@ package com.infinities.nova.servers.metadata.controller;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
-import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
+import com.infinities.nova.common.model.MetaItemTemplate;
+import com.infinities.nova.common.model.MetadataTemplate;
 
 public interface ServerMetadataController {
 

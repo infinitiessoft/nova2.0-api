@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.infinities.nova.api.v2.Version2Api;
+import com.infinities.nova.versions.v2.api.Version2Api;
 
 @Singleton
 @Consumes(MediaType.APPLICATION_JSON)

@@ -1,0 +1,9 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X DELETE -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e/metadata/foo2
+
+response:
+HTTP/1.1 204 No Content
+Content-Length: 0
+Content-Type: application/json
+X-Compute-Request-Id: req-bc956546-473e-4699-b1b9-608d4b24e1f7
+Date: Thu, 18 Feb 2016 10:56:32 GMT

@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/metadata
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 43
+X-Compute-Request-Id: req-c726e4a9-4b8b-48b4-8070-5ebe20a6ffa5
+Date: Thu, 18 Feb 2016 09:38:39 GMT
+
+{"metadata": {"My Server Name": "Apache1"}}

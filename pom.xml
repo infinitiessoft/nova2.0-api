@@ -59,6 +59,11 @@
 			<artifactId>bcpkix-jdk15on</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.infinities.keystone4j</groupId>
+			<artifactId>keystone4j-client</artifactId>
+		</dependency>
+
 
 		<!-- Database -->
 		<dependency>

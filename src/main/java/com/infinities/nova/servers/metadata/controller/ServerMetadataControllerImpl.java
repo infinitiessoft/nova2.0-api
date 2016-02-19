@@ -23,8 +23,8 @@ import javax.ws.rs.container.ContainerRequestContext;
 
 import com.infinities.nova.Common;
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
-import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
+import com.infinities.nova.common.model.MetaItemTemplate;
+import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.InstanceInvalidStateException;
 import com.infinities.nova.exception.InstanceIsLockedException;

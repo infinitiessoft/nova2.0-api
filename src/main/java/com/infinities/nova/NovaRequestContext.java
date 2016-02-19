@@ -24,12 +24,12 @@ import java.util.Set;
 import jersey.repackaged.com.google.common.collect.Sets;
 
 import com.google.common.base.Strings;
-import com.infinities.keystonemiddleware.model.Access.Service;
+import com.infinities.keystone4j.middleware.model.Access.Service;
+import com.infinities.nova.common.Context;
+import com.infinities.nova.common.Local;
 import com.infinities.nova.exception.ForbiddenException;
-import com.infinities.nova.openstack.common.Context;
-import com.infinities.nova.openstack.common.Local;
-import com.infinities.nova.openstack.common.policy.Credentials;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Credentials;
+import com.infinities.nova.policy.Target;
 
 public class NovaRequestContext implements Cloneable, Credentials, Target {
 

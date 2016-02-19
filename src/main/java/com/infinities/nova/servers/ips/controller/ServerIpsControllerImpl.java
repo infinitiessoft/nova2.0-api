@@ -28,7 +28,7 @@ import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.api.ComputeApi;
-import com.infinities.nova.views.address.ViewBuilder;
+import com.infinities.nova.servers.ips.views.ViewBuilder;
 
 public class ServerIpsControllerImpl implements ServerIpsController {
 

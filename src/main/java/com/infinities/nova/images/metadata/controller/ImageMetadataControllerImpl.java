@@ -22,14 +22,12 @@ import java.util.Map.Entry;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 
-import com.infinities.keystonemiddleware.ImageNotAuthorizedException;
-import com.infinities.keystonemiddleware.ImageNotFoundException;
 import com.infinities.nova.Common;
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
-import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
+import com.infinities.nova.common.model.MetaItemTemplate;
+import com.infinities.nova.common.model.MetadataTemplate;
+import com.infinities.nova.exception.ImageNotFoundException;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPForbiddenException;
 import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.images.api.ImagesApi;
 import com.infinities.nova.images.metadata.api.ImageMetadataApi;
@@ -62,8 +60,6 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 	private Image getImage(NovaRequestContext context, String imageId) throws Exception {
 		try {
 			return imageApi.get(context, imageId);
-		} catch (ImageNotAuthorizedException e) {
-			throw new HTTPForbiddenException(e.getMessage());
 		} catch (ImageNotFoundException e) {
 			throw new HTTPNotFoundException("Image not found.");
 		}
@@ -97,20 +93,15 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 			}
 		}
 		Common.checkImgMetadataPropertiesQuota(context, image.getMetadata());
-		try {
-			metadataApi.create(context, imageId, metadata.getMetadata());
-		} catch (ImageNotAuthorizedException e) {
-			throw new HTTPForbiddenException(e.getMessage());
-		}
+		metadataApi.create(context, imageId, metadata.getMetadata());
 		MetadataTemplate ret = new MetadataTemplate();
 		ret.setMetadata(image.getMetadata());
 		return ret;
 	}
 
 	@Override
-	public MetaItemTemplate
-			update(String imageId, String key, MetaItemTemplate body, ContainerRequestContext requestContext)
-					throws Exception {
+	public MetaItemTemplate update(String imageId, String key, MetaItemTemplate body, ContainerRequestContext requestContext)
+			throws Exception {
 		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
 
 		Map<String, String> meta = body.getMeta();
@@ -133,11 +124,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 		image.getMetadata().put(key, meta.get(key));
 		Common.checkImgMetadataPropertiesQuota(context, image.getMetadata());
 
-		try {
-			metadataApi.update(context, imageId, key, meta);
-		} catch (ImageNotAuthorizedException e) {
-			throw new HTTPForbiddenException(e.getMessage());
-		}
+		metadataApi.update(context, imageId, key, meta);
 
 		MetaItemTemplate ret = new MetaItemTemplate();
 		ret.setMeta(meta);
@@ -156,13 +143,8 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 		}
 
 		image.getMetadata().remove(key);
-		try {
-			metadataApi.delete(context, imageId, key);
-			return Response.noContent().build();
-		} catch (ImageNotAuthorizedException e) {
-			throw new HTTPForbiddenException(e.getMessage());
-		}
-
+		metadataApi.delete(context, imageId, key);
+		return Response.noContent().build();
 	}
 
 	@Override
@@ -176,11 +158,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 		}
 		Common.checkImgMetadataPropertiesQuota(context, metadata);
 		image.setMetadata(metadata);
-		try {
-			metadataApi.updateAll(context, imageId, metadata);
-		} catch (ImageNotAuthorizedException e) {
-			throw new HTTPForbiddenException(e.getMessage());
-		}
+		metadataApi.updateAll(context, imageId, metadata);
 		MetadataTemplate ret = new MetadataTemplate();
 		ret.setMetadata(metadata);
 		return ret;

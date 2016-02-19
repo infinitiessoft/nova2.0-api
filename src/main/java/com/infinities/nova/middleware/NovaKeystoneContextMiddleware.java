@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Strings;
-import com.infinities.keystonemiddleware.model.Access;
+import com.infinities.keystone4j.middleware.model.Access;
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 import com.infinities.skyport.util.JsonUtil;
 
 public class NovaKeystoneContextMiddleware {
@@ -94,8 +94,9 @@ public class NovaKeystoneContextMiddleware {
 			}
 		}
 
-		NovaRequestContext ctx = new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId,
-				authToken, true, null, userName, projectName, serviceCatalog, false);
+		NovaRequestContext ctx =
+				new NovaRequestContext(userId, projectId, null, "no", roles, remoteAddress, null, reqId, authToken, true,
+						null, userName, projectName, serviceCatalog, false);
 		env.setProperty("nova.context", ctx);
 		logger.debug("NovaKeystoneContex end");
 	}

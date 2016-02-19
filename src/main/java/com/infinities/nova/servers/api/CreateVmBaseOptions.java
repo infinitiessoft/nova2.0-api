@@ -18,9 +18,6 @@ package com.infinities.nova.servers.api;
 import java.util.Map;
 import java.util.UUID;
 
-import com.infinities.nova.compute.PowerState;
-import com.infinities.nova.compute.VmStates;
-
 public class CreateVmBaseOptions {
 
 	private UUID reservationId;

@@ -29,7 +29,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.common.Resource;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.ips.controller.ServerIpsController;

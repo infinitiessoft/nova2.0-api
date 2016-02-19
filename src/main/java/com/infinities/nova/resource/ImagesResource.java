@@ -30,9 +30,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
-import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
-import com.infinities.nova.api.openstack.wsgi.Resource;
+import com.infinities.nova.common.Resource;
+import com.infinities.nova.common.model.MetaItemTemplate;
+import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.exception.http.HTTPMethodNotAllowException;
 import com.infinities.nova.images.controller.ImagesController;
 import com.infinities.nova.images.metadata.controller.ImageMetadataController;

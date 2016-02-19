@@ -36,7 +36,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 import com.infinities.nova.response.model.Link;
 
 public abstract class AbstractViewBuilder {

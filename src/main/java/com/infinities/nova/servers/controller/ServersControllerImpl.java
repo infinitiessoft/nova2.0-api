@@ -40,11 +40,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.infinities.keystonemiddleware.ImageNotAuthorizedException;
 import com.infinities.nova.Common;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.Policy;
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.CannotResizeToSameFlavorException;
 import com.infinities.nova.exception.FlavorNotFoundException;
@@ -56,9 +55,8 @@ import com.infinities.nova.exception.NotFoundException;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
 import com.infinities.nova.exception.http.HTTPForbiddenException;
 import com.infinities.nova.exception.http.HTTPNotFoundException;
-import com.infinities.nova.exception.http.HTTPUnauthorizedException;
 import com.infinities.nova.extensions.Extensions;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Target;
 import com.infinities.nova.response.model.NetworkForCreate;
 import com.infinities.nova.response.model.PersonalityFile;
 import com.infinities.nova.response.model.ServerAction;
@@ -731,9 +729,6 @@ public class ServersControllerImpl implements ServersController {
 		} catch (CannotResizeToSameFlavorException e) {
 			String msg = "Resize requires a flavor change.";
 			throw new HTTPBadRequestException(msg);
-		} catch (ImageNotAuthorizedException e) {
-			String msg = "You are not authorized to access the image the instance was started with.";
-			throw new HTTPUnauthorizedException(msg);
 		} catch (ImageNotFoundException e) {
 			String msg = "Image that the instance was started with could not be found.";
 			throw new HTTPBadRequestException(msg);

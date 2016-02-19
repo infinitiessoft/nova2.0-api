@@ -1,0 +1,10 @@
+request:
+curl -si -X GET http://192.168.0.96:8774/
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 154
+Date: Wed, 17 Feb 2016 08:02:49 GMT
+
+{"versions": [{"status": "CURRENT", "updated": "2011-01-21T11:33:21Z", "id": "v2.0", "links": [{"href": "http://192.168.0.96:8774/v2/", "rel": "self"}]}]}

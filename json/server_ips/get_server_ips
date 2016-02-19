@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/ips/floating
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 57
+X-Compute-Request-Id: req-a763cbaf-45d3-4cf9-acd0-7577a54c7890
+Date: Thu, 18 Feb 2016 09:15:48 GMT
+
+{"floating": [{"version": 4, "addr": "192.168.126.173"}]}

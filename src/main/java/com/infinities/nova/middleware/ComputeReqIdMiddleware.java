@@ -21,7 +21,7 @@ import javax.annotation.Priority;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 
-import com.infinities.nova.openstack.common.Context;
+import com.infinities.nova.common.Context;
 
 @Priority(1002)
 public class ComputeReqIdMiddleware extends Middleware {

@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/limits
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 513
+X-Compute-Request-Id: req-0b1eb36c-c92b-4e3d-8a6f-5b84fe54d1b4
+Date: Fri, 19 Feb 2016 02:23:41 GMT
+
+{"limits": {"rate": [], "absolute": {"maxServerMeta": 128, "maxPersonality": 5, "totalServerGroupsUsed": 0, "maxImageMeta": 128, "maxPersonalitySize": 10240, "maxServerGroups": 10, "maxSecurityGroupRules": 20, "maxTotalKeypairs": 100, "totalCoresUsed": 1, "totalRAMUsed": 512, "totalInstancesUsed": 1, "maxSecurityGroups": 10, "totalFloatingIpsUsed": 0, "maxTotalCores": 20, "totalSecurityGroupsUsed": 1, "maxTotalFloatingIps": 10, "maxTotalInstances": 10, "maxTotalRAMSize": 51200, "maxServerGroupMembers": 10}}}

@@ -50,4 +50,9 @@ public class ProjectMapperResource {
 	public Class<KeyPairsResource> getKeyPairsResource() {
 		return KeyPairsResource.class;
 	}
+
+	@Path("os-availability-zone")
+	public Class<AvailabilityZoneResource> getAvailabilityZoneResource() {
+		return AvailabilityZoneResource.class;
+	}
 }

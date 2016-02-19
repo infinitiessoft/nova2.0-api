@@ -31,7 +31,7 @@ import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPair;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Target;
 import com.infinities.nova.response.model.KeyPair;
 
 /**

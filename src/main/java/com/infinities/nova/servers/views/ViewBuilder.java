@@ -36,7 +36,7 @@ import org.bouncycastle.util.encoders.Hex;
 import com.google.common.base.Strings;
 import com.infinities.nova.Common;
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.response.model.Link;
 import com.infinities.nova.response.model.Server;
@@ -58,7 +58,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 	private final static String COLLECTION_NAME = "servers";
 	private final static Set<String> PROGRESS_STATUSES;
 	private final static Map<String, String> FAULT_STATUSES;
-	private final com.infinities.nova.views.address.ViewBuilder addressBuilder = new com.infinities.nova.views.address.ViewBuilder();
+	private final com.infinities.nova.servers.ips.views.ViewBuilder addressBuilder = new com.infinities.nova.servers.ips.views.ViewBuilder();
 	// private final com.infinities.nova.views.flavors.ViewBuilder flavorBuilder
 	// = new com.infinities.nova.views.flavors.ViewBuilder();
 	// private final com.infinities.nova.views.images.ViewBuilder imageBuilder =

@@ -19,7 +19,7 @@ import com.google.common.base.Strings;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.Policy;
 import com.infinities.nova.exception.ForbiddenException;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Target;
 
 /**
  * @author pohsun

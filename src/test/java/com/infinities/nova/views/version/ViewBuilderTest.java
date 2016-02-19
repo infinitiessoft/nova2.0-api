@@ -29,11 +29,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.infinities.nova.model.wrapper.IdentityVersionListWrapper;
-import com.infinities.nova.model.wrapper.VersionWrapper;
 import com.infinities.nova.response.model.Link;
 import com.infinities.nova.response.model.MediaType;
 import com.infinities.nova.response.model.Version;
+import com.infinities.nova.versions.model.VersionWrapper;
+import com.infinities.nova.versions.model.VersionsWrapper;
+import com.infinities.nova.versions.views.ViewBuilder;
 
 public class ViewBuilderTest {
 
@@ -97,8 +98,8 @@ public class ViewBuilderTest {
 			versions.add(clone);
 		}
 
-		IdentityVersionListWrapper wrapper = builder.buildChoices(map, requestPath);
-		Collection<Version> rets = wrapper.getValues();
+		VersionsWrapper wrapper = builder.buildChoices(map, requestPath);
+		Collection<Version> rets = wrapper.getVersions();
 		assertEquals(versions, new HashSet<Version>(rets));
 	}
 
@@ -115,8 +116,8 @@ public class ViewBuilderTest {
 			clone.getMediaTypes().clear();
 			versions.add(clone);
 		}
-		IdentityVersionListWrapper wrapper = builder.buildVersions(map);
-		assertEquals(2, wrapper.getValues().size());
+		VersionsWrapper wrapper = builder.buildVersions(map);
+		assertEquals(2, wrapper.getVersions().size());
 	}
 
 	@Test

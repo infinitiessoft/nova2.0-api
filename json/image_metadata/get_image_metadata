@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e/metadata/owner_id
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 58
+X-Compute-Request-Id: req-098b6823-af62-41fe-977b-8716acd38522
+Date: Thu, 18 Feb 2016 10:37:27 GMT
+
+{"meta": {"owner_id": "7fb44a8ffc6e419497d94b8b2c13fee5"}}

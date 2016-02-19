@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.infinities.nova.VersionsApi;
+import com.infinities.nova.versions.api.VersionsApi;
 
 // [composite:osapi_compute]
 // use = call:nova.api.openstack.urlmap:urlmap_factory

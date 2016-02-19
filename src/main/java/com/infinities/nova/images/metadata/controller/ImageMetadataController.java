@@ -18,8 +18,8 @@ package com.infinities.nova.images.metadata.controller;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 
-import com.infinities.nova.api.openstack.compute.model.MetaItemTemplate;
-import com.infinities.nova.api.openstack.compute.model.MetadataTemplate;
+import com.infinities.nova.common.model.MetaItemTemplate;
+import com.infinities.nova.common.model.MetadataTemplate;
 
 public interface ImageMetadataController {
 

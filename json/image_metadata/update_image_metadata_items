@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e/metadata -d '{"metadata":{"foo":"FOO VALUE3"}}'
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 35
+X-Compute-Request-Id: req-4651f450-1aaf-4fd5-93da-196d37a932fb
+Date: Thu, 18 Feb 2016 10:44:47 GMT
+
+{"metadata": {"foo": "FOO VALUE3"}}

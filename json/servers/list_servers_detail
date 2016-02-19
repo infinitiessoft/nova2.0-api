@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/detail
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 1809
+X-Compute-Request-Id: req-52ab2794-3323-4ce1-996e-da7abcce6a87
+Date: Thu, 18 Feb 2016 10:24:10 GMT
+
+{"servers": [{"status": "ACTIVE", "updated": "2016-02-15T09:08:40Z", "hostId": "7a26c93e5c1a6c570c8288366b50cb127b0e2f22a2a537dfa6fbe76b", "OS-EXT-SRV-ATTR:host": "d00-0c-29-5f-bb-81", "addresses": {"floating": [{"OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:be:31:52", "version": 4, "addr": "192.168.126.173", "OS-EXT-IPS:type": "fixed"}]}, "links": [{"href": "http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "rel": "self"}, {"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "rel": "bookmark"}], "key_name": null, "image": {"id": "b1222a92-3bb1-4065-a9ca-cd11caef568f", "links": [{"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/images/b1222a92-3bb1-4065-a9ca-cd11caef568f", "rel": "bookmark"}]}, "OS-EXT-STS:task_state": null, "OS-EXT-STS:vm_state": "active", "OS-EXT-SRV-ATTR:instance_name": "instance-0000007b", "OS-SRV-USG:launched_at": "2016-02-05T08:29:33.000000", "OS-EXT-SRV-ATTR:hypervisor_hostname": "d00-0c-29-5f-bb-81.cloud.default.net", "flavor": {"id": "922faa0a-ae78-499c-a494-bfc6e2c26a00", "links": [{"href": "http://192.168.0.96:8774/0d284d59ec704b1690d70c773c4e16bc/flavors/922faa0a-ae78-499c-a494-bfc6e2c26a00", "rel": "bookmark"}]}, "id": "1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "security_groups": [{"name": "default"}], "OS-SRV-USG:terminated_at": null, "OS-EXT-AZ:availability_zone": "nova", "user_id": "7e84a35aed5c41a491c0aee8b7c7a9be", "name": "demo", "created": "2016-02-05T08:29:24Z", "tenant_id": "0d284d59ec704b1690d70c773c4e16bc", "OS-DCF:diskConfig": "MANUAL", "os-extended-volumes:volumes_attached": [], "accessIPv4": "", "accessIPv6": "", "progress": 0, "OS-EXT-STS:power_state": 1, "config_drive": "", "metadata": {"foo": "FOO VALUE2"}}]}

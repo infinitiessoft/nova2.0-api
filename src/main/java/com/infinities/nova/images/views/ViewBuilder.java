@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.ws.rs.container.ContainerRequestContext;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImage;

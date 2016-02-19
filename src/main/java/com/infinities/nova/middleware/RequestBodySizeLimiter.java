@@ -22,7 +22,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.core.Response;
 
-import com.infinities.nova.common.Config;
+import com.infinities.nova.common.config.Config;
 
 @Priority(1003)
 public class RequestBodySizeLimiter extends Middleware {

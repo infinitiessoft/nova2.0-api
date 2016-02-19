@@ -16,7 +16,7 @@
 package com.infinities.nova.extensions;
 
 import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.openstack.common.policy.Target;
+import com.infinities.nova.policy.Target;
 
 /**
  * @author pohsun

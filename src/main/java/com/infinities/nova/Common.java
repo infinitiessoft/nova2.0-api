@@ -36,14 +36,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.common.Config;
-import com.infinities.nova.compute.TaskStates;
-import com.infinities.nova.compute.VmStates;
+import com.infinities.nova.common.config.Config;
 import com.infinities.nova.db.model.Address;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.InstanceInvalidStateException;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
 import com.infinities.nova.exception.http.HTTPConflictException;
+import com.infinities.nova.servers.api.TaskStates;
+import com.infinities.nova.servers.api.VmStates;
 
 public class Common {
 

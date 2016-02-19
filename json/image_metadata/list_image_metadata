@@ -1,0 +1,11 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/images/017bec68-05d4-42e8-834a-b3a64ba7341e/metadata
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 651
+X-Compute-Request-Id: req-74ab6d8a-b295-4875-8b28-66fe67cd47f3
+Date: Thu, 18 Feb 2016 10:29:56 GMT
+
+{"metadata": {"instance_uuid": "30d563ce-f7a7-476a-b7e9-9baa1b2a4453", "image_location": "snapshot", "image_state": "available", "instance_type_memory_mb": "512", "user_id": "7e84a35aed5c41a491c0aee8b7c7a9be", "image_type": "snapshot", "instance_type_id": "6", "instance_type_name": "m1.tiny", "instance_type_ephemeral_gb": "0", "instance_type_rxtx_factor": "1.0", "instance_type_root_gb": "0", "network_allocated": "True", "instance_type_flavorid": "922faa0a-ae78-499c-a494-bfc6e2c26a00", "instance_type_vcpus": "1", "base_image_ref": "b1222a92-3bb1-4065-a9ca-cd11caef568f", "instance_type_swap": "1", "owner_id": "7fb44a8ffc6e419497d94b8b2c13fee5"}}
