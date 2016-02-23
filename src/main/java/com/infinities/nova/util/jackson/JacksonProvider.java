@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
@@ -41,6 +42,11 @@ public class JacksonProvider extends com.fasterxml.jackson.jaxrs.json.JacksonJso
 						.enable(SerializationFeature.INDENT_OUTPUT)
 						.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 						.setAnnotationIntrospector(new AnnotationIntrospectorPair(introspector, secondary));
+		NullStringSerializer serializer = new NullStringSerializer();
+
+		SimpleModule module = new SimpleModule("NullToNoneDeserializer");
+		module.addSerializer(String.class, serializer);
+		mapper.registerModule(module);
 		// mapper = mapper.setSerializationInclusion(Include)
 		setMapper(mapper);
 	}
