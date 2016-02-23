@@ -141,6 +141,11 @@ public class ServersResource {
 		return ServerIpsResource.class;
 	}
 
+	@Path("{serverId}/os-volume_attachments")
+	public Class<VolumeAttachmentsResource> getVolumeAttachmentsResource() {
+		return VolumeAttachmentsResource.class;
+	}
+
 	@POST
 	@Path("{serverId}/action")
 	public Response action(@PathParam("serverId") String serverId, @Context ContainerRequestContext requestContext,

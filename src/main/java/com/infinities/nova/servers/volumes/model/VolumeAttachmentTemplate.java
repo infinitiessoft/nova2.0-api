@@ -13,22 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.availablityzone.api;
+package com.infinities.nova.servers.volumes.model;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.io.Serializable;
 
-import org.apache.commons.lang3.concurrent.ConcurrentException;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
+/**
+ * @author pohsun
+ *
+ */
+public class VolumeAttachmentTemplate implements Serializable {
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.availablityzone.model.AvailabilityZone;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private VolumeAttachment volumeAttachment;
 
-public interface AvailabilityZoneApi {
 
-	// getOnlyAvailable=false, withHosts=false
-	public List<AvailabilityZone> getAvailabilityZones(NovaRequestContext context) throws InterruptedException,
-			ExecutionException, InternalException, CloudException, ConcurrentException, Exception;
+	/**
+	 * @return the volumeAttachment
+	 */
+	public VolumeAttachment getVolumeAttachment() {
+		return volumeAttachment;
+	}
+
+	/**
+	 * @param volumeAttachment
+	 *            the volumeAttachment to set
+	 */
+	public void setVolumeAttachment(VolumeAttachment volumeAttachment) {
+		this.volumeAttachment = volumeAttachment;
+	}
 
 }

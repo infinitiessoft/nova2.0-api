@@ -55,4 +55,9 @@ public class ProjectMapperResource {
 	public Class<AvailabilityZoneResource> getAvailabilityZoneResource() {
 		return AvailabilityZoneResource.class;
 	}
+
+	@Path("os-volumes")
+	public Class<VolumesResource> getVolumesResource() {
+		return VolumesResource.class;
+	}
 }

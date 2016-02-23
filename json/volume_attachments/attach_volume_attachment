@@ -1,0 +1,10 @@
+request:
+ curl -si -H "X-Auth-Token:$TOKEN" -X POST -d '{"volumeAttachment": { "volumeId": "c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c", "device": "/dev/vdd"}}' -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/os-volume_attachments
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 194
+X-Compute-Request-Id: req-e849bf9c-3e66-4628-bf1b-976e8ffcd262
+Date: Tue, 23 Feb 2016 02:24:19 GMT
+
+{"volumeAttachment": {"device": "/dev/vdd", "serverId": "1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "id": "c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c", "volumeId": "c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c"}}

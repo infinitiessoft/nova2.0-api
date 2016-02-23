@@ -19,16 +19,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.concurrent.ConcurrentException;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
 import org.dasein.cloud.dc.DataCenter;
 
 import com.google.common.base.Preconditions;
+import com.infinities.nova.Context;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.availablityzone.model.AvailabilityZone;
 import com.infinities.nova.availablityzone.model.Service;
@@ -48,8 +46,10 @@ public class DaseinAvailabilityZoneApi implements AvailabilityZoneApi {
 	}
 
 	@Override
-	public List<AvailabilityZone> getAvailabilityZones(NovaRequestContext context) throws InterruptedException,
-			ExecutionException, InternalException, CloudException, ConcurrentException {
+	public List<AvailabilityZone> getAvailabilityZones(NovaRequestContext context) throws Exception {
+		if (context == null) {
+			context = Context.getAdminContext("no");
+		}
 		AsyncResult<Iterable<DataCenter>> result =
 				getServices(context.getProjectId()).listDataCenters(getRegionId(context.getProjectId()));
 		Iterable<DataCenter> dcs = result.get();
