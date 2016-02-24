@@ -60,4 +60,14 @@ public class ProjectMapperResource {
 	public Class<VolumesResource> getVolumesResource() {
 		return VolumesResource.class;
 	}
+
+	@Path("os-snapshots")
+	public Class<SnapshotsResource> getSnapshotsResource() {
+		return SnapshotsResource.class;
+	}
+
+	@Path("os-security-groups")
+	public Class<SecurityGroupsResource> getSecurityGroupsResource() {
+		return SecurityGroupsResource.class;
+	}
 }

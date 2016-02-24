@@ -1,0 +1,12 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d curl -si -H "X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d '{"volume":{"display_name":"vol-001","display_description":"Another Volume.","size":"1","volume_type": "4aafe9fb-3e33-4ffd-adb0-3d95c76370ce","metadata": {"contents": "junk"},"availability_zone": "nova"}}' http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-volumes
+
+response:
+HTTP/1.1 200 OK
+Location: http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-volumes/59d4d7a1-f7c2-49ed-87cf-011e3ce27173
+Content-Type: application/json
+Content-Length: 326
+X-Compute-Request-Id: req-4e3b9cf1-73f2-4473-bb29-29565b282e63
+Date: Tue, 23 Feb 2016 10:44:15 GMT
+
+{"volume": {"status": "creating", "displayDescription": "Another Volume.", "availabilityZone": "nova", "displayName": "vol-001", "attachments": [{}], "volumeType": "disk", "snapshotId": null, "metadata": {"contents": "junk"}, "id": "59d4d7a1-f7c2-49ed-87cf-011e3ce27173", "createdAt": "2016-02-23T10:44:15.319112", "size": 1}}

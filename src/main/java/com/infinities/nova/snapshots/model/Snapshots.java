@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.snapshots.model;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -51,6 +51,14 @@ public class Snapshots implements Iterable<Snapshot>, Serializable {
 	@Override
 	public Iterator<Snapshot> iterator() {
 		return list.iterator();
+	}
+
+	/**
+	 * @param list
+	 *            the list to set
+	 */
+	public void setList(List<Snapshot> list) {
+		this.list = list;
 	}
 
 }

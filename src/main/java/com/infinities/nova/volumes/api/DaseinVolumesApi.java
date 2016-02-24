@@ -100,7 +100,7 @@ public class DaseinVolumesApi implements VolumesApi {
 		Iterator<org.dasein.cloud.compute.Volume> iterator = iterable.iterator();
 		while (iterator.hasNext()) {
 			org.dasein.cloud.compute.Volume volume = iterator.next();
-			volumes.add(toVolumes(volume, types.get()));
+			volumes.add(toVolume(volume, types.get()));
 		}
 		return volumes;
 	}
@@ -110,7 +110,7 @@ public class DaseinVolumesApi implements VolumesApi {
 	 * @param iterable
 	 * @return
 	 */
-	private Volume toVolumes(org.dasein.cloud.compute.Volume volume, Iterable<VolumeProduct> iterable) {
+	private Volume toVolume(org.dasein.cloud.compute.Volume volume, Iterable<VolumeProduct> iterable) {
 		final Volume ret = new Volume();
 		ret.setAvailabilityZone(volume.getProviderDataCenterId());
 		Calendar createdAt = Calendar.getInstance();
@@ -171,7 +171,7 @@ public class DaseinVolumesApi implements VolumesApi {
 		if (volume == null) {
 			throw new VolumeNotFoundException(null, volumeId);
 		}
-		return toVolumes(volume, types.get());
+		return toVolume(volume, types.get());
 	}
 
 	/*

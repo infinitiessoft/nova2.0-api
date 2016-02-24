@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d '{"snapshot": {"display_name": "snap-001","display_description": "Daily backup","volum"c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c"}}' http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-snapshots
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 253
+X-Compute-Request-Id: req-05c5f1d7-f63c-4b1a-99e3-7690fc9dc0ff
+Date: Wed, 24 Feb 2016 02:27:43 GMT
+
+{"snapshot": {"status": "creating", "displayDescription": "Daily backup", "displayName": "snap-001", "volumeId": "c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c", "id": "0d11f01d-3919-4585-b07c-64767fd04673", "createdAt": "2016-02-24T02:27:43.515136", "size": 1}}

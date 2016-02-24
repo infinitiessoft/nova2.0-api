@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-volumes
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 1130
+X-Compute-Request-Id: req-066a09c1-e5cf-4234-b1f8-a8600d89f021
+Date: Tue, 23 Feb 2016 10:54:24 GMT
+
+{"volumes": [{"status": "available", "displayDescription": "Another Volume.", "availabilityZone": "nova", "displayName": "vol-001", "attachments": [{}], "volumeType": "disk", "snapshotId": null, "metadata": {"contents": "junk"}, "id": "59d4d7a1-f7c2-49ed-87cf-011e3ce27173", "createdAt": "2016-02-23T10:44:15.319112", "size": 1}, {"status": "available", "displayDescription": null, "availabilityZone": "nova", "displayName": "volume2", "attachments": [{}], "volumeType": "disk", "snapshotId": null, "metadata": {"readonly": "False"}, "id": "c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c", "createdAt": "2016-02-19T09:47:46.849808", "size": 1}, {"status": "in-use", "displayDescription": null, "availabilityZone": "nova", "displayName": "volume1", "attachments": [{"device": "/dev/vdc", "serverId": "1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3", "id": "8d4ec1c8-6ad8-4fab-b723-1e256941e3ef", "volumeId": "8d4ec1c8-6ad8-4fab-b723-1e256941e3ef"}], "volumeType": "disk", "snapshotId": null, "metadata": {"readonly": "False", "attached_mode": "rw"}, "id": "8d4ec1c8-6ad8-4fab-b723-1e256941e3ef", "createdAt": "2016-02-19T09:47:26.565359", "size": 1}]}

@@ -1,0 +1,9 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X DELETE -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-volumes/59d4d7a1-f7c2-49ed-87cf-011e3ce27173
+
+response:
+HTTP/1.1 202 Accepted
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+X-Compute-Request-Id: req-50654106-731a-4279-8b69-74d1feaff3a6
+Date: Tue, 23 Feb 2016 10:59:46 GMT

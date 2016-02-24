@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: appli11e3ce27173" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-volumes/59d4d7a1-f7c2-49ed-87cf-0
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 327
+X-Compute-Request-Id: req-22ca51d1-3b15-40bb-a5a7-a8ca1aa5ab27
+Date: Tue, 23 Feb 2016 10:58:04 GMT
+
+{"volume": {"status": "available", "displayDescription": "Another Volume.", "availabilityZone": "nova", "displayName": "vol-001", "attachments": [{}], "volumeType": "disk", "snapshotId": null, "metadata": {"contents": "junk"}, "id": "59d4d7a1-f7c2-49ed-87cf-011e3ce27173", "createdAt": "2016-02-23T10:44:15.319112", "size": 1}}

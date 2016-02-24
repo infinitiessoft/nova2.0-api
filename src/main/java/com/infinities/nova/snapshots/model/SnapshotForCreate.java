@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.snapshots.model;
 
 import java.io.Serializable;
 
@@ -21,42 +21,53 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "snapshot")
-public class Snapshot implements Serializable {
+public class SnapshotForCreate implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String id;
-
-	private String status;
-
-	@XmlElement(name = "displayName")
-	private String name;
-
-	@XmlElement(name = "displayDescription")
-	private String description;
-
+	@XmlElement(name = "volume_id")
 	private String volumeId;
 
-	private Integer size;
+	private Boolean force;
 
-	private String createdAt;
+	@XmlElement(name = "display_name")
+	private String name;
+
+	@XmlElement(name = "display_description")
+	private String description;
 
 
 	/**
-	 * @return the id
+	 * @return the volumeId
 	 */
-	public String getId() {
-		return id;
+	public String getVolumeId() {
+		return volumeId;
 	}
 
 	/**
-	 * @return the status
+	 * @param volumeId
+	 *            the volumeId to set
 	 */
-	public String getStatus() {
-		return status;
+	public void setVolumeId(String volumeId) {
+		this.volumeId = volumeId;
+	}
+
+	/**
+	 * @return the force
+	 */
+	public Boolean getForce() {
+		return force;
+	}
+
+	/**
+	 * @param force
+	 *            the force to set
+	 */
+	public void setForce(Boolean force) {
+		this.force = force;
 	}
 
 	/**
@@ -67,6 +78,14 @@ public class Snapshot implements Serializable {
 	}
 
 	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -74,24 +93,11 @@ public class Snapshot implements Serializable {
 	}
 
 	/**
-	 * @return the volumeId
+	 * @param description
+	 *            the description to set
 	 */
-	public String getVolumeId() {
-		return volumeId;
-	}
-
-	/**
-	 * @return the size
-	 */
-	public Integer getSize() {
-		return size;
-	}
-
-	/**
-	 * @return the createdAt
-	 */
-	public String getCreatedAt() {
-		return createdAt;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/*
@@ -101,8 +107,8 @@ public class Snapshot implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Snapshot [id=" + id + ", status=" + status + ", displayName=" + name + ", displayDescription=" + description
-				+ ", volumeId=" + volumeId + ", size=" + size + ", createdAt=" + createdAt + "]";
+		return "SnapshotForCreate [volumeId=" + volumeId + ", force=" + force + ", name=" + name + ", description="
+				+ description + "]";
 	}
 
 }

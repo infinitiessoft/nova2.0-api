@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-snapshots
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 247
+X-Compute-Request-Id: req-10f2ff23-acae-442b-9b03-0d456dc486d1
+Date: Wed, 24 Feb 2016 02:14:32 GMT
+
+{"snapshots": [{"status": "available", "displayDescription": "", "displayName": "snapshot-1", "volumeId": "c7c11fdd-aaf2-4c45-8f92-02f7a9160b5c", "id": "96154156-7e2f-4931-95ab-a4d36664dfd2", "createdAt": "2016-02-24T02:13:58.049330", "size": 1}]}
