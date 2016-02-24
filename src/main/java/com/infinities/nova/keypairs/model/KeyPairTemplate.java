@@ -29,7 +29,7 @@ public class KeyPairTemplate implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private KeyPair keyPair;
+	private KeyPair keypair;
 
 
 	/**
@@ -40,26 +40,26 @@ public class KeyPairTemplate implements Serializable {
 	}
 
 	/**
-	 * @param keyPair
+	 * @param keypair
 	 */
-	public KeyPairTemplate(KeyPair keyPair) {
+	public KeyPairTemplate(KeyPair keypair) {
 		super();
-		this.keyPair = keyPair;
+		this.keypair = keypair;
 	}
 
 	/**
-	 * @param keyPair
-	 *            the keyPair to set
+	 * @param keypair
+	 *            the keypair to set
 	 */
-	public void setKeyPair(KeyPair keyPair) {
-		this.keyPair = keyPair;
+	public void setKeyPair(KeyPair keypair) {
+		this.keypair = keypair;
 	}
 
 	/**
-	 * @return the keyPair
+	 * @return the keypair
 	 */
-	public KeyPair getKeyPair() {
-		return keyPair;
+	public KeyPair getKeypair() {
+		return keypair;
 	}
 
 }

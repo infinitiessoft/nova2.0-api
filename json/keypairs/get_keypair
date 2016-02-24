@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-keypairs/key_01
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 673
+X-Compute-Request-Id: req-4d4a431a-6879-43ea-bde5-db23a1659da1
+Date: Wed, 24 Feb 2016 04:47:39 GMT
+
+{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI51vktAYHRYJMNjp8qoHRy/X7fTaDI/z00m22EGR8Z3Bbkw0Tf2uKyb/Ep4mxDSBdhaHbHXa+iQTo+xmJ/RaaXSmH+mSRtjZX6Bda30+KxvqZZWXQI+mYTYZ6ZkdGJ88dYO7milXj5uYHUwCyXgQds4QXUl1pGkBBeuZfP7/DnlXsbUlKmepXkVK6LsYPkxV9EimszitdTUmUvQJ4feYsgqwb7SYNX4BJIjn7YvvkV9W80PkhuIJCIv+OohnIMMJbN1H7HNtkDZQzzrARJ5N/XBsrTPbMq1lRCIsqTSjmjPe+QeS34CJ2EMy0QGx8u0Dt+YIckIrGqHq3VqQroH65 Generated-by-Nova\n", "user_id": "7e84a35aed5c41a491c0aee8b7c7a9be", "name": "key_01", "deleted": false, "created_at": "2016-02-24T04:40:42.010495", "updated_at": null, "fingerprint": "8b:ae:d9:db:94:70:13:1d:1f:e4:9e:4f:62:70:49:1f", "deleted_at": null, "id": 1}}

@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d '{"keypair":{"name":"key_04","public_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9yWAUZjQizmEuIWS+SYbF8Nw7KJkfkQJgaVTWcYQaVrkQuJ/3RQe8h5sllHVrJmkXrESqip98km3d24nFTnJpof+f7KKm4hMfVXhEDdb+Ecp/qkjgRMvGeVXJ3Rva2q4QkNjn61AstyT4/ei/B9ts2KUZC6RKAvmWmcddlFrbdklLU/kQWlQYShgfaRA9FKj4E19zsRW8BY/AKC0cwj+9LxRQ1pnN07EiMDObSlDZ/OZ5dqH0KCBUFOtVBsqFPux2BV1rzXvXyH6+Ww7/1F4WmM//oK2VniMarBzSPT9QPfbQmNAEvzbKgy1qrmi1Gbwe/Lsx3fa3fbKmgbVJx/Cp Generated-by-Pohsun\n"}}' http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-keypairs
+ 
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 564
+X-Compute-Request-Id: req-46750406-61de-4cef-951a-e8ca35f7f7db
+Date: Wed, 24 Feb 2016 04:57:20 GMT
+
+{"keypair": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9yWAUZjQizmEuIWS+SYbF8Nw7KJkfkQJgaVTWcYQaVrkQuJ/3RQe8h5sllHVrJmkXrESqip98km3d24nFTnJpof+f7KKm4hMfVXhEDdb+Ecp/qkjgRMvGeVXJ3Rva2q4QkNjn61AstyT4/ei/B9ts2KUZC6RKAvmWmcddlFrbdklLU/kQWlQYShgfaRA9FKj4E19zsRW8BY/AKC0cwj+9LxRQ1pnN07EiMDObSlDZ/OZ5dqH0KCBUFOtVBsqFPux2BV1rzXvXyH6+Ww7/1F4WmM//oK2VniMarBzSPT9QPfbQmNAEvzbKgy1qrmi1Gbwe/Lsx3fa3fbKmgbVJx/Cp Generated-by-Pohsun\n", "user_id": "7e84a35aed5c41a491c0aee8b7c7a9be", "name": "key_04", "fingerprint": "d9:05:79:13:de:03:07:df:99:91:77:76:a9:39:4f:85"}}

@@ -84,7 +84,7 @@ public class KeyPairsResource {
 		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
 		Resource.processStack(requestContext, projectId, novaContext);
 		controller.delete(keyPairId, requestContext);
-		return Response.status(Status.NO_CONTENT).build();
+		return Response.status(Status.ACCEPTED).build();
 	}
 
 }

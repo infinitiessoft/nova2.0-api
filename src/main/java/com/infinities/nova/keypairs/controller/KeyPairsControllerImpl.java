@@ -94,7 +94,7 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, null, "create");
 
-		KeyPair params = body.getKeyPair();
+		KeyPair params = body.getKeypair();
 		if (params == null || Strings.isNullOrEmpty(params.getName())) {
 			String msg = "Invalid request body";
 			throw new HTTPBadRequestException(msg);
@@ -102,8 +102,8 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 
 		MinimalKeyPair minimalKeyPair = null;
 		if (!Strings.isNullOrEmpty(params.getPublicKey())) {
-			KeyPair keyPair = keyPairsApi.importKeyPair(context, context.getUserId(), params.getName(),
-					params.getPublicKey());
+			KeyPair keyPair =
+					keyPairsApi.importKeyPair(context, context.getUserId(), params.getName(), params.getPublicKey());
 			minimalKeyPair = toMinimalKeyPair(keyPair);
 		} else {
 			KeyPair keyPair = keyPairsApi.createKeyPair(context, context.getUserId(), params.getName());

@@ -28,6 +28,7 @@ public class KeyPair implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@XmlElement(name = "name")
 	private String name;
 
 	@XmlElement(name = "user_id")

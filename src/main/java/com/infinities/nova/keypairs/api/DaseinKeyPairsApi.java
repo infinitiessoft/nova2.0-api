@@ -80,7 +80,9 @@ public class DaseinKeyPairsApi implements KeyPairsApi {
 		keyPair.setName(name);
 		keyPair.setPublicKey(publicKey);
 		keyPair.setFingerprint(fingerprint);
-		keyPair.setPrivateKey(new String(privateKey, "UTF-8"));
+		if (privateKey != null) {
+			keyPair.setPrivateKey(new String(privateKey, "UTF-8"));
+		}
 		keyPair.setUserId(userId);
 		return keyPair;
 	}
