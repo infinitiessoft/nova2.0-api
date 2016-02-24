@@ -1,0 +1,11 @@
+request:
+ curl -si -H "X-Auth-Token:$TOKEN" -X PUT -H "Content-type: application/json" -d '{"security_group": {"name": "demo","description": "demo"}}' http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-security-groups/d879b301-35ae-42da-b0dc-bd2dbd850f64
+ 
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 167
+X-Compute-Request-Id: req-aaea0406-744d-4388-ad36-e1b6b92afd05
+Date: Wed, 24 Feb 2016 09:29:11 GMT
+
+{"security_group": {"rules": [], "tenant_id": "0d284d59ec704b1690d70c773c4e16bc", "id": "d879b301-35ae-42da-b0dc-bd2dbd850f64", "name": "demo", "description": "demo"}}

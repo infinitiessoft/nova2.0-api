@@ -13,44 +13,39 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.securitygroups.model;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class SecurityGroups implements Iterable<SecurityGroup>, Serializable {
+/**
+ * @author pohsun
+ *
+ */
+public class SecurityForCreateTemplate implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@XmlElement(name = "security_groups")
-	private List<SecurityGroup> list;
+	@XmlElement(name = "security_group")
+	private SecurityGroupForCreate securityGroup;
 
 
 	/**
-	 * @return the list
+	 * @return the securityGroup
 	 */
-	public List<SecurityGroup> getList() {
-		return list;
+	public SecurityGroupForCreate getSecurityGroup() {
+		return securityGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @param securityGroup
+	 *            the securityGroup to set
 	 */
-	@Override
-	public String toString() {
-		return "SecurityGroups [list=" + list + "]";
-	}
-
-	@Override
-	public Iterator<SecurityGroup> iterator() {
-		return list.iterator();
+	public void setSecurityGroup(SecurityGroupForCreate securityGroup) {
+		this.securityGroup = securityGroup;
 	}
 
 }

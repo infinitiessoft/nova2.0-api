@@ -136,6 +136,11 @@ public class ServersResource {
 		return ServerMetadataResource.class;
 	}
 
+	@Path("{serverId}/os-security-groups")
+	public Class<ServerSecurityGroupsResource> getServerSecurityGroupsResource() {
+		return ServerSecurityGroupsResource.class;
+	}
+
 	@Path("{serverId}/ips")
 	public Class<ServerIpsResource> getServerIpsResource() {
 		return ServerIpsResource.class;

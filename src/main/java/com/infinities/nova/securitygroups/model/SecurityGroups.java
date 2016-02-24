@@ -13,66 +13,37 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.securitygroups.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 
-@XmlRootElement(name = "security_group")
-public class SecurityGroupForCreate implements Serializable {
+public class SecurityGroups implements Iterable<SecurityGroup>, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private String name;
-
-	private String description;
+	@XmlElement(name = "security_groups")
+	private List<SecurityGroup> list;
 
 
-	public SecurityGroupForCreate() {
-		super();
-	}
-
-	public SecurityGroupForCreate(String name) {
-		this.name = name;
-	}
-
-	public SecurityGroupForCreate(String name, String description) {
-		this(name);
-		this.description = description;
+	/**
+	 * @return the list
+	 */
+	public List<SecurityGroup> getList() {
+		return list;
 	}
 
 	/**
-	 * @return the name
+	 * @param list
+	 *            the list to set
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setList(List<SecurityGroup> list) {
+		this.list = list;
 	}
 
 	/*
@@ -82,7 +53,12 @@ public class SecurityGroupForCreate implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "SecurityGroupForCreate [name=" + name + ", description=" + description + "]";
+		return "SecurityGroups [list=" + list + "]";
+	}
+
+	@Override
+	public Iterator<SecurityGroup> iterator() {
+		return list.iterator();
 	}
 
 }

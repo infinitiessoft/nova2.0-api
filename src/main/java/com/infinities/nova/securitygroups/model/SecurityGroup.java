@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.securitygroups.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +29,7 @@ public class SecurityGroup implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+
 	@XmlRootElement(name = "security_group_rule")
 	public static final class Rule implements Serializable {
 
@@ -36,6 +37,7 @@ public class SecurityGroup implements Serializable {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+
 
 		public static final class Group implements Serializable {
 
@@ -58,6 +60,22 @@ public class SecurityGroup implements Serializable {
 				return tenantId;
 			}
 
+			/**
+			 * @param name
+			 *            the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+
+			/**
+			 * @param tenantId
+			 *            the tenantId to set
+			 */
+			public void setTenantId(String tenantId) {
+				this.tenantId = tenantId;
+			}
+
 			@Override
 			public String toString() {
 				return "Group [name=" + name + ", tenantId=" + tenantId + "]";
@@ -78,6 +96,14 @@ public class SecurityGroup implements Serializable {
 				return cidr;
 			}
 
+			/**
+			 * @param cidr
+			 *            the cidr to set
+			 */
+			public void setCidr(String cidr) {
+				this.cidr = cidr;
+			}
+
 			@Override
 			public String toString() {
 				return "IpRange [cidr=" + cidr + "]";
@@ -87,8 +113,6 @@ public class SecurityGroup implements Serializable {
 
 
 		private String id;
-
-		private String name;
 
 		@XmlElement(name = "parent_group_id")
 		private String parentGroupId;
@@ -113,13 +137,6 @@ public class SecurityGroup implements Serializable {
 		 */
 		public String getId() {
 			return id;
-		}
-
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return name;
 		}
 
 		/**
@@ -164,6 +181,62 @@ public class SecurityGroup implements Serializable {
 			return group;
 		}
 
+		/**
+		 * @param id
+		 *            the id to set
+		 */
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		/**
+		 * @param parentGroupId
+		 *            the parentGroupId to set
+		 */
+		public void setParentGroupId(String parentGroupId) {
+			this.parentGroupId = parentGroupId;
+		}
+
+		/**
+		 * @param fromPort
+		 *            the fromPort to set
+		 */
+		public void setFromPort(Integer fromPort) {
+			this.fromPort = fromPort;
+		}
+
+		/**
+		 * @param toPort
+		 *            the toPort to set
+		 */
+		public void setToPort(Integer toPort) {
+			this.toPort = toPort;
+		}
+
+		/**
+		 * @param ipProtocol
+		 *            the ipProtocol to set
+		 */
+		public void setIpProtocol(String ipProtocol) {
+			this.ipProtocol = ipProtocol;
+		}
+
+		/**
+		 * @param ipRange
+		 *            the ipRange to set
+		 */
+		public void setIpRange(IpRange ipRange) {
+			this.ipRange = ipRange;
+		}
+
+		/**
+		 * @param group
+		 *            the group to set
+		 */
+		public void setGroup(Group group) {
+			this.group = group;
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -171,9 +244,8 @@ public class SecurityGroup implements Serializable {
 		 */
 		@Override
 		public String toString() {
-			return "Rule [id=" + id + ", name=" + name + ", parentGroupId=" + parentGroupId + ", fromPort=" + fromPort
-					+ ", toPort=" + toPort + ", ipProtocol=" + ipProtocol + ", ipRange=" + ipRange + ", group=" + group
-					+ "]";
+			return "Rule [id=" + id + ", parentGroupId=" + parentGroupId + ", fromPort=" + fromPort + ", toPort=" + toPort
+					+ ", ipProtocol=" + ipProtocol + ", ipRange=" + ipRange + ", group=" + group + "]";
 		}
 
 	}
@@ -189,8 +261,6 @@ public class SecurityGroup implements Serializable {
 	private String tenantId;
 
 	private List<Rule> rules;
-
-	private List<Link> links;
 
 
 	/**
@@ -229,10 +299,43 @@ public class SecurityGroup implements Serializable {
 	}
 
 	/**
-	 * @return the links
+	 * @param id
+	 *            the id to set
 	 */
-	public List<Link> getLinks() {
-		return links;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param tenantId
+	 *            the tenantId to set
+	 */
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
+	}
+
+	/**
+	 * @param rules
+	 *            the rules to set
+	 */
+	public void setRules(List<Rule> rules) {
+		this.rules = rules;
 	}
 
 	/*
@@ -243,7 +346,7 @@ public class SecurityGroup implements Serializable {
 	@Override
 	public String toString() {
 		return "SecurityGroup [id=" + id + ", name=" + name + ", description=" + description + ", tenantId=" + tenantId
-				+ ", rules=" + rules + ", links=" + links + "]";
+				+ ", rules=" + rules + "]";
 	}
 
 }

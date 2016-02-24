@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/os-security-groups
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 692
+X-Compute-Request-Id: req-7ebf4e78-8566-4265-a0e2-1529db9cb282
+Date: Wed, 24 Feb 2016 09:41:30 GMT
+
+{"security_groups": [{"rules": [{"from_port": null, "group": {"tenant_id": "0d284d59ec704b1690d70c773c4e16bc", "name": "default"}, "ip_protocol": null, "to_port": null, "parent_group_id": "53cce721-9b67-48e2-87df-1cdd773b0681", "ip_range": {}, "id": "61d731ab-bec1-4876-bf3d-b83a2f2aece5"}, {"from_port": null, "group": {"tenant_id": "0d284d59ec704b1690d70c773c4e16bc", "name": "default"}, "ip_protocol": null, "to_port": null, "parent_group_id": "53cce721-9b67-48e2-87df-1cdd773b0681", "ip_range": {}, "id": "ba43c7d3-ffb2-438f-a4c0-91ccc83c7046"}], "tenant_id": "0d284d59ec704b1690d70c773c4e16bc", "id": "53cce721-9b67-48e2-87df-1cdd773b0681", "name": "default", "description": "default"}]}
