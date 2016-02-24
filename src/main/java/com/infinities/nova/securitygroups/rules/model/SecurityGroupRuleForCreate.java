@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.securitygroups.model;
+package com.infinities.nova.securitygroups.rules.model;
 
 import java.io.Serializable;
 
@@ -51,46 +51,6 @@ public class SecurityGroupRuleForCreate implements Serializable {
 
 	}
 
-	/**
-	 * 
-	 * @param parentSecurityGroupId
-	 * @param ipProtocol
-	 * @param fromPort
-	 * @param toPort
-	 * @param cidr
-	 * @deprecated Ids in some installs have shown to use strings .Use
-	 *             {@link #SecurityGroupRuleForCreate(String, String, Integer, Integer, String)}
-	 */
-	@Deprecated
-	public SecurityGroupRuleForCreate(Integer parentSecurityGroupId, String ipProtocol, Integer fromPort, Integer toPort,
-			String cidr) {
-		this.parentGroupId = String.valueOf(parentSecurityGroupId);
-		this.ipProtocol = ipProtocol;
-		this.fromPort = fromPort;
-		this.toPort = toPort;
-		this.cidr = cidr;
-	}
-
-	/**
-	 * 
-	 * @param parentSecurityGroupId
-	 * @param ipProtocol
-	 * @param fromPort
-	 * @param toPort
-	 * @param cidr
-	 * @deprecated Ids in some installs have shown to use strings .Use
-	 *             {@link #SecurityGroupRuleForCreate(String, String, String, Integer, Integer)}
-	 */
-	@Deprecated
-	public SecurityGroupRuleForCreate(Integer parentGroupId, String ipProtocol, Integer fromPort, Integer toPort,
-			Integer sourceGroupId) {
-		this.parentGroupId = String.valueOf(parentGroupId);
-		this.ipProtocol = ipProtocol;
-		this.fromPort = fromPort;
-		this.toPort = toPort;
-		this.groupId = String.valueOf(sourceGroupId);
-	}
-
 	public SecurityGroupRuleForCreate(String parentSecurityGroupId, String ipProtocol, Integer fromPort, Integer toPort,
 			String cidr) {
 		this.parentGroupId = parentSecurityGroupId;
@@ -114,15 +74,6 @@ public class SecurityGroupRuleForCreate implements Serializable {
 	 */
 	public String getParentGroupId() {
 		return parentGroupId;
-	}
-
-	/**
-	 * @param parentGroupId
-	 *            the parentGroupId to set
-	 * @deprecated Use {@link #setParentGroupId(String)}
-	 */
-	public void setParentGroupId(Integer parentGroupId) {
-		this.parentGroupId = String.valueOf(parentGroupId);
 	}
 
 	/**
@@ -198,15 +149,6 @@ public class SecurityGroupRuleForCreate implements Serializable {
 	 */
 	public String getGroupId() {
 		return groupId;
-	}
-
-	/**
-	 * @param groupId
-	 *            the groupId to set
-	 * @deprecated Use {@link #setGroupId(String)}
-	 */
-	public void setGroupId(Integer groupId) {
-		this.groupId = String.valueOf(groupId);
 	}
 
 	/**

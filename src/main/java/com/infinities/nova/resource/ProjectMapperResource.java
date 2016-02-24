@@ -70,4 +70,9 @@ public class ProjectMapperResource {
 	public Class<SecurityGroupsResource> getSecurityGroupsResource() {
 		return SecurityGroupsResource.class;
 	}
+
+	@Path("os-security-group-rules")
+	public Class<SecurityGroupRulesResource> getSecurityGroupRulesResource() {
+		return SecurityGroupRulesResource.class;
+	}
 }

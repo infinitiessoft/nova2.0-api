@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d '{"security_group_rule": {"from_port": "443","ip_protocol": "tcp","to_port": "443","cidr": "0.0.0.0/0","parent_group_id": "13ee7840-fddb-4070-9412-57107abc242f"}}'  http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-security-group-rules
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 234
+X-Compute-Request-Id: req-c72edc06-0be6-4612-bbdc-21dbef4503cf
+Date: Wed, 24 Feb 2016 11:07:19 GMT
+
+{"security_group_rule": {"from_port": 443, "group": {}, "ip_protocol": "tcp", "to_port": 443, "parent_group_id": "13ee7840-fddb-4070-9412-57107abc242f", "ip_range": {"cidr": "0.0.0.0/0"}, "id": "1f2e8bc8-f238-41d7-b697-2ae162415ae5"}}
