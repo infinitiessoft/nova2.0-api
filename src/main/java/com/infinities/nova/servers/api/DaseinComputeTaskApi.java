@@ -24,15 +24,13 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.compute.VMLaunchOptions;
+import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.network.Firewall;
 
 import com.google.common.base.Preconditions;
@@ -44,6 +42,7 @@ import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.skyport.async.service.network.AsyncFirewallSupport;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
+import com.infinities.skyport.compute.VMUpdateOptions;
 import com.infinities.skyport.service.ConfigurationHome;
 
 public class DaseinComputeTaskApi implements ComputeTaskApi {
@@ -129,9 +128,11 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public Instance updateInstance(NovaRequestContext context, String serverId, String name, String ipv4, String ipv6) {
-		throw new WebApplicationException(Response.status(Status.NOT_IMPLEMENTED)
-				.entity("update instance command not implemented yet").build());
+	public Instance updateInstance(NovaRequestContext context, String serverId, String name, String ipv4, String ipv6)
+			throws Exception {
+		VirtualMachine vm =
+				getSupport(context.getProjectId()).updateVirtualMachine(serverId, VMUpdateOptions.getInstance(name)).get();
+		return Instance.toInstance(vm);
 	}
 
 	@Override
@@ -192,7 +193,7 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	@Override
 	public void resizeInstance(NovaRequestContext context, Instance instance, String newInstanceTypeId, boolean cleanShutdown)
 			throws Exception {
-		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getInstanceId(), newInstanceTypeId);
+		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getInstanceId(), newInstanceTypeId).get();
 	}
 
 }
