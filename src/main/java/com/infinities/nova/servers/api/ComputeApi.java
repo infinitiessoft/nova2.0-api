@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.response.model.NetworkForCreate;
+import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.servers.controller.ServersFilter;
 
 public interface ComputeApi {
@@ -77,7 +77,7 @@ public interface ComputeApi {
 			String ramDiskId, Integer minCount, Integer maxCount, String displayName, String displayDescription,
 			String keyName, String keyData, List<String> securityGroup, String availabilityZone, String userData,
 			Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
-			String accessIpV4, String accessIpV6, List<NetworkForCreate> requestedNetworks, boolean configDrive,
-			boolean autoDiskConfig, boolean checkServerGroupQuota) throws Exception;
+			String accessIpV4, String accessIpV6, List<ServerForCreate.NetworkForCreate> requestedNetworks,
+			boolean configDrive, boolean autoDiskConfig, boolean checkServerGroupQuota) throws Exception;
 
 }

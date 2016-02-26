@@ -75,4 +75,9 @@ public class ProjectMapperResource {
 	public Class<SecurityGroupRulesResource> getSecurityGroupRulesResource() {
 		return SecurityGroupRulesResource.class;
 	}
+
+	@Path("os-networks")
+	public Class<NetworksResource> getNetworksResource() {
+		return NetworksResource.class;
+	}
 }

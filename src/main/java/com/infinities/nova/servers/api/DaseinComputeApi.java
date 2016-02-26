@@ -54,7 +54,7 @@ import com.infinities.nova.flavors.api.FlavorsApi;
 import com.infinities.nova.images.api.ImagesApi;
 import com.infinities.nova.policy.Target;
 import com.infinities.nova.response.model.Image;
-import com.infinities.nova.response.model.NetworkForCreate;
+import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.servers.controller.ServersFilter;
 import com.infinities.skyport.async.AsyncResult;
 import com.infinities.skyport.cache.CachedServiceProvider;
@@ -201,8 +201,8 @@ public class DaseinComputeApi implements ComputeApi {
 			String kernelId, String ramDiskId, Integer minCount, Integer maxCount, String displayName,
 			String displayDescription, String keyName, String keyData, List<String> securityGroup, String availabilityZone,
 			String userData, Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
-			String accessIpV4, String accessIpV6, List<NetworkForCreate> requestedNetworks, boolean configDrive,
-			boolean autoDiskConfig, boolean checkServerGroupQuota) throws Exception {
+			String accessIpV4, String accessIpV6, List<ServerForCreate.NetworkForCreate> requestedNetworks,
+			boolean configDrive, boolean autoDiskConfig, boolean checkServerGroupQuota) throws Exception {
 
 		checkCreatePolicies(context, availabilityZone, requestedNetworks);
 
@@ -221,8 +221,9 @@ public class DaseinComputeApi implements ComputeApi {
 			String kernelId, String ramDiskId, Integer minCount, Integer maxCount, String displayName,
 			String displayDescription, String keyName, String keyData, List<String> securityGroups, String availabilityZone,
 			String userData, Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
-			String accessIpV4, String accessIpV6, List<NetworkForCreate> requestedNetworks, boolean configDrive,
-			boolean autoDiskConfig, boolean shutdownTerminate, boolean checkServerGroupQuota) throws Exception {
+			String accessIpV4, String accessIpV6, List<ServerForCreate.NetworkForCreate> requestedNetworks,
+			boolean configDrive, boolean autoDiskConfig, boolean shutdownTerminate, boolean checkServerGroupQuota)
+			throws Exception {
 		UUID reservationId = UUID.randomUUID();
 		if (securityGroups == null || securityGroups.isEmpty()) {
 			securityGroups = new ArrayList<String>();
@@ -282,8 +283,8 @@ public class DaseinComputeApi implements ComputeApi {
 			String displayName, String displayDescription, String keyName, String keyData, List<String> securityGroups,
 			String availabilityZone, String forcedHost, String userData, Map<String, String> metadata,
 			List<Entry<String, String>> injectedFiles, String accessIpV4, String accessIpV6,
-			List<NetworkForCreate> requestedNetworks, boolean configDrive, boolean autoDiskConfig, UUID reservationId,
-			Integer maxCount) {
+			List<ServerForCreate.NetworkForCreate> requestedNetworks, boolean configDrive, boolean autoDiskConfig,
+			UUID reservationId, Integer maxCount) {
 		CreateVmBaseOptions baseOptions = new CreateVmBaseOptions();
 		if (Strings.isNullOrEmpty(kernelId)) {
 			kernelId = "";
@@ -381,13 +382,13 @@ public class DaseinComputeApi implements ComputeApi {
 		return image;
 	}
 
-	private void checkMultipleInstancesAndSpecifiedIp(List<NetworkForCreate> requestedNetworks) {
+	private void checkMultipleInstancesAndSpecifiedIp(List<ServerForCreate.NetworkForCreate> requestedNetworks) {
 		String msg = "max count cannot be greater than 1 if an fixed_ip is specified.";
 		throw new InvalidFixedIpAndMaxCountRequestException(msg);
 	}
 
 	private void checkCreatePolicies(NovaRequestContext context, String availabilityZone,
-			List<NetworkForCreate> requestedNetworks) throws Exception {
+			List<ServerForCreate.NetworkForCreate> requestedNetworks) throws Exception {
 		ComputeTarget target = new ComputeTarget();
 		target.setProjectId(context.getProjectId());
 		target.setUsertId(context.getUserId());

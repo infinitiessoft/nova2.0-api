@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/os-interface
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 550
+X-Compute-Request-Id: req-0a4d761e-6642-4f61-84a1-d088ed5da7db
+Date: Thu, 25 Feb 2016 04:27:41 GMT
+
+{"interfaceAttachments": [{"port_state": "ACTIVE", "fixed_ips": [{"subnet_id": "a5aeb5ab-5a39-40c3-b7be-c141f95a303e", "ip_address": "192.168.123.3"}], "port_id": "bc7ba01a-ce79-40b1-be6a-27f4779f0e91", "net_id": "d970d95a-58fb-497a-820c-ee71d4e90da7", "mac_addr": "fa:16:3e:b4:5e:86"}, {"port_state": "ACTIVE", "fixed_ips": [{"subnet_id": "a6b43d24-8d83-4236-8242-66e83fceabe4", "ip_address": "192.168.126.173"}], "port_id": "0cb0fecc-7f37-4c91-a611-842f8e7555a8", "net_id": "ce31c600-7f4c-45f7-8e3b-1b237e52eaa4", "mac_addr": "fa:16:3e:be:31:52"}]}

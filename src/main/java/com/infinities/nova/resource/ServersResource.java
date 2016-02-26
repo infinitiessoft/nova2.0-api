@@ -151,6 +151,11 @@ public class ServersResource {
 		return VolumeAttachmentsResource.class;
 	}
 
+	@Path("{serverId}/os-interface")
+	public Class<InterfaceAttachmentsResource> getInterfaceAttachmentsResource() {
+		return InterfaceAttachmentsResource.class;
+	}
+
 	@POST
 	@Path("{serverId}/action")
 	public Response action(@PathParam("serverId") String serverId, @Context ContainerRequestContext requestContext,

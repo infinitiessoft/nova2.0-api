@@ -32,6 +32,7 @@ public class ServerForCreate implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+
 	public static final class SecurityGroup implements Serializable {
 
 		/**
@@ -61,6 +62,49 @@ public class ServerForCreate implements Serializable {
 		 */
 		public void setName(String name) {
 			this.name = name;
+		}
+
+	}
+
+	public static class NetworkForCreate implements Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private String id;
+		@XmlElement(name = "fixed_ip")
+		private String fixedIp;
+
+
+		/**
+		 * @return the id
+		 */
+		public String getId() {
+			return id;
+		}
+
+		/**
+		 * @param id
+		 *            the id to set
+		 */
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		/**
+		 * @return the fixedIp
+		 */
+		public String getFixedIp() {
+			return fixedIp;
+		}
+
+		/**
+		 * @param fixedIp
+		 *            the fixedIp to set
+		 */
+		public void setFixedIp(String fixedIp) {
+			this.fixedIp = fixedIp;
 		}
 
 	}

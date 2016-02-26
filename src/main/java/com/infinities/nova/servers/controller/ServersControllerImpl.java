@@ -57,7 +57,6 @@ import com.infinities.nova.exception.http.HTTPForbiddenException;
 import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.extensions.Extensions;
 import com.infinities.nova.policy.Target;
-import com.infinities.nova.response.model.NetworkForCreate;
 import com.infinities.nova.response.model.PersonalityFile;
 import com.infinities.nova.response.model.ServerAction;
 import com.infinities.nova.response.model.ServerAction.Pause;
@@ -336,7 +335,7 @@ public class ServersControllerImpl implements ServersController {
 
 		sgNames = new ArrayList<String>(new HashSet<String>(sgNames));
 
-		List<NetworkForCreate> requestedNetworks = server.getNetworks();
+		List<ServerForCreate.NetworkForCreate> requestedNetworks = server.getNetworks();
 		if (requestedNetworks != null && !requestedNetworks.isEmpty()) {
 			getRequestedNetworks(requestedNetworks);
 		}
@@ -437,11 +436,11 @@ public class ServersControllerImpl implements ServersController {
 		}
 	}
 
-	private List<NetworkRequest> getRequestedNetworks(List<NetworkForCreate> requestedNetworks) {
+	private List<NetworkRequest> getRequestedNetworks(List<ServerForCreate.NetworkForCreate> requestedNetworks) {
 		List<NetworkRequest> networks = new ArrayList<NetworkRequest>();
 		List<String> networkUuids = new ArrayList<String>();
 
-		for (NetworkForCreate network : requestedNetworks) {
+		for (ServerForCreate.NetworkForCreate network : requestedNetworks) {
 			NetworkRequest request = new NetworkRequest();
 			request.setPortId(null);
 			request.setNetworkId(network.getId());

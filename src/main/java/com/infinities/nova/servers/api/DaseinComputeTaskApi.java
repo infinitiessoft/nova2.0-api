@@ -40,7 +40,7 @@ import com.infinities.nova.Context;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.response.model.Image;
-import com.infinities.nova.response.model.NetworkForCreate;
+import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.skyport.async.service.network.AsyncFirewallSupport;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
@@ -58,9 +58,9 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 
 	@Override
 	public List<Instance> buildInstances(NovaRequestContext context, CreateVmBaseOptions options, int num, Image bootMeta,
-			String adminPassword, List<Entry<String, String>> injectedFiles, List<NetworkForCreate> requestedNetworks,
-			List<String> securityGroups) throws CloudException, InternalException, ConcurrentException,
-			InterruptedException, ExecutionException {
+			String adminPassword, List<Entry<String, String>> injectedFiles,
+			List<ServerForCreate.NetworkForCreate> requestedNetworks, List<String> securityGroups) throws CloudException,
+			InternalException, ConcurrentException, InterruptedException, ExecutionException {
 		VMLaunchOptions withLaunchOptions =
 				VMLaunchOptions.getInstance(options.getInstanceTypeId(), bootMeta.getId(), options.getDisplayName(),
 						options.getDisplayDescription());
