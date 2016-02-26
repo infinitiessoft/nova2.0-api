@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.networks.model;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -36,6 +36,14 @@ public class Networks implements Iterable<Network>, Serializable {
 	 */
 	public List<Network> getList() {
 		return list;
+	}
+
+	/**
+	 * @param list
+	 *            the list to set
+	 */
+	public void setList(List<Network> list) {
+		this.list = list;
 	}
 
 	/*

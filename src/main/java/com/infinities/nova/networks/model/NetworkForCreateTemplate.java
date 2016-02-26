@@ -13,38 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.networks.model;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlElement;
-
-public class NetworkForCreate implements Serializable {
+/**
+ * @author pohsun
+ *
+ */
+public class NetworkForCreateTemplate implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@XmlElement(name = "uuid")
-	private String id;
-	@XmlElement(name = "fixed_ip")
-	private String fixedIp;
+	private NetworkForCreate network;
 
 
-	public String getId() {
-		return id;
+	/**
+	 * @return the network
+	 */
+	public NetworkForCreate getNetwork() {
+		return network;
 	}
 
-	public String getFixedIp() {
-		return fixedIp;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setFixedIp(String fixedIp) {
-		this.fixedIp = fixedIp;
+	/**
+	 * @param network
+	 *            the network to set
+	 */
+	public void setNetwork(NetworkForCreate network) {
+		this.network = network;
 	}
 
 }

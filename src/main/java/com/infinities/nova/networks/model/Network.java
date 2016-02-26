@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.response.model;
+package com.infinities.nova.networks.model;
 
 import java.io.Serializable;
 
@@ -98,6 +98,237 @@ public class Network implements Serializable {
 
 	private String priority;
 
+
+	/**
+	 * @return the vpnPrivateAddress
+	 */
+	public String getVpnPrivateAddress() {
+		return vpnPrivateAddress;
+	}
+
+	/**
+	 * @param vpnPrivateAddress
+	 *            the vpnPrivateAddress to set
+	 */
+	public void setVpnPrivateAddress(String vpnPrivateAddress) {
+		this.vpnPrivateAddress = vpnPrivateAddress;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param vpnPublicAddress
+	 *            the vpnPublicAddress to set
+	 */
+	public void setVpnPublicAddress(String vpnPublicAddress) {
+		this.vpnPublicAddress = vpnPublicAddress;
+	}
+
+	/**
+	 * @param vpnPublicPort
+	 *            the vpnPublicPort to set
+	 */
+	public void setVpnPublicPort(String vpnPublicPort) {
+		this.vpnPublicPort = vpnPublicPort;
+	}
+
+	/**
+	 * @param dhcpStart
+	 *            the dhcpStart to set
+	 */
+	public void setDhcpStart(String dhcpStart) {
+		this.dhcpStart = dhcpStart;
+	}
+
+	/**
+	 * @param bridge
+	 *            the bridge to set
+	 */
+	public void setBridge(String bridge) {
+		this.bridge = bridge;
+	}
+
+	/**
+	 * @param bridgeInterface
+	 *            the bridgeInterface to set
+	 */
+	public void setBridgeInterface(String bridgeInterface) {
+		this.bridgeInterface = bridgeInterface;
+	}
+
+	/**
+	 * @param updatedAt
+	 *            the updatedAt to set
+	 */
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	/**
+	 * @param deleted
+	 *            the deleted to set
+	 */
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	/**
+	 * @param vlan
+	 *            the vlan to set
+	 */
+	public void setVlan(String vlan) {
+		this.vlan = vlan;
+	}
+
+	/**
+	 * @param broadcast
+	 *            the broadcast to set
+	 */
+	public void setBroadcast(String broadcast) {
+		this.broadcast = broadcast;
+	}
+
+	/**
+	 * @param netmask
+	 *            the netmask to set
+	 */
+	public void setNetmask(String netmask) {
+		this.netmask = netmask;
+	}
+
+	/**
+	 * @param injected
+	 *            the injected to set
+	 */
+	public void setInjected(Boolean injected) {
+		this.injected = injected;
+	}
+
+	/**
+	 * @param host
+	 *            the host to set
+	 */
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	/**
+	 * @param multiHost
+	 *            the multiHost to set
+	 */
+	public void setMultiHost(Boolean multiHost) {
+		this.multiHost = multiHost;
+	}
+
+	/**
+	 * @param createdAt
+	 *            the createdAt to set
+	 */
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	/**
+	 * @param deletedAt
+	 *            the deletedAt to set
+	 */
+	public void setDeletedAt(String deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	/**
+	 * @param cidr
+	 *            the cidr to set
+	 */
+	public void setCidr(String cidr) {
+		this.cidr = cidr;
+	}
+
+	/**
+	 * @param cidrV6
+	 *            the cidrV6 to set
+	 */
+	public void setCidrV6(String cidrV6) {
+		this.cidrV6 = cidrV6;
+	}
+
+	/**
+	 * @param gateway
+	 *            the gateway to set
+	 */
+	public void setGateway(String gateway) {
+		this.gateway = gateway;
+	}
+
+	/**
+	 * @param gatewayV6
+	 *            the gatewayV6 to set
+	 */
+	public void setGatewayV6(String gatewayV6) {
+		this.gatewayV6 = gatewayV6;
+	}
+
+	/**
+	 * @param netmaskV6
+	 *            the netmaskV6 to set
+	 */
+	public void setNetmaskV6(String netmaskV6) {
+		this.netmaskV6 = netmaskV6;
+	}
+
+	/**
+	 * @param projectId
+	 *            the projectId to set
+	 */
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	/**
+	 * @param rxtxBase
+	 *            the rxtxBase to set
+	 */
+	public void setRxtxBase(String rxtxBase) {
+		this.rxtxBase = rxtxBase;
+	}
+
+	/**
+	 * @param dns1
+	 *            the dns1 to set
+	 */
+	public void setDns1(String dns1) {
+		this.dns1 = dns1;
+	}
+
+	/**
+	 * @param dns2
+	 *            the dns2 to set
+	 */
+	public void setDns2(String dns2) {
+		this.dns2 = dns2;
+	}
+
+	/**
+	 * @param label
+	 *            the label to set
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	/**
+	 * @param priority
+	 *            the priority to set
+	 */
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
 
 	/**
 	 * @return the id

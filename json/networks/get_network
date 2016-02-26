@@ -1,0 +1,11 @@
+request:
+curl -si -H "X-Auth-Token:$TOKEN" -X GET -H "Content-type: application/json" http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/os-networks/ce31c600-7f4c-45f7-8e3b-1b237e52eaa4
+
+response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 654
+X-Compute-Request-Id: req-f5e5cadc-5caf-4960-8239-45570278ff7e
+Date: Thu, 25 Feb 2016 03:43:25 GMT
+
+{"network": {"bridge": null, "vpn_public_port": null, "dhcp_start": null, "bridge_interface": null, "share_address": null, "updated_at": null, "id": "ce31c600-7f4c-45f7-8e3b-1b237e52eaa4", "cidr_v6": null, "deleted_at": null, "gateway": null, "rxtx_base": null, "label": "floating", "priority": null, "project_id": null, "vpn_private_address": null, "deleted": null, "vlan": null, "broadcast": null, "netmask": null, "injected": null, "cidr": null, "vpn_public_address": null, "multi_host": null, "enable_dhcp": null, "dns2": null, "created_at": null, "host": null, "mtu": null, "gateway_v6": null, "netmask_v6": null, "dhcp_server": null, "dns1": null}}
