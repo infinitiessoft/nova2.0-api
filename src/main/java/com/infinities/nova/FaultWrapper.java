@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import com.infinities.nova.exception.SafeException;
 
 public class FaultWrapper implements ExceptionMapper<Exception> {
@@ -62,19 +63,17 @@ public class FaultWrapper implements ExceptionMapper<Exception> {
 				}
 			}
 		}
-		logger.debug("inner:{}", inner.getMessage());
+		String rootMsg = Throwables.getRootCause(inner).getMessage();
+		logger.debug("inner:{}", rootMsg);
 
 		WebApplicationException outer = null;
 
 		if (safe) {
-			outer =
-					new WebApplicationException(String.format("%s:%s", inner.getClass().getName(), inner.getMessage()),
-							res.build());
+			outer = new WebApplicationException(String.format("%s:%s", inner.getClass().getName(), rootMsg), res.build());
 		} else {
 			Response response = res.build();
 			String message =
-					Strings.isNullOrEmpty(inner.getMessage()) ? response.getStatusInfo().getReasonPhrase() : inner
-							.getMessage();
+					Strings.isNullOrEmpty(inner.getMessage()) ? response.getStatusInfo().getReasonPhrase() : rootMsg;
 			outer = new WebApplicationException(message, response);
 		}
 
