@@ -59,7 +59,6 @@ import com.infinities.nova.response.model.ServerAction.Start;
 import com.infinities.nova.response.model.ServerAction.Stop;
 import com.infinities.nova.response.model.ServerAction.Suspend;
 import com.infinities.nova.response.model.ServerAction.Unpause;
-import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.servers.controller.ServersController;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
 import com.infinities.nova.servers.model.ServerForCreateTemplate;
@@ -115,10 +114,10 @@ public class ServersResource {
 	@PUT
 	@Path("{serverId}")
 	public ServerTemplate update(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
-			@Context ContainerRequestContext requestContext, ServerForCreate server) throws Exception {
+			@Context ContainerRequestContext requestContext, ServerForCreateTemplate serverTemplate) throws Exception {
 		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
 		Resource.processStack(requestContext, projectId, novaContext);
-		return controller.update(requestContext, serverId, server);
+		return controller.update(requestContext, serverId, serverTemplate.getServer());
 	}
 
 	@DELETE

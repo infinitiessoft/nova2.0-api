@@ -28,24 +28,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
 import com.infinities.nova.exception.SafeException;
 
-public class FaultWrapper implements ExceptionMapper<SafeException> {
+public class FaultWrapper implements ExceptionMapper<Exception> {
 
 	private final static Logger logger = LoggerFactory.getLogger(FaultWrapper.class);
 
 
 	@Override
-	public Response toResponse(SafeException inner) {
+	public Response toResponse(Exception inner) {
 		logger.error("Cauht Error", inner);
 
 		boolean safe = false;
 		Map<String, List<Object>> headers = null;
 		int status = 500;
 
-		safe = inner.isSafe();
-		headers = inner.getHeaders();
-		status = inner.getCode();
+		if (inner instanceof SafeException) {
+			SafeException safeException = (SafeException) inner;
+			safe = safeException.isSafe();
+			headers = safeException.getHeaders();
+			status = safeException.getCode();
+		} else if (inner instanceof WebApplicationException) {
+			WebApplicationException webapplicationExcpetion = (WebApplicationException) inner;
+			headers = webapplicationExcpetion.getResponse().getHeaders();
+			status = webapplicationExcpetion.getResponse().getStatus();
+		}
 
 		ResponseBuilder res = Response.status(status);
 		if (headers != null) {
@@ -55,17 +63,17 @@ public class FaultWrapper implements ExceptionMapper<SafeException> {
 				}
 			}
 		}
-		logger.debug("inner:{}", inner.getMessage());
+		String rootMsg = Throwables.getRootCause(inner).getMessage();
+		logger.debug("inner:{}", rootMsg);
 
 		WebApplicationException outer = null;
 
 		if (safe) {
-			outer = new WebApplicationException(String.format("%s:%s", inner.getClass().getName(), inner.getMessage()),
-					res.build());
+			outer = new WebApplicationException(String.format("%s:%s", inner.getClass().getName(), rootMsg), res.build());
 		} else {
 			Response response = res.build();
-			String message = Strings.isNullOrEmpty(inner.getMessage()) ? response.getStatusInfo().getReasonPhrase() : inner
-					.getMessage();
+			String message =
+					Strings.isNullOrEmpty(inner.getMessage()) ? response.getStatusInfo().getReasonPhrase() : rootMsg;
 			outer = new WebApplicationException(message, response);
 		}
 

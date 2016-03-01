@@ -1,0 +1,9 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d '{"confirmResize": null}' http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/action
+
+response:
+HTTP/1.1 204 No Content
+Content-Length: 0
+Content-Type: application/json
+X-Compute-Request-Id: req-4b9a7a17-1871-4061-82bf-7f6f470dcf59
+Date: Tue, 01 Mar 2016 02:19:49 GMT
