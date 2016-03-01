@@ -1,0 +1,9 @@
+request:
+curl -si -H"X-Auth-Token:$TOKEN" -X POST -H "Content-type: application/json" -d '{"resize": {"flavorRef": "1664db0d-c5e1-4480-be72-6b24d5280f3e"}}' http://192.168.0.96:8774/v2/0d284d59ec704b1690d70c773c4e16bc/servers/1979d9a1-aa54-4a5e-bdf6-4b2d7a83b7d3/action
+
+response:
+HTTP/1.1 202 Accepted
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+X-Compute-Request-Id: req-5036f696-55a3-4880-8c0c-2ad7b931a727
+Date: Tue, 01 Mar 2016 02:17:54 GMT
