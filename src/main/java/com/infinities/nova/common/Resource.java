@@ -32,9 +32,9 @@ public class Resource {
 	public static void processStack(ContainerRequestContext requestContext, String projectid, NovaRequestContext context) {
 		logger.debug("projectid: {}, context projectid: {}", new Object[] { projectid, context.getProjectId() });
 		if (!Strings.isNullOrEmpty(projectid) && context != null && !projectid.equals(context.getProjectId())) {
-			String msg = String.format(
-					"Malformed request URL: URL's project_id '%s' doesn't match Context's project_id '%s'", projectid,
-					context.getProjectId());
+			String msg =
+					String.format("Malformed request URL: URL's project_id '%s' doesn't match Context's project_id '%s'",
+							projectid, context.getProjectId());
 
 			throw new HTTPBadRequestException(msg);
 		}

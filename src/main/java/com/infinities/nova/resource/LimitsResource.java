@@ -26,14 +26,14 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
 import com.infinities.nova.limits.controller.LimitsController;
 import com.infinities.nova.limits.model.LimitsTemplate;
+import com.infinities.nova.security.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class LimitsResource {
 
 	private final LimitsController controller;
@@ -51,8 +51,6 @@ public class LimitsResource {
 	@GET
 	public LimitsTemplate index(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.index(requestContext);
 	}
 

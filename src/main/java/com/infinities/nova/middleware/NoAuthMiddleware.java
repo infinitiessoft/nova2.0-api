@@ -52,6 +52,7 @@ public class NoAuthMiddleware extends Middleware {
 	}
 
 	protected void baseCall(ContainerRequestContext req, boolean projectIdInPath) throws Exception {
+		logger.debug("NoAuthMiddleware begin");
 		if (!req.getHeaders().containsKey("X-Auth-Token")) {
 			String userId = req.getHeaderString("X-Auth-User");
 			if (Strings.isNullOrEmpty(userId)) {
@@ -68,8 +69,9 @@ public class NoAuthMiddleware extends Middleware {
 			} else {
 				osUrl = StringUtils.removeEnd(req.getUriInfo().getRequestUri().toString(), "/");
 			}
-			Response res = Response.status(204).header("X-Auth-Token", String.format("%s:%s", userId, projectId))
-					.header("X-Server-Management-Url", osUrl).type("text/plain").build();
+			Response res =
+					Response.status(204).header("X-Auth-Token", String.format("%s:%s", userId, projectId))
+							.header("X-Server-Management-Url", osUrl).type("text/plain").build();
 			req.abortWith(res);
 		}
 
@@ -91,11 +93,12 @@ public class NoAuthMiddleware extends Middleware {
 				remoteAddress = "127.0.0.1";
 			}
 		}
-		NovaRequestContext ctx = new NovaRequestContext(userId, projectId, true, "no", null, remoteAddress, null, null,
-				null, true, null, null, null, null, false);
+		NovaRequestContext ctx =
+				new NovaRequestContext(userId, projectId, true, "no", null, remoteAddress, null, null, null, true, null,
+						null, null, null, false);
 
 		req.setProperty("nova.context", ctx);
-
+		logger.debug("NoAuthMiddleware end");
 	}
 
 	@Override

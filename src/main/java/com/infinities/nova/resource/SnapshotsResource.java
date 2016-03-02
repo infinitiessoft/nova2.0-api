@@ -29,8 +29,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.security.CheckProjectId;
 import com.infinities.nova.snapshots.controller.SnapshotsController;
 import com.infinities.nova.snapshots.model.SnapshotForCreateTemplate;
 import com.infinities.nova.snapshots.model.SnapshotTemplate;
@@ -40,8 +41,10 @@ import com.infinities.nova.snapshots.model.Snapshots;
  * @author pohsun
  *
  */
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class SnapshotsResource {
 
 	private SnapshotsController controller;
@@ -55,8 +58,7 @@ public class SnapshotsResource {
 	@GET
 	public Snapshots index(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, projectId);
 	}
 
@@ -64,8 +66,7 @@ public class SnapshotsResource {
 	@Path("detail")
 	public Snapshots detail(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, projectId);
 	}
 
@@ -73,8 +74,7 @@ public class SnapshotsResource {
 	@Path("{snapshotId}")
 	public SnapshotTemplate show(@PathParam("projectId") String projectId, @PathParam("snapshotId") String snapshotId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, projectId, snapshotId);
 	}
 
@@ -82,8 +82,7 @@ public class SnapshotsResource {
 	public SnapshotTemplate create(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext, SnapshotForCreateTemplate snapshotForCreateTemplate)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, projectId, snapshotForCreateTemplate);
 	}
 
@@ -91,8 +90,7 @@ public class SnapshotsResource {
 	@Path("{snapshotId}")
 	public Response detach(@PathParam("projectId") String projectId, @PathParam("snapshotId") String snapshotId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(projectId, snapshotId, requestContext);
 		return Response.status(Status.ACCEPTED).build();
 	}

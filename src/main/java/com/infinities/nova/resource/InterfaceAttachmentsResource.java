@@ -31,8 +31,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import com.infinities.nova.security.CheckProjectId;
 import com.infinities.nova.servers.interfaces.controller.InterfaceAttachmentsController;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachmentForCreateTemplate;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachmentTemplate;
@@ -45,6 +44,7 @@ import com.infinities.nova.servers.interfaces.model.InterfaceAttachments;
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class InterfaceAttachmentsResource {
 
 	private final InterfaceAttachmentsController controller;
@@ -62,8 +62,7 @@ public class InterfaceAttachmentsResource {
 	@GET
 	public InterfaceAttachments index(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, projectId, serverId);
 	}
 
@@ -72,8 +71,7 @@ public class InterfaceAttachmentsResource {
 	public InterfaceAttachmentTemplate show(@PathParam("projectId") String projectId,
 			@PathParam("serverId") String serverId, @PathParam("interfaceAttachmentId") String interfaceAttachmentId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, projectId, serverId, interfaceAttachmentId);
 	}
 
@@ -81,8 +79,7 @@ public class InterfaceAttachmentsResource {
 	public InterfaceAttachmentTemplate create(@PathParam("projectId") String projectId,
 			@PathParam("serverId") String serverId, @Context ContainerRequestContext requestContext,
 			InterfaceAttachmentForCreateTemplate interfaceAttachmentForCreateTemplate) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.attach(requestContext, projectId, serverId, interfaceAttachmentForCreateTemplate);
 	}
 
@@ -91,8 +88,7 @@ public class InterfaceAttachmentsResource {
 	public Response delete(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("interfaceAttachmentId") String interfaceAttachmentId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.detach(projectId, serverId, interfaceAttachmentId, requestContext);
 		return Response.status(Status.ACCEPTED).build();
 	}

@@ -27,10 +27,9 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.availablityzone.controller.AvailabilityZoneController;
 import com.infinities.nova.availablityzone.model.AvailabilityZoneTemplate;
-import com.infinities.nova.common.Resource;
+import com.infinities.nova.security.CheckProjectId;
 
 /**
  * @author pohsun
@@ -39,6 +38,7 @@ import com.infinities.nova.common.Resource;
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class AvailabilityZoneResource {
 
 	private final AvailabilityZoneController controller;
@@ -56,8 +56,6 @@ public class AvailabilityZoneResource {
 	@GET
 	public AvailabilityZoneTemplate index(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.index(requestContext);
 	}
 
@@ -65,8 +63,6 @@ public class AvailabilityZoneResource {
 	@Path("detail")
 	public AvailabilityZoneTemplate datail(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.detail(requestContext);
 	}
 

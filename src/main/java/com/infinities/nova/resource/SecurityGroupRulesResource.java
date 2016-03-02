@@ -30,8 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import com.infinities.nova.security.CheckProjectId;
 import com.infinities.nova.securitygroups.rules.controller.SecurityGroupRulesController;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleForCreateTemplate;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleTemplate;
@@ -39,6 +38,7 @@ import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleTemplate;
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class SecurityGroupRulesResource {
 
 	private final SecurityGroupRulesController controller;
@@ -52,8 +52,7 @@ public class SecurityGroupRulesResource {
 	@POST
 	public SecurityGroupRuleTemplate create(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext, SecurityGroupRuleForCreateTemplate body) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, projectId, body);
 	}
 
@@ -62,8 +61,7 @@ public class SecurityGroupRulesResource {
 	public Response delete(@PathParam("projectId") String projectId,
 			@PathParam("securityGroupRuleId") String securityGroupRuleId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(requestContext, projectId, securityGroupRuleId);
 		return Response.status(Status.ACCEPTED).build();
 	}

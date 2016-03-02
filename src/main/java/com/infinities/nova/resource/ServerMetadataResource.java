@@ -32,15 +32,15 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
+import com.infinities.nova.security.CheckProjectId;
 import com.infinities.nova.servers.metadata.controller.ServerMetadataController;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ServerMetadataResource {
 
 	private final ServerMetadataController controller;
@@ -54,16 +54,14 @@ public class ServerMetadataResource {
 	@GET
 	public MetadataTemplate index(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, serverId);
 	}
 
 	@POST
 	public MetadataTemplate create(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			MetadataTemplate metadata, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, serverId, metadata);
 	}
 
@@ -72,16 +70,14 @@ public class ServerMetadataResource {
 	public MetaItemTemplate update(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("key") String key, MetaItemTemplate meta, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.update(requestContext, serverId, key, meta);
 	}
 
 	@PUT
 	public MetadataTemplate updateAll(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			MetadataTemplate metadata, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.updateAll(requestContext, serverId, metadata);
 	}
 
@@ -89,8 +85,7 @@ public class ServerMetadataResource {
 	@Path("{key}")
 	public MetaItemTemplate show(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("key") String key, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, serverId, key);
 	}
 
@@ -98,8 +93,7 @@ public class ServerMetadataResource {
 	@Path("{key}")
 	public Response delete(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("key") String key, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(requestContext, serverId, key);
 		return Response.status(Status.NO_CONTENT).build();
 	}

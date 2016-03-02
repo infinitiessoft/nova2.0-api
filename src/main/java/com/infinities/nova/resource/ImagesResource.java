@@ -31,8 +31,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.exception.http.HTTPMethodNotAllowException;
@@ -41,10 +39,12 @@ import com.infinities.nova.images.metadata.controller.ImageMetadataController;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImagesTemplate;
+import com.infinities.nova.security.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ImagesResource {
 
 	private final ImagesController controller;
@@ -65,8 +65,6 @@ public class ImagesResource {
 	@GET
 	public MinimalImagesTemplate index(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.index(requestContext);
 	}
 
@@ -74,8 +72,6 @@ public class ImagesResource {
 	@Path("detail")
 	public ImagesTemplate datail(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.detail(requestContext);
 	}
 
@@ -83,8 +79,6 @@ public class ImagesResource {
 	@Path("{imageId}")
 	public ImageTemplate show(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.show(imageId, requestContext);
 	}
 
@@ -92,8 +86,6 @@ public class ImagesResource {
 	@Path("{imageId}")
 	public Response delete(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.delete(imageId, requestContext);
 	}
 
@@ -106,8 +98,6 @@ public class ImagesResource {
 	@Path("{imageId}/metadata")
 	public MetadataTemplate indexMetadata(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return metadataController.index(imageId, requestContext);
 	}
 
@@ -115,8 +105,6 @@ public class ImagesResource {
 	@Path("{imageId}/metadata/{key}")
 	public MetaItemTemplate showMetadata(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			@PathParam("key") String key, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return metadataController.show(imageId, key, requestContext);
 	}
 
@@ -124,8 +112,6 @@ public class ImagesResource {
 	@Path("{imageId}/metadata")
 	public MetadataTemplate createMetadata(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			MetadataTemplate metadata, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return metadataController.create(imageId, metadata, requestContext);
 	}
 
@@ -134,8 +120,6 @@ public class ImagesResource {
 	public MetaItemTemplate updateMetadata(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			@PathParam("key") String key, MetaItemTemplate meta, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return metadataController.update(imageId, key, meta, requestContext);
 	}
 
@@ -144,8 +128,6 @@ public class ImagesResource {
 	public MetadataTemplate updateAllMetadata(@PathParam("projectId") String projectId,
 			@PathParam("imageId") String imageId, MetadataTemplate metadata, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return metadataController.updataAll(imageId, metadata, requestContext);
 	}
 
@@ -153,8 +135,6 @@ public class ImagesResource {
 	@Path("{imageId}/metadata/{key}")
 	public Response deleteMetadata(@PathParam("projectId") String projectId, @PathParam("imageId") String imageId,
 			@PathParam("key") String key, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return metadataController.delete(imageId, key, requestContext);
 	}
 

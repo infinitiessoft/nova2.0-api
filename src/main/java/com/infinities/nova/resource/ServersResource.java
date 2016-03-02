@@ -44,8 +44,6 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
 import com.infinities.nova.exception.http.HTTPBadRequestException;
 import com.infinities.nova.exception.http.HTTPNotImplementedException;
 import com.infinities.nova.response.model.ServerAction.ChangePassword;
@@ -61,6 +59,7 @@ import com.infinities.nova.response.model.ServerAction.Start;
 import com.infinities.nova.response.model.ServerAction.Stop;
 import com.infinities.nova.response.model.ServerAction.Suspend;
 import com.infinities.nova.response.model.ServerAction.Unpause;
+import com.infinities.nova.security.CheckProjectId;
 import com.infinities.nova.servers.controller.ServersController;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
 import com.infinities.nova.servers.model.ServerForCreateTemplate;
@@ -70,6 +69,7 @@ import com.infinities.nova.servers.model.ServersTemplate;
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ServersResource {
 
 	private final ServersController controller;
@@ -83,8 +83,7 @@ public class ServersResource {
 	@GET
 	public MinimalServersTemplate index(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext);
 	}
 
@@ -92,8 +91,7 @@ public class ServersResource {
 	@Path("detail")
 	public ServersTemplate datail(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.detail(requestContext);
 	}
 
@@ -101,16 +99,14 @@ public class ServersResource {
 	@Path("{serverId}")
 	public ServerTemplate show(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(serverId, requestContext);
 	}
 
 	@POST
 	public Response create(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext,
 			ServerForCreateTemplate serverTemplate) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, serverTemplate.getServer());
 	}
 
@@ -118,8 +114,7 @@ public class ServersResource {
 	@Path("{serverId}")
 	public ServerTemplate update(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext, ServerForCreateTemplate serverTemplate) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.update(requestContext, serverId, serverTemplate.getServer());
 	}
 
@@ -127,8 +122,7 @@ public class ServersResource {
 	@Path("{serverId}")
 	public Response delete(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(serverId, requestContext);
 		return Response.status(Status.NO_CONTENT).build();
 	}

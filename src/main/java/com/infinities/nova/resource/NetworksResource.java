@@ -31,12 +31,11 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
 import com.infinities.nova.networks.controller.NetworksController;
 import com.infinities.nova.networks.model.NetworkForCreateTemplate;
 import com.infinities.nova.networks.model.NetworkTemplate;
 import com.infinities.nova.networks.model.Networks;
+import com.infinities.nova.security.CheckProjectId;
 
 /**
  * @author pohsun
@@ -45,6 +44,7 @@ import com.infinities.nova.networks.model.Networks;
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class NetworksResource {
 
 	private final NetworksController controller;
@@ -58,8 +58,6 @@ public class NetworksResource {
 	@GET
 	public Networks index(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.index(requestContext, projectId);
 	}
 
@@ -67,16 +65,12 @@ public class NetworksResource {
 	@Path("{networkId}")
 	public NetworkTemplate show(@PathParam("projectId") String projectId, @PathParam("networkId") String networkId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.show(requestContext, projectId, networkId);
 	}
 
 	@POST
 	public NetworkTemplate create(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext,
 			NetworkForCreateTemplate networkForCreateTemplate) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.create(requestContext, projectId, networkForCreateTemplate);
 	}
 
@@ -84,8 +78,6 @@ public class NetworksResource {
 	@Path("{networkId}")
 	public Response detach(@PathParam("projectId") String projectId, @PathParam("networkId") String networkId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		controller.delete(projectId, networkId, requestContext);
 		return Response.status(Status.ACCEPTED).build();
 	}

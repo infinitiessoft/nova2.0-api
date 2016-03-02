@@ -22,9 +22,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Component;
 
+import com.infinities.nova.security.CheckProjectId;
+
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ProjectMapperResource {
 
 	@Path("limits")
