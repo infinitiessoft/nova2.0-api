@@ -60,7 +60,7 @@ public class NoAuthMiddleware extends Middleware {
 			}
 			String projectId = req.getHeaderString("X-Auth-Project-Id");
 			if (Strings.isNullOrEmpty(projectId)) {
-				projectId = "admin";
+				projectId = "{projectId}";
 			}
 			String osUrl = null;
 			if (projectIdInPath) {
@@ -73,6 +73,7 @@ public class NoAuthMiddleware extends Middleware {
 					Response.status(204).header("X-Auth-Token", String.format("%s:%s", userId, projectId))
 							.header("X-Server-Management-Url", osUrl).type("text/plain").build();
 			req.abortWith(res);
+			return;
 		}
 
 		String token = req.getHeaderString("X-Auth-Token");
