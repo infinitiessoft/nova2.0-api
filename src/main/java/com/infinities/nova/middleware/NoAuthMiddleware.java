@@ -70,7 +70,7 @@ public class NoAuthMiddleware extends Middleware {
 				osUrl = StringUtils.removeEnd(req.getUriInfo().getRequestUri().toString(), "/");
 			}
 			Response res =
-					Response.status(204).header("X-Auth-Token", String.format("%s:%s", userId, projectId))
+					Response.status(204).header("X-Auth-Token", String.format("%s:%s", projectId, userId))
 							.header("X-Server-Management-Url", osUrl).type("text/plain").build();
 			req.abortWith(res);
 			return;
