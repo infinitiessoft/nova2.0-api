@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.limits.controller;
+package com.infinities.nova.middleware;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.common.base.Strings;
 import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.limits.controller.Limiter;
 import com.infinities.nova.limits.model.Limit;
 import com.infinities.nova.limits.model.OverLimit;
 import com.infinities.nova.limits.model.OverLimitWrapper;

@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,6 +28,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.Resource;
 import com.infinities.nova.volumes.controller.VolumesController;
@@ -40,6 +42,7 @@ import com.infinities.nova.volumes.model.Volumes;
  * @author pohsun
  *
  */
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class VolumesResource {
@@ -47,7 +50,7 @@ public class VolumesResource {
 	private VolumesController controller;
 
 
-	@Inject
+	@Autowired
 	public VolumesResource(VolumesController controller) {
 		this.controller = controller;
 	}

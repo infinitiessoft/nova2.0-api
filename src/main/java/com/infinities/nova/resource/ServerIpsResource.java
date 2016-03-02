@@ -18,7 +18,6 @@ package com.infinities.nova.resource;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,12 +27,16 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.Resource;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.ips.controller.ServerIpsController;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ServerIpsResource {
@@ -41,7 +44,7 @@ public class ServerIpsResource {
 	private final ServerIpsController controller;
 
 
-	@Inject
+	@Autowired
 	public ServerIpsResource(ServerIpsController controller) {
 		this.controller = controller;
 	}

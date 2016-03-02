@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,12 +29,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.Resource;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.servers.metadata.controller.ServerMetadataController;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ServerMetadataResource {
@@ -43,7 +46,7 @@ public class ServerMetadataResource {
 	private final ServerMetadataController controller;
 
 
-	@Inject
+	@Autowired
 	public ServerMetadataResource(ServerMetadataController controller) {
 		this.controller = controller;
 	}

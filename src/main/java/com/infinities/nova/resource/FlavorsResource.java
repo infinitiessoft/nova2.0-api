@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,6 +24,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.Resource;
 import com.infinities.nova.flavors.controller.FlavorsController;
@@ -32,6 +34,7 @@ import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FlavorsResource {
@@ -39,8 +42,12 @@ public class FlavorsResource {
 	private final FlavorsController controller;
 
 
-	@Inject
+	/**
+	 * @param controller
+	 */
+	@Autowired
 	public FlavorsResource(FlavorsController controller) {
+		super();
 		this.controller = controller;
 	}
 
@@ -69,4 +76,5 @@ public class FlavorsResource {
 		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.show(flavorId, requestContext);
 	}
+
 }

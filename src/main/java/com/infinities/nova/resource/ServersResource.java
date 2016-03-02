@@ -17,7 +17,6 @@ package com.infinities.nova.resource;
 
 import java.text.SimpleDateFormat;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,6 +30,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
@@ -65,6 +67,7 @@ import com.infinities.nova.servers.model.ServerForCreateTemplate;
 import com.infinities.nova.servers.model.ServerTemplate;
 import com.infinities.nova.servers.model.ServersTemplate;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ServersResource {
@@ -72,7 +75,7 @@ public class ServersResource {
 	private final ServersController controller;
 
 
-	@Inject
+	@Autowired
 	public ServersResource(ServersController controller) {
 		this.controller = controller;
 	}
