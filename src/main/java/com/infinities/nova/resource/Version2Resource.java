@@ -15,31 +15,34 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.versions.v2.api.Version2Api;
 
-@Singleton
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class Version2Resource {
 
-	private final Version2Api versionApi;
+	private Version2Api versionApi;
 
 
-	@Inject
+	/**
+	 * @param versionApi
+	 */
+	@Autowired
 	public Version2Resource(Version2Api versionApi) {
+		super();
 		this.versionApi = versionApi;
 	}
 
@@ -49,8 +52,7 @@ public class Version2Resource {
 	}
 
 	@Path("{projectId}")
-	public Class<ProjectMapperResource> getProjectMapperResource(@PathParam("projectId") String projectId,
-			@Context ContainerRequestContext requestContext) {
+	public Class<ProjectMapperResource> getProjectMapperResource() {
 		// nova.wsgi.Resource.call
 		return ProjectMapperResource.class;
 	}
@@ -59,4 +61,5 @@ public class Version2Resource {
 	public Class<ExtensionsResource> getExtensionsResource() {
 		return ExtensionsResource.class;
 	}
+
 }

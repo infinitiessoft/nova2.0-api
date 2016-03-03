@@ -23,6 +23,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.infinities.nova.exception.SafeException;
 
+@Provider
 public class FaultWrapper implements ExceptionMapper<Exception> {
 
 	private final static Logger logger = LoggerFactory.getLogger(FaultWrapper.class);
@@ -51,8 +53,9 @@ public class FaultWrapper implements ExceptionMapper<Exception> {
 			status = safeException.getCode();
 		} else if (inner instanceof WebApplicationException) {
 			WebApplicationException webapplicationExcpetion = (WebApplicationException) inner;
-			headers = webapplicationExcpetion.getResponse().getHeaders();
-			status = webapplicationExcpetion.getResponse().getStatus();
+			// headers = webapplicationExcpetion.getResponse().getHeaders();
+			// status = webapplicationExcpetion.getResponse().getStatus();
+			return webapplicationExcpetion.getResponse();
 		}
 
 		ResponseBuilder res = Response.status(status);

@@ -24,8 +24,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.servlet.WebappContext;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ApplicationHandler;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.spi.TestContainer;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
@@ -37,13 +37,13 @@ public class GrizzlyWebContainerFactory implements TestContainerFactory {
 	private static class GrizzlyTestContainer implements TestContainer {
 
 		private final URI uri;
-		private final ApplicationHandler appHandler;
+		private final DeploymentContext deploymentContext;
 		private HttpServer server;
 		private static final Logger LOGGER = LoggerFactory.getLogger(GrizzlyTestContainer.class);
 
 
-		private GrizzlyTestContainer(URI uri, ApplicationHandler appHandler) {
-			this.appHandler = appHandler;
+		private GrizzlyTestContainer(URI uri, DeploymentContext deploymentContext) {
+			this.deploymentContext = deploymentContext;
 			this.uri = uri;
 		}
 
@@ -62,13 +62,13 @@ public class GrizzlyWebContainerFactory implements TestContainerFactory {
 			LOGGER.debug("Starting GrizzlyTestContainer...");
 
 			try {
-				this.server = GrizzlyHttpServerFactory.createHttpServer(uri, appHandler);
+				this.server = GrizzlyHttpServerFactory.createHttpServer(uri, deploymentContext.getResourceConfig());
 
 				// Initialize and register Jersey Servlet
 				WebappContext context = new WebappContext("WebappContext", "");
 				ServletRegistration registration = context.addServlet("ServletContainer", ServletContainer.class);
-				registration.setInitParameter("javax.ws.rs.Application", appHandler.getConfiguration().getApplication()
-						.getClass().getName());
+				registration.setInitParameter("javax.ws.rs.Application", deploymentContext.getResourceConfig()
+						.getApplication().getClass().getName());
 				// Add an init parameter - this could be loaded from a parameter
 				// in the constructor
 				registration.setInitParameter("myparam", "myvalue");
@@ -88,8 +88,15 @@ public class GrizzlyWebContainerFactory implements TestContainerFactory {
 	}
 
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.glassfish.jersey.test.spi.TestContainerFactory#create(java.net.URI,
+	 * org.glassfish.jersey.test.DeploymentContext)
+	 */
 	@Override
-	public TestContainer create(URI baseUri, ApplicationHandler application) throws IllegalArgumentException {
-		return new GrizzlyTestContainer(baseUri, application);
+	public TestContainer create(URI baseUri, DeploymentContext deploymentContext) {
+		return new GrizzlyTestContainer(baseUri, deploymentContext);
 	}
 }

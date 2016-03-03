@@ -20,9 +20,11 @@ import java.io.IOException;
 import javax.annotation.Priority;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.ext.Provider;
 
 import com.infinities.nova.common.Context;
 
+@Provider
 @Priority(1002)
 public class ComputeReqIdMiddleware extends Middleware {
 

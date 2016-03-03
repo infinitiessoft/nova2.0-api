@@ -13,37 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.middleware;
+package com.infinities.nova.namebinding;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
-import javax.annotation.Priority;
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
 
-import com.infinities.keystone4j.middleware.AuthProtocol;
+import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.common.Resource;
 
+/**
+ * @author pohsun
+ *
+ */
 @Provider
-@Priority(1004)
-public class AuthTokenMiddleware extends Middleware {
+@CheckProjectId
+public class CheckProjectIdFilter implements ContainerRequestFilter {
 
-	private final AuthProtocol authProtocol;
-
-
-	public AuthTokenMiddleware() throws MalformedURLException {
-		authProtocol = new AuthProtocol();
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.ws.rs.container.ContainerRequestFilter#filter(javax.ws.rs.container
+	 * .ContainerRequestContext)
+	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		authProtocol.call(requestContext);
+		String projectId = requestContext.getUriInfo().getPathParameters().getFirst("projectId");
+		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		Resource.processStack(requestContext, projectId, novaContext);
 	}
-
-	@Override
-	public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-
-	}
-
 }

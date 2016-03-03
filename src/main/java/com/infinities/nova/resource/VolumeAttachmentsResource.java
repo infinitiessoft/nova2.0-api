@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,8 +28,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.servers.volumes.controller.VolumeAttachmentsController;
 import com.infinities.nova.servers.volumes.model.VolumeAttachmentTemplate;
 import com.infinities.nova.servers.volumes.model.VolumeAttachments;
@@ -39,14 +40,16 @@ import com.infinities.nova.servers.volumes.model.VolumeAttachments;
  * @author pohsun
  *
  */
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class VolumeAttachmentsResource {
 
 	private VolumeAttachmentsController controller;
 
 
-	@Inject
+	@Autowired
 	public VolumeAttachmentsResource(VolumeAttachmentsController controller) {
 		this.controller = controller;
 	}
@@ -54,8 +57,7 @@ public class VolumeAttachmentsResource {
 	@GET
 	public VolumeAttachments index(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, projectId, serverId);
 	}
 
@@ -63,8 +65,7 @@ public class VolumeAttachmentsResource {
 	@Path("{volumeId}")
 	public VolumeAttachmentTemplate show(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("volumeId") String volumeId, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, projectId, serverId, volumeId);
 	}
 
@@ -72,8 +73,7 @@ public class VolumeAttachmentsResource {
 	@Path("{volumeId}")
 	public Response detach(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("volumeId") String volumeId, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.detach(projectId, serverId, volumeId, requestContext);
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -81,8 +81,7 @@ public class VolumeAttachmentsResource {
 	@POST
 	public VolumeAttachmentTemplate attach(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			VolumeAttachmentTemplate volumeAttachment, @Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.attach(projectId, serverId, volumeAttachment, requestContext);
 	}
 

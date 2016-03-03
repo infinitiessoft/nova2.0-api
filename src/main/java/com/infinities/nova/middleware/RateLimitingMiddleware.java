@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.limits.controller;
+package com.infinities.nova.middleware;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.common.base.Strings;
 import com.infinities.nova.NovaRequestContext;
+import com.infinities.nova.limits.controller.Limiter;
 import com.infinities.nova.limits.model.Limit;
 import com.infinities.nova.limits.model.OverLimit;
 import com.infinities.nova.limits.model.OverLimitWrapper;
@@ -41,11 +42,13 @@ public class RateLimitingMiddleware {
 
 
 	public RateLimitingMiddleware(String limits) throws CloneNotSupportedException, URISyntaxException {
-		DEFAULT_LIMITS = Collections.unmodifiableList(Arrays.asList(new Limit("POST", new URI("*"), ".*", 120,
-				TimeUnit.MINUTES), new Limit("POST", new URI("*/servers"), "^/servers", 120, TimeUnit.MINUTES), new Limit(
-				"PUT", new URI("*"), ".*", 120, TimeUnit.MINUTES), new Limit("GET", new URI("*changes-since*"),
-				".*changes-since.*", 120, TimeUnit.MINUTES), new Limit("DELETE", new URI("*"), ".*", 120, TimeUnit.MINUTES),
-				new Limit("GET", new URI("*/os-fping"), "^/os-fping", 12, TimeUnit.MINUTES)));
+		DEFAULT_LIMITS =
+				Collections.unmodifiableList(Arrays.asList(new Limit("POST", new URI("*"), ".*", 120, TimeUnit.MINUTES),
+						new Limit("POST", new URI("*/servers"), "^/servers", 120, TimeUnit.MINUTES), new Limit("PUT",
+								new URI("*"), ".*", 120, TimeUnit.MINUTES), new Limit("GET", new URI("*changes-since*"),
+								".*changes-since.*", 120, TimeUnit.MINUTES), new Limit("DELETE", new URI("*"), ".*", 120,
+								TimeUnit.MINUTES), new Limit("GET", new URI("*/os-fping"), "^/os-fping", 12,
+								TimeUnit.MINUTES)));
 
 		List<Limit> list = null;
 		if (Strings.isNullOrEmpty(limits)) {
@@ -80,6 +83,7 @@ public class RateLimitingMiddleware {
 			retry.add(Calendar.SECOND, sec);
 
 			req.abortWith(new RateLimitFault("This request was rate-limited.", entry.getValue(), retry).call());
+			return;
 		}
 
 		req.setProperty("nova.limits", limiter.getLimits(username));
@@ -97,8 +101,9 @@ public class RateLimitingMiddleware {
 			OverLimitWrapper wrapper = new OverLimitWrapper();
 			wrapper.setOverLimit(overLimit);
 
-			wrappedExec = Response.status(429).header("title", "Too Many Requests").header("Retry-After", retryAfter)
-					.entity(wrapper).type(MediaType.APPLICATION_JSON_TYPE).build();
+			wrappedExec =
+					Response.status(429).header("title", "Too Many Requests").header("Retry-After", retryAfter)
+							.entity(wrapper).type(MediaType.APPLICATION_JSON_TYPE).build();
 		}
 
 		private Response call() {

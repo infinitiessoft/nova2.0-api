@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -28,20 +27,24 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.securitygroups.rules.controller.SecurityGroupRulesController;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleForCreateTemplate;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleTemplate;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class SecurityGroupRulesResource {
 
 	private final SecurityGroupRulesController controller;
 
 
-	@Inject
+	@Autowired
 	public SecurityGroupRulesResource(SecurityGroupRulesController controller) {
 		this.controller = controller;
 	}
@@ -49,8 +52,7 @@ public class SecurityGroupRulesResource {
 	@POST
 	public SecurityGroupRuleTemplate create(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext, SecurityGroupRuleForCreateTemplate body) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, projectId, body);
 	}
 
@@ -59,8 +61,7 @@ public class SecurityGroupRulesResource {
 	public Response delete(@PathParam("projectId") String projectId,
 			@PathParam("securityGroupRuleId") String securityGroupRuleId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(requestContext, projectId, securityGroupRuleId);
 		return Response.status(Status.ACCEPTED).build();
 	}

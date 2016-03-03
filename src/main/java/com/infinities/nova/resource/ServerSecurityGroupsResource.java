@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
@@ -24,19 +23,23 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.securitygroups.controller.SecurityGroupsController;
 import com.infinities.nova.securitygroups.model.SecurityGroups;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ServerSecurityGroupsResource {
 
 	private final SecurityGroupsController controller;
 
 
-	@Inject
+	@Autowired
 	public ServerSecurityGroupsResource(SecurityGroupsController controller) {
 		this.controller = controller;
 	}
@@ -44,8 +47,6 @@ public class ServerSecurityGroupsResource {
 	@GET
 	public SecurityGroups index(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return controller.index(requestContext, projectId, serverId);
 	}
 }

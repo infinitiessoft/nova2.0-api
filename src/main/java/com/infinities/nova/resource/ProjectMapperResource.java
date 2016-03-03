@@ -15,18 +15,21 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.neutron.resource.PortsResource;
 import com.infinities.swift.resource.StoragesResource;
 
-@Singleton
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.namebinding.CheckProjectId;
+
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ProjectMapperResource {
 
 	@Path("limits")
@@ -82,21 +85,6 @@ public class ProjectMapperResource {
 	@Path("os-networks")
 	public Class<NetworksResource> getNetworksResource() {
 		return NetworksResource.class;
-	}
-	
-	@Path("networks")
-	public Class<com.infinities.neutron.resource.NetworksResource> getNeutronNetworksResource() {
-		return com.infinities.neutron.resource.NetworksResource.class;
-	}
-	
-	@Path("subnets")
-	public Class<com.infinities.neutron.resource.SubnetsResource> getNeutronSubnetsResource() {
-		return com.infinities.neutron.resource.SubnetsResource.class;
-	}
-	
-	@Path("ports")
-	public Class<PortsResource> getNeutronPortsResource() {
-		return PortsResource.class;
 	}
 	
 	@Path("")

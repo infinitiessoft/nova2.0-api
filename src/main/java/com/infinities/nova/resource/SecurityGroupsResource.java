@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,8 +29,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.securitygroups.controller.SecurityGroupsController;
 import com.infinities.nova.securitygroups.model.SecurityForCreateTemplate;
 import com.infinities.nova.securitygroups.model.SecurityGroupTemplate;
@@ -41,14 +42,16 @@ import com.infinities.nova.securitygroups.model.SecurityGroups;
  * @author pohsun
  *
  */
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class SecurityGroupsResource {
 
 	private final SecurityGroupsController controller;
 
 
-	@Inject
+	@Autowired
 	public SecurityGroupsResource(SecurityGroupsController controller) {
 		this.controller = controller;
 	}
@@ -56,16 +59,14 @@ public class SecurityGroupsResource {
 	@POST
 	public SecurityGroupTemplate create(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext, SecurityForCreateTemplate body) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, projectId, body);
 	}
 
 	@GET
 	public SecurityGroups index(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, projectId);
 	}
 
@@ -74,8 +75,7 @@ public class SecurityGroupsResource {
 	public SecurityGroupTemplate show(@PathParam("projectId") String projectId,
 			@PathParam("securityGroupId") String securityGroupId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, projectId, securityGroupId);
 	}
 
@@ -84,8 +84,7 @@ public class SecurityGroupsResource {
 	public SecurityGroupTemplate update(@PathParam("projectId") String projectId,
 			@PathParam("securityGroupId") String securityGroupId, @Context ContainerRequestContext requestContext,
 			SecurityGroupTemplate body) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.update(projectId, requestContext, securityGroupId, body);
 	}
 
@@ -93,8 +92,7 @@ public class SecurityGroupsResource {
 	@Path("{securityGroupId}")
 	public Response delete(@PathParam("projectId") String projectId, @PathParam("securityGroupId") String securityGroupId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(projectId, securityGroupId, requestContext);
 		return Response.status(Status.ACCEPTED).build();
 	}

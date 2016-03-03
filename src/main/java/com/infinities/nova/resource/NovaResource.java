@@ -17,8 +17,6 @@ package com.infinities.nova.resource;
 
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,11 +26,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.versions.api.VersionsApi;
 
 // [composite:osapi_compute]
 // use = call:nova.api.openstack.urlmap:urlmap_factory
-@Singleton
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/")
@@ -41,8 +42,12 @@ public class NovaResource {
 	private final VersionsApi versionsApi;
 
 
-	@Inject
+	/**
+	 * @param versionsApi
+	 */
+	@Autowired
 	public NovaResource(VersionsApi versionsApi) {
+		super();
 		this.versionsApi = versionsApi;
 	}
 
@@ -67,6 +72,7 @@ public class NovaResource {
 			return versionsApi.multi(uri.getRequestUri(), uri.getPath());
 		}
 	}
+
 	// @Path("/")
 	// @GET
 	// public Response multi(@PathParam("version") String version, @Context

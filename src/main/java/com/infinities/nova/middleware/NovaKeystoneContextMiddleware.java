@@ -48,6 +48,7 @@ public class NovaKeystoneContextMiddleware {
 		if (Strings.isNullOrEmpty(userId)) {
 			logger.debug("Neither X-User-Id nor X-User found in request");
 			env.abortWith(Response.status(Status.UNAUTHORIZED).build());
+			return;
 		}
 
 		String[] roles = getRoles(env);
@@ -91,6 +92,7 @@ public class NovaKeystoneContextMiddleware {
 				});
 			} catch (Exception e) {
 				env.abortWith(Response.status(Status.INTERNAL_SERVER_ERROR).entity("Invalid service catalog json").build());
+				return;
 			}
 		}
 

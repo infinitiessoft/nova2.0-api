@@ -18,7 +18,6 @@ package com.infinities.nova.resource;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,20 +27,24 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.ips.controller.ServerIpsController;
 
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ServerIpsResource {
 
 	private final ServerIpsController controller;
 
 
-	@Inject
+	@Autowired
 	public ServerIpsResource(ServerIpsController controller) {
 		this.controller = controller;
 	}
@@ -49,8 +52,7 @@ public class ServerIpsResource {
 	@GET
 	public Addresses index(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext, serverId);
 	}
 
@@ -59,8 +61,7 @@ public class ServerIpsResource {
 	public Map<String, List<Address>> show(@PathParam("projectId") String projectId, @PathParam("serverId") String serverId,
 			@PathParam("networkLabel") String networkLabel, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, serverId, networkLabel);
 	}
 }

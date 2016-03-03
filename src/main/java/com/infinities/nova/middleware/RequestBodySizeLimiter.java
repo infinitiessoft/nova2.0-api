@@ -39,11 +39,13 @@ public class RequestBodySizeLimiter extends Middleware {
 		if (requestContext.getLength() > maxRequestSize) {
 			requestContext.abortWith(Response.status(Response.Status.REQUEST_ENTITY_TOO_LARGE)
 					.entity("Request is too large.").build());
+			return;
 		}
 
 		if (requestContext.getEntityStream().available() > maxRequestSize) {
 			requestContext.abortWith(Response.status(Response.Status.REQUEST_ENTITY_TOO_LARGE)
 					.entity("Request is too large.").build());
+			return;
 		}
 	}
 

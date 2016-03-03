@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.infinities.nova.resource;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,42 +28,48 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.infinities.nova.keypairs.controller.KeyPairsController;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
+import com.infinities.nova.namebinding.CheckProjectId;
 
 /**
  * @author pohsun
  *
  */
+@Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class KeyPairsResource {
 
 	private final KeyPairsController controller;
 
 
-	@Inject
+	/**
+	 * @param controller
+	 */
+	@Autowired
 	public KeyPairsResource(KeyPairsController controller) {
+		super();
 		this.controller = controller;
 	}
 
 	@POST
 	public MinimalKeyPairTemplate create(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext, KeyPairTemplate body) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.create(requestContext, body);
 	}
 
 	@GET
 	public MinimalKeyPairsTemplate index(@PathParam("projectId") String projectId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.index(requestContext);
 	}
 
@@ -72,8 +77,7 @@ public class KeyPairsResource {
 	@Path("{keyPairId}")
 	public KeyPairTemplate show(@PathParam("projectId") String projectId, @PathParam("keyPairId") String keyPairId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		return controller.show(requestContext, keyPairId);
 	}
 
@@ -81,8 +85,7 @@ public class KeyPairsResource {
 	@Path("{keyPairId}")
 	public Response delete(@PathParam("projectId") String projectId, @PathParam("keyPairId") String keyPairId,
 			@Context ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
+
 		controller.delete(keyPairId, requestContext);
 		return Response.status(Status.ACCEPTED).build();
 	}

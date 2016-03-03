@@ -23,6 +23,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import com.google.common.base.Strings;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.config.Config;
 
+@Provider
 @Priority(1005)
 public class NoAuthMiddleware extends Middleware {
 
@@ -52,6 +54,7 @@ public class NoAuthMiddleware extends Middleware {
 	}
 
 	protected void baseCall(ContainerRequestContext req, boolean projectIdInPath) throws Exception {
+		logger.debug("NoAuthMiddleware begin");
 		if (!req.getHeaders().containsKey("X-Auth-Token")) {
 			String userId = req.getHeaderString("X-Auth-User");
 			if (Strings.isNullOrEmpty(userId)) {
@@ -59,7 +62,7 @@ public class NoAuthMiddleware extends Middleware {
 			}
 			String projectId = req.getHeaderString("X-Auth-Project-Id");
 			if (Strings.isNullOrEmpty(projectId)) {
-				projectId = "admin";
+				projectId = "{projectId}";
 			}
 			String osUrl = null;
 			if (projectIdInPath) {
@@ -68,9 +71,11 @@ public class NoAuthMiddleware extends Middleware {
 			} else {
 				osUrl = StringUtils.removeEnd(req.getUriInfo().getRequestUri().toString(), "/");
 			}
-			Response res = Response.status(204).header("X-Auth-Token", String.format("%s:%s", userId, projectId))
-					.header("X-Server-Management-Url", osUrl).type("text/plain").build();
+			Response res =
+					Response.status(204).header("X-Auth-Token", String.format("%s:%s", projectId, userId))
+							.header("X-Server-Management-Url", osUrl).type("text/plain").build();
 			req.abortWith(res);
+			return;
 		}
 
 		String token = req.getHeaderString("X-Auth-Token");
@@ -91,11 +96,12 @@ public class NoAuthMiddleware extends Middleware {
 				remoteAddress = "127.0.0.1";
 			}
 		}
-		NovaRequestContext ctx = new NovaRequestContext(userId, projectId, true, "no", null, remoteAddress, null, null,
-				null, true, null, null, null, null, false);
+		NovaRequestContext ctx =
+				new NovaRequestContext(userId, projectId, true, "no", null, remoteAddress, null, null, null, true, null,
+						null, null, null, false);
 
 		req.setProperty("nova.context", ctx);
-
+		logger.debug("NoAuthMiddleware end");
 	}
 
 	@Override

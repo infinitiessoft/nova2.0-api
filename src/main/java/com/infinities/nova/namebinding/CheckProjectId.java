@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.model.home.impl.factory;
+package com.infinities.nova.namebinding;
 
-import org.glassfish.hk2.api.Factory;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.infinities.nova.model.home.QuotaHome;
-import com.infinities.nova.model.home.impl.QuotaHomeImpl;
+import javax.ws.rs.NameBinding;
 
-public class QuotaHomeFactory implements Factory<QuotaHome> {
-
-	@Override
-	public QuotaHome provide() {
-		return new QuotaHomeImpl();
-	}
-
-	@Override
-	public void dispose(QuotaHome instance) {
-	}
+/**
+ * @author pohsun
+ *
+ */
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(value = RetentionPolicy.RUNTIME)
+@NameBinding
+public @interface CheckProjectId {
 
 }
