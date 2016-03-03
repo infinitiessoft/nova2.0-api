@@ -35,7 +35,7 @@ import com.infinities.nova.keypairs.controller.KeyPairsController;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 
 /**
  * @author pohsun

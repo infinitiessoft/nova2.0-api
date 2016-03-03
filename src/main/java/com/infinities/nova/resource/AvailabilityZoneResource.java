@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 import com.infinities.nova.availablityzone.controller.AvailabilityZoneController;
 import com.infinities.nova.availablityzone.model.AvailabilityZoneTemplate;
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 
 /**
  * @author pohsun

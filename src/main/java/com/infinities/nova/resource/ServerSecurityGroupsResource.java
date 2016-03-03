@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.securitygroups.controller.SecurityGroupsController;
 import com.infinities.nova.securitygroups.model.SecurityGroups;
 

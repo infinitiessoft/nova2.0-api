@@ -21,9 +21,11 @@ import java.net.MalformedURLException;
 import javax.annotation.Priority;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.ext.Provider;
 
 import com.infinities.keystone4j.middleware.AuthProtocol;
 
+@Provider
 @Priority(1004)
 public class AuthTokenMiddleware extends Middleware {
 

@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.servers.metadata.controller.ServerMetadataController;
 
 @Component

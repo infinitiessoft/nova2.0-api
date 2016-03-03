@@ -31,7 +31,7 @@ import com.infinities.nova.flavors.controller.FlavorsController;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.security;
+package com.infinities.nova.namebinding;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

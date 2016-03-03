@@ -27,10 +27,13 @@ public abstract class SafeException extends WebApplicationException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private final Response response;
+	private final String message;
 
 
 	public SafeException(final String message, final Response.Status status) {
-		super(message, status);
+		this.message = message;
+		this.response = Response.status(status).build();
 	}
 
 	public abstract Map<String, List<Object>> getHeaders();
@@ -38,5 +41,21 @@ public abstract class SafeException extends WebApplicationException {
 	public abstract int getCode();
 
 	public abstract boolean isSafe();
+
+	/**
+	 * @return the response
+	 */
+	@Override
+	public Response getResponse() {
+		return response;
+	}
+
+	/**
+	 * @return the message
+	 */
+	@Override
+	public String getMessage() {
+		return message;
+	}
 
 }

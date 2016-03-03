@@ -23,6 +23,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import com.google.common.base.Strings;
 import com.infinities.nova.NovaRequestContext;
 import com.infinities.nova.common.config.Config;
 
+@Provider
 @Priority(1005)
 public class NoAuthMiddleware extends Middleware {
 

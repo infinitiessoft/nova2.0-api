@@ -39,7 +39,7 @@ import com.infinities.nova.images.metadata.controller.ImageMetadataController;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImagesTemplate;
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

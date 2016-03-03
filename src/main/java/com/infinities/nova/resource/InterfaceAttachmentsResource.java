@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.security.CheckProjectId;
+import com.infinities.nova.namebinding.CheckProjectId;
 import com.infinities.nova.servers.interfaces.controller.InterfaceAttachmentsController;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachmentForCreateTemplate;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachmentTemplate;
