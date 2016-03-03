@@ -20,8 +20,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.infinities.swift.resource.StoragesResource;
-
 import org.springframework.stereotype.Component;
 
 import com.infinities.nova.namebinding.CheckProjectId;
@@ -86,9 +84,5 @@ public class ProjectMapperResource {
 	public Class<NetworksResource> getNetworksResource() {
 		return NetworksResource.class;
 	}
-	
-	@Path("")
-	public Class<StoragesResource> getStoragesResource() {
-		return StoragesResource.class;
-	}
+
 }
