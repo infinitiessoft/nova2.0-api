@@ -21,6 +21,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.infinities.neutron.resource.PortsResource;
+import com.infinities.swift.resource.StoragesResource;
+
 @Singleton
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -79,5 +82,25 @@ public class ProjectMapperResource {
 	@Path("os-networks")
 	public Class<NetworksResource> getNetworksResource() {
 		return NetworksResource.class;
+	}
+	
+	@Path("networks")
+	public Class<com.infinities.neutron.resource.NetworksResource> getNeutronNetworksResource() {
+		return com.infinities.neutron.resource.NetworksResource.class;
+	}
+	
+	@Path("subnets")
+	public Class<com.infinities.neutron.resource.SubnetsResource> getNeutronSubnetsResource() {
+		return com.infinities.neutron.resource.SubnetsResource.class;
+	}
+	
+	@Path("ports")
+	public Class<PortsResource> getNeutronPortsResource() {
+		return PortsResource.class;
+	}
+	
+	@Path("")
+	public Class<StoragesResource> getStoragesResource() {
+		return StoragesResource.class;
 	}
 }
