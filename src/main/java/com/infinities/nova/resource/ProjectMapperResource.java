@@ -84,4 +84,5 @@ public class ProjectMapperResource {
 	public Class<NetworksResource> getNetworksResource() {
 		return NetworksResource.class;
 	}
+
 }
