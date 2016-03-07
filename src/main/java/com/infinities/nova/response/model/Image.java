@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.infinities.api.openstack.commons.model.Link;
+
 @XmlRootElement(name = "image")
 public class Image implements Serializable {
 

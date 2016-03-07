@@ -17,7 +17,7 @@ package com.infinities.nova.volumes.api;
 
 import java.util.List;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.volumes.model.Volume;
 import com.infinities.nova.volumes.model.VolumeForCreateTemplate;
 
@@ -33,7 +33,7 @@ public interface VolumesApi {
 	 * @return
 	 * @throws Exception
 	 */
-	List<Volume> getVolumes(NovaRequestContext context, String projectId) throws Exception;
+	List<Volume> getVolumes(OpenstackRequestContext context, String projectId) throws Exception;
 
 	/**
 	 * @param context
@@ -42,7 +42,7 @@ public interface VolumesApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Volume getVolume(NovaRequestContext context, String projectId, String volumeId) throws Exception;
+	Volume getVolume(OpenstackRequestContext context, String projectId, String volumeId) throws Exception;
 
 	/**
 	 * @param context
@@ -51,7 +51,7 @@ public interface VolumesApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Volume createVolume(NovaRequestContext context, String projectId, VolumeForCreateTemplate volumeForCreateTemplate)
+	Volume createVolume(OpenstackRequestContext context, String projectId, VolumeForCreateTemplate volumeForCreateTemplate)
 			throws Exception;
 
 	/**
@@ -60,6 +60,6 @@ public interface VolumesApi {
 	 * @param volumeId
 	 * @throws Exception
 	 */
-	void deleteVolume(NovaRequestContext context, String projectId, String volumeId) throws Exception;
+	void deleteVolume(OpenstackRequestContext context, String projectId, String volumeId) throws Exception;
 
 }

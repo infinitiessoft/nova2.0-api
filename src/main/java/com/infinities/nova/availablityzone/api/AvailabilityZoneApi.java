@@ -22,13 +22,13 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.availablityzone.model.AvailabilityZone;
 
 public interface AvailabilityZoneApi {
 
 	// getOnlyAvailable=false, withHosts=false
-	public List<AvailabilityZone> getAvailabilityZones(NovaRequestContext context) throws InterruptedException,
+	public List<AvailabilityZone> getAvailabilityZones(OpenstackRequestContext context) throws InterruptedException,
 			ExecutionException, InternalException, CloudException, ConcurrentException, Exception;
 
 }

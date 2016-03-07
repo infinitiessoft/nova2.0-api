@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.db.model.ProjectUserQuota;
 import com.infinities.nova.db.model.Quota;
 import com.infinities.nova.db.model.QuotaClass;
@@ -32,48 +32,49 @@ import com.infinities.nova.util.StringUtils;
 public class NoopQuotaDriver implements QuotaDriver {
 
 	@Override
-	public ProjectUserQuota
-			getByProjectAndUser(NovaRequestContext context, String projectid, String userid, String resource) {
+	public ProjectUserQuota getByProjectAndUser(OpenstackRequestContext context, String projectid, String userid,
+			String resource) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Quota getByProject(NovaRequestContext context, String projectid, String resource) {
+	public Quota getByProject(OpenstackRequestContext context, String projectid, String resource) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QuotaClass getByClass(NovaRequestContext context, String quotaClass, String resource) {
+	public QuotaClass getByClass(OpenstackRequestContext context, String quotaClass, String resource) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QuotaSet getDefaults(NovaRequestContext context, Map<String, BaseResource> resources) throws Exception {
+	public QuotaSet getDefaults(OpenstackRequestContext context, Map<String, BaseResource> resources) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QuotaSet getClassQuotas(NovaRequestContext context, Map<String, BaseResource> resources, String quotaClass,
+	public QuotaSet getClassQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources, String quotaClass,
 			boolean defaults) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QuotaUsageSet getUserQuotas(NovaRequestContext context, Map<String, BaseResource> resources, String projectid,
-			String userid, String quotaClass, boolean defaults, boolean usages, ProjectQuotaSet projectQuotas,
-			ProjectUserQuotaSet userQuotas) throws Exception {
+	public QuotaUsageSet getUserQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources,
+			String projectid, String userid, String quotaClass, boolean defaults, boolean usages,
+			ProjectQuotaSet projectQuotas, ProjectUserQuotaSet userQuotas) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QuotaUsageSet getProjectQuotas(NovaRequestContext context, Map<String, BaseResource> resources, String projectid,
-			String quotaClass, boolean defaults, boolean usages, boolean remains, QuotaSet projectQuotas) throws Exception {
+	public QuotaUsageSet getProjectQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources,
+			String projectid, String quotaClass, boolean defaults, boolean usages, boolean remains, QuotaSet projectQuotas)
+			throws Exception {
 		return getNoopQuotas(resources, usages, remains);
 	}
 
@@ -105,60 +106,60 @@ public class NoopQuotaDriver implements QuotaDriver {
 	}
 
 	@Override
-	public QuotaUsageSet getSettableQuotas(NovaRequestContext context, Map<String, BaseResource> resources,
+	public QuotaUsageSet getSettableQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources,
 			String projectid, String userid) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void limitCheck(NovaRequestContext context, Map<String, BaseResource> resources, Map<String, Integer> values,
-			String projectid, String userid) throws Exception {
+	public void limitCheck(OpenstackRequestContext context, Map<String, BaseResource> resources,
+			Map<String, Integer> values, String projectid, String userid) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public List<String> reserve(NovaRequestContext context, Map<String, BaseResource> resources,
+	public List<String> reserve(OpenstackRequestContext context, Map<String, BaseResource> resources,
 			Map<String, Integer> deltas, Calendar expire, String projectid, String userid) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void commit(NovaRequestContext context, List<String> reservations, String projectid, String userid)
+	public void commit(OpenstackRequestContext context, List<String> reservations, String projectid, String userid)
 			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void rollback(NovaRequestContext context, List<String> reservations, String projectid, String userid)
+	public void rollback(OpenstackRequestContext context, List<String> reservations, String projectid, String userid)
 			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void usageReset(NovaRequestContext context, List<String> resources) throws Exception {
+	public void usageReset(OpenstackRequestContext context, List<String> resources) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void destroyAllByProjectAndUser(NovaRequestContext context, String projectid, String userid) {
+	public void destroyAllByProjectAndUser(OpenstackRequestContext context, String projectid, String userid) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void expire(NovaRequestContext context) {
+	public void expire(OpenstackRequestContext context) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void destroyAllByProject(NovaRequestContext context, String projectid) {
+	public void destroyAllByProject(OpenstackRequestContext context, String projectid) {
 		// TODO Auto-generated method stub
 
 	}

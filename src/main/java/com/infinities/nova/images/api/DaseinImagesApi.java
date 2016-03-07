@@ -27,9 +27,9 @@ import org.dasein.cloud.compute.ImageFilterOptions;
 import org.dasein.cloud.compute.MachineImage;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.Common.PaginationParams;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.nova.AbstractPaginableController.PaginationParams;
 import com.infinities.nova.images.controller.ImagesFilter;
 import com.infinities.nova.response.model.Image;
 import com.infinities.skyport.async.AsyncResult;
@@ -48,7 +48,7 @@ public class DaseinImagesApi implements ImagesApi {
 	}
 
 	@Override
-	public Image get(NovaRequestContext context, String imageId) throws Exception {
+	public Image get(OpenstackRequestContext context, String imageId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -80,7 +80,7 @@ public class DaseinImagesApi implements ImagesApi {
 	}
 
 	@Override
-	public List<Image> getAll(NovaRequestContext context, ImagesFilter filters, PaginationParams pageParams)
+	public List<Image> getAll(OpenstackRequestContext context, ImagesFilter filters, PaginationParams pageParams)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -101,7 +101,7 @@ public class DaseinImagesApi implements ImagesApi {
 	}
 
 	@Override
-	public void delete(NovaRequestContext context, String imageId) throws Exception {
+	public void delete(OpenstackRequestContext context, String imageId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

@@ -20,45 +20,47 @@ import java.util.Map;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.Common.CommonNetwork;
+import com.infinities.api.openstack.commons.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
 import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.api.ComputeApi;
+import com.infinities.nova.servers.ips.controller.NetworkUtils.Network;
 import com.infinities.nova.servers.ips.views.ViewBuilder;
 
 public class ServerIpsControllerImpl implements ServerIpsController {
 
 	private final ComputeApi computeApi;
-	private final ViewBuilder builder = new ViewBuilder();
+	private final ViewBuilder builder;
 
 
-	public ServerIpsControllerImpl(ComputeApi computeApi) {
+	public ServerIpsControllerImpl(Config config, ComputeApi computeApi) {
 		this.computeApi = computeApi;
+		String osapiComputeLinkPrefix = config.getOpt("osapi_compute_link_prefix").asText();
+		builder = new ViewBuilder(osapiComputeLinkPrefix);
 	}
 
-	private Instance getInstance(NovaRequestContext context, String serverId) throws Exception {
+	private Instance getInstance(OpenstackRequestContext context, String serverId) throws Exception {
 		Instance instance = computeApi.get(context, serverId, null);
 		return instance;
 	}
 
 	@Override
 	public Addresses index(ContainerRequestContext requestContext, String serverId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getInstance(context, serverId);
-		Map<String, CommonNetwork> networks = Common.getNetworksForInstance(context, instance);
+		Map<String, Network> networks = NetworkUtils.getNetworksForInstance(context, instance);
 		return builder.index(networks);
 	}
 
 	@Override
 	public Map<String, List<Address>> show(ContainerRequestContext requestContext, String serverId, String networkLabel)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getInstance(context, serverId);
-		Map<String, CommonNetwork> networks = Common.getNetworksForInstance(context, instance);
+		Map<String, Network> networks = NetworkUtils.getNetworksForInstance(context, instance);
 
 		if (!networks.containsKey(networkLabel)) {
 			String msg = "Instance is not a member of specified network";

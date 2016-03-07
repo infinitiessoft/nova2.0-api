@@ -25,8 +25,8 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.compute.VirtualMachineProduct;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.flavors.controller.FlavorsFilter;
 import com.infinities.skyport.async.AsyncResult;
@@ -47,7 +47,7 @@ public class DaseinFlavorsApi implements FlavorsApi {
 	// context=null, inactive=false,
 	// filters=null,sortKey=flavorid,sortDir=asc,limit=null,marker=null
 	@Override
-	public List<InstanceType> getAllFlavorsSortedList(NovaRequestContext context, FlavorsFilter filter, String sortKey,
+	public List<InstanceType> getAllFlavorsSortedList(OpenstackRequestContext context, FlavorsFilter filter, String sortKey,
 			String sortDir, Integer limit, String marker) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -83,7 +83,7 @@ public class DaseinFlavorsApi implements FlavorsApi {
 
 	// context=null,readDeleted = yes
 	@Override
-	public InstanceType getFlavorByFlavorId(String flavorid, NovaRequestContext context, String readDeleted)
+	public InstanceType getFlavorByFlavorId(String flavorid, OpenstackRequestContext context, String readDeleted)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext(readDeleted);
@@ -116,7 +116,7 @@ public class DaseinFlavorsApi implements FlavorsApi {
 	// return getFlavorByName(name, null);
 	// }
 	//
-	// private InstanceType getFlavorByName(String name, NovaRequestContext
+	// private InstanceType getFlavorByName(String name, OpenstackRequestContext
 	// context) throws Exception {
 	// if (Strings.isNullOrEmpty(name)) {
 	// return getDefaultFlavor();

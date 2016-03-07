@@ -21,7 +21,8 @@ import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.limits.model.LimitWrapper;
 import com.infinities.nova.limits.model.LimitsTemplate;
 import com.infinities.nova.limits.views.ViewBuilder;
@@ -36,13 +37,14 @@ public class LimitsControllerImpl implements LimitsController {
 	// private final Logger logger =
 	// LoggerFactory.getLogger(LimitsControllerImpl.class);
 
-	public LimitsControllerImpl() {
-		quotas = QuotaEngine.getQUOTAS();
+	public LimitsControllerImpl(Config config) {
+		String quotaDriver = config.getOpt("quota_driver").asText();
+		quotas = QuotaEngine.getQUOTAS(quotaDriver);
 	}
 
 	@Override
 	public LimitsTemplate index(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		String projectid = requestContext.getUriInfo().getQueryParameters().getFirst("tenant_id");
 		if (Strings.isNullOrEmpty(projectid)) {
 			projectid = context.getProjectId();

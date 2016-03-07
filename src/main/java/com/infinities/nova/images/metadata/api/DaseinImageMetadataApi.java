@@ -24,8 +24,8 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.Tag;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedMachineImageSupport;
 import com.infinities.skyport.service.ConfigurationHome;
@@ -41,7 +41,7 @@ public class DaseinImageMetadataApi implements ImageMetadataApi {
 	}
 
 	@Override
-	public void updateAll(NovaRequestContext context, String imageId, Map<String, String> metadata) throws Exception {
+	public void updateAll(OpenstackRequestContext context, String imageId, Map<String, String> metadata) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -55,7 +55,7 @@ public class DaseinImageMetadataApi implements ImageMetadataApi {
 	}
 
 	@Override
-	public void create(NovaRequestContext context, String imageId, Map<String, String> metadata) throws Exception {
+	public void create(OpenstackRequestContext context, String imageId, Map<String, String> metadata) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -68,7 +68,8 @@ public class DaseinImageMetadataApi implements ImageMetadataApi {
 	}
 
 	@Override
-	public void update(NovaRequestContext context, String imageId, String key, Map<String, String> meta) throws Exception {
+	public void update(OpenstackRequestContext context, String imageId, String key, Map<String, String> meta)
+			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -76,7 +77,7 @@ public class DaseinImageMetadataApi implements ImageMetadataApi {
 	}
 
 	@Override
-	public void delete(NovaRequestContext context, String imageId, String key) throws Exception {
+	public void delete(OpenstackRequestContext context, String imageId, String key) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.securitygroups.api.SecurityGroupsApi;
 import com.infinities.nova.securitygroups.model.SecurityForCreateTemplate;
 import com.infinities.nova.securitygroups.model.SecurityGroup;
@@ -53,7 +53,7 @@ public class SecurityGroupsControllerImpl implements SecurityGroupsController {
 	@Override
 	public SecurityGroupTemplate create(ContainerRequestContext requestContext, String projectId,
 			SecurityForCreateTemplate body) throws InterruptedException, ExecutionException, Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		SecurityGroup securityGroup = securityGroupsApi.createSecurityGroup(context, projectId, body);
 
 		return builder.show(requestContext, securityGroup);
@@ -68,7 +68,7 @@ public class SecurityGroupsControllerImpl implements SecurityGroupsController {
 	 */
 	@Override
 	public SecurityGroups index(ContainerRequestContext requestContext, String projectId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<SecurityGroup> securityGroups = securityGroupsApi.getSecurityGroups(context, projectId);
 		return builder.index(requestContext, securityGroups);
 	}
@@ -84,7 +84,7 @@ public class SecurityGroupsControllerImpl implements SecurityGroupsController {
 	@Override
 	public SecurityGroupTemplate show(ContainerRequestContext requestContext, String projectId, String securityGroupId)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		SecurityGroup securityGroup = securityGroupsApi.getSecurityGroup(context, projectId, securityGroupId);
 
 		return builder.show(requestContext, securityGroup);
@@ -101,7 +101,7 @@ public class SecurityGroupsControllerImpl implements SecurityGroupsController {
 	@Override
 	public SecurityGroupTemplate update(String projectId, ContainerRequestContext requestContext, String securityGroupId,
 			SecurityGroupTemplate body) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		SecurityGroup securityGroup = securityGroupsApi.updateSecurityGroup(context, projectId, securityGroupId, body);
 
 		return builder.show(requestContext, securityGroup);
@@ -117,7 +117,7 @@ public class SecurityGroupsControllerImpl implements SecurityGroupsController {
 	 */
 	@Override
 	public void delete(String projectId, String securityGroupId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		securityGroupsApi.deleteSecurityGroup(context, projectId, securityGroupId);
 	}
 
@@ -131,7 +131,7 @@ public class SecurityGroupsControllerImpl implements SecurityGroupsController {
 	 */
 	@Override
 	public SecurityGroups index(ContainerRequestContext requestContext, String projectId, String serverId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<SecurityGroup> securityGroups = securityGroupsApi.getSecurityGroups(context, projectId, serverId);
 		return builder.index(requestContext, securityGroups);
 	}

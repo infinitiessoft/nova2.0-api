@@ -27,11 +27,11 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.flavors.controller.FlavorsController;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
-import com.infinities.nova.namebinding.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

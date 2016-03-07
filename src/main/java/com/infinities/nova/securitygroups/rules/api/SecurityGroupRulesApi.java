@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.infinities.nova.securitygroups.rules.api;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.securitygroups.model.SecurityGroup.Rule;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleForCreateTemplate;
 
@@ -32,7 +32,8 @@ public interface SecurityGroupRulesApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Rule createRule(NovaRequestContext context, String projectId, SecurityGroupRuleForCreateTemplate body) throws Exception;
+	Rule createRule(OpenstackRequestContext context, String projectId, SecurityGroupRuleForCreateTemplate body)
+			throws Exception;
 
 	/**
 	 * @param context
@@ -40,6 +41,6 @@ public interface SecurityGroupRulesApi {
 	 * @param securityGroupRuleId
 	 * @throws Exception
 	 */
-	void deleteRule(NovaRequestContext context, String projectId, String securityGroupRuleId) throws Exception;
+	void deleteRule(OpenstackRequestContext context, String projectId, String securityGroupRuleId) throws Exception;
 
 }

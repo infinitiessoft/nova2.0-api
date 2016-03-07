@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.snapshots.api.SnapshotsApi;
 import com.infinities.nova.snapshots.model.Snapshot;
 import com.infinities.nova.snapshots.model.SnapshotForCreateTemplate;
@@ -50,7 +50,7 @@ public class SnapshotsControllerImpl implements SnapshotsController {
 	 */
 	@Override
 	public Snapshots index(ContainerRequestContext requestContext, String projectId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<Snapshot> snapshots = snapshotsApi.getSnapshots(context, projectId);
 		return builder.index(requestContext, snapshots);
 	}
@@ -66,7 +66,7 @@ public class SnapshotsControllerImpl implements SnapshotsController {
 	@Override
 	public SnapshotTemplate show(ContainerRequestContext requestContext, String projectId, String snapshotId)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Snapshot snapshot = snapshotsApi.getSnapshot(context, projectId, snapshotId);
 
 		return builder.show(requestContext, snapshot);
@@ -83,7 +83,7 @@ public class SnapshotsControllerImpl implements SnapshotsController {
 	@Override
 	public SnapshotTemplate create(ContainerRequestContext requestContext, String projectId,
 			SnapshotForCreateTemplate snapshotForCreateTemplate) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Snapshot snapshot = snapshotsApi.createSnapshot(context, projectId, snapshotForCreateTemplate);
 
 		return builder.show(requestContext, snapshot);
@@ -99,7 +99,7 @@ public class SnapshotsControllerImpl implements SnapshotsController {
 	 */
 	@Override
 	public void delete(String projectId, String snapshotId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		snapshotsApi.deleteSnapshot(context, projectId, snapshotId);
 	}
 

@@ -18,7 +18,7 @@ package com.infinities.nova.securitygroups.api;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.securitygroups.model.SecurityForCreateTemplate;
 import com.infinities.nova.securitygroups.model.SecurityGroup;
 import com.infinities.nova.securitygroups.model.SecurityGroupTemplate;
@@ -38,7 +38,7 @@ public interface SecurityGroupsApi {
 	 * @throws ExecutionException
 	 * @throws InterruptedException
 	 */
-	SecurityGroup createSecurityGroup(NovaRequestContext context, String projectId, SecurityForCreateTemplate body)
+	SecurityGroup createSecurityGroup(OpenstackRequestContext context, String projectId, SecurityForCreateTemplate body)
 			throws InterruptedException, ExecutionException, Exception;
 
 	/**
@@ -47,7 +47,7 @@ public interface SecurityGroupsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	List<SecurityGroup> getSecurityGroups(NovaRequestContext context, String projectId) throws Exception;
+	List<SecurityGroup> getSecurityGroups(OpenstackRequestContext context, String projectId) throws Exception;
 
 	/**
 	 * @param context
@@ -56,7 +56,8 @@ public interface SecurityGroupsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	SecurityGroup getSecurityGroup(NovaRequestContext context, String projectId, String securityGroupId) throws Exception;
+	SecurityGroup getSecurityGroup(OpenstackRequestContext context, String projectId, String securityGroupId)
+			throws Exception;
 
 	/**
 	 * @param context
@@ -64,7 +65,7 @@ public interface SecurityGroupsApi {
 	 * @param securityGroupId
 	 * @throws Exception
 	 */
-	void deleteSecurityGroup(NovaRequestContext context, String projectId, String securityGroupId) throws Exception;
+	void deleteSecurityGroup(OpenstackRequestContext context, String projectId, String securityGroupId) throws Exception;
 
 	/**
 	 * @param context
@@ -74,7 +75,7 @@ public interface SecurityGroupsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	SecurityGroup updateSecurityGroup(NovaRequestContext context, String projectId, String securityGroupId,
+	SecurityGroup updateSecurityGroup(OpenstackRequestContext context, String projectId, String securityGroupId,
 			SecurityGroupTemplate body) throws Exception;
 
 	/**
@@ -84,6 +85,7 @@ public interface SecurityGroupsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	List<SecurityGroup> getSecurityGroups(NovaRequestContext context, String projectId, String serverId) throws Exception;
+	List<SecurityGroup> getSecurityGroups(OpenstackRequestContext context, String projectId, String serverId)
+			throws Exception;
 
 }

@@ -26,8 +26,8 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.identity.SSHKeypair;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.response.model.KeyPair;
 import com.infinities.skyport.async.AsyncResult;
 import com.infinities.skyport.async.service.identity.AsyncShellKeySupport;
@@ -55,7 +55,7 @@ public class DaseinKeyPairsApi implements KeyPairsApi {
 	 * createKeyPair(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public KeyPair createKeyPair(NovaRequestContext context, String userId, String keyName) throws Exception {
+	public KeyPair createKeyPair(OpenstackRequestContext context, String userId, String keyName) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -95,7 +95,7 @@ public class DaseinKeyPairsApi implements KeyPairsApi {
 	 * (java.lang.String, java.lang.String)
 	 */
 	@Override
-	public KeyPair getKeyPair(NovaRequestContext context, String userId, String keyName) throws Exception {
+	public KeyPair getKeyPair(OpenstackRequestContext context, String userId, String keyName) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -123,11 +123,11 @@ public class DaseinKeyPairsApi implements KeyPairsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.api.openstack.compute.keypairs.api.KeyPairsApi#
-	 * importKeyPair(com.infinities.nova.api.NovaRequestContext,
+	 * importKeyPair(com.infinities.nova.api.OpenstackRequestContext,
 	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public KeyPair importKeyPair(NovaRequestContext context, String userId, String keyName, String publicKey)
+	public KeyPair importKeyPair(OpenstackRequestContext context, String userId, String keyName, String publicKey)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -142,10 +142,11 @@ public class DaseinKeyPairsApi implements KeyPairsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.api.openstack.compute.keypairs.api.KeyPairsApi#
-	 * getKeyPairs(com.infinities.nova.api.NovaRequestContext, java.lang.String)
+	 * getKeyPairs(com.infinities.nova.api.OpenstackRequestContext,
+	 * java.lang.String)
 	 */
 	@Override
-	public List<KeyPair> getKeyPairs(NovaRequestContext context, String userId) throws Exception {
+	public List<KeyPair> getKeyPairs(OpenstackRequestContext context, String userId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -166,11 +167,11 @@ public class DaseinKeyPairsApi implements KeyPairsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.api.openstack.compute.keypairs.api.KeyPairsApi#
-	 * deleteKeyPair(com.infinities.nova.api.NovaRequestContext,
+	 * deleteKeyPair(com.infinities.nova.api.OpenstackRequestContext,
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void deleteKeyPair(NovaRequestContext context, String userId, String keyName) throws Exception {
+	public void deleteKeyPair(OpenstackRequestContext context, String userId, String keyName) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

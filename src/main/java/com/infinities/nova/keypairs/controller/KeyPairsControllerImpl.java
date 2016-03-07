@@ -21,17 +21,17 @@ import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
+import com.infinities.api.openstack.commons.policy.Target;
 import com.infinities.nova.exception.KeyPairNotFoundException;
-import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.extensions.Extensions;
 import com.infinities.nova.keypairs.api.KeyPairsApi;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPair;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
-import com.infinities.nova.policy.Target;
 import com.infinities.nova.response.model.KeyPair;
 
 /**
@@ -58,7 +58,7 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 	 */
 	@Override
 	public MinimalKeyPairsTemplate index(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, null, "index");
 		List<KeyPair> keyPairs = keyPairsApi.getKeyPairs(context, context.getUserId());
 		List<MinimalKeyPair> rval = new ArrayList<MinimalKeyPair>();
@@ -91,7 +91,7 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 	 */
 	@Override
 	public MinimalKeyPairTemplate create(ContainerRequestContext requestContext, KeyPairTemplate body) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, null, "create");
 
 		KeyPair params = body.getKeypair();
@@ -122,7 +122,7 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 	 */
 	@Override
 	public void delete(String keyPairName, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, null, "delete");
 		try {
 			keyPairsApi.deleteKeyPair(context, context.getUserId(), keyPairName);
@@ -131,7 +131,7 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 		}
 	}
 
-	private boolean authorize(NovaRequestContext context, Target target, String action) throws Exception {
+	private boolean authorize(OpenstackRequestContext context, Target target, String action) throws Exception {
 		return Extensions.extensionAuthorizer("compute", "keypairs").authorize(context, target, action);
 	}
 
@@ -144,7 +144,7 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 	 */
 	@Override
 	public KeyPairTemplate show(ContainerRequestContext requestContext, String id) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, null, "show");
 		try {
 			KeyPair keyPair = keyPairsApi.getKeyPair(context, context.getUserId(), id);
@@ -154,7 +154,8 @@ public class KeyPairsControllerImpl implements KeyPairsController {
 		}
 	}
 
-	// private boolean softAuthorize(NovaRequestContext context, Target target,
+	// private boolean softAuthorize(OpenstackRequestContext context, Target
+	// target,
 	// String action) throws Exception {
 	// return Extensions.softExtensionAuthorizer("compute",
 	// "keypairs").authorize(context, target, action);

@@ -15,39 +15,30 @@
  *******************************************************************************/
 package com.infinities.nova.versions.views;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.UriBuilder;
-
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.infinities.nova.common.config.Config;
-import com.infinities.nova.response.model.Link;
+import com.infinities.api.openstack.commons.model.Link;
+import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
 import com.infinities.nova.response.model.Version;
 import com.infinities.nova.versions.model.VersionWrapper;
 import com.infinities.nova.versions.model.VersionsWrapper;
 
-public class ViewBuilder {
+public class ViewBuilder extends AbstractViewBuilder {
 
 	private String baseUrl;
 
 
-	public static ViewBuilder getViewBuilder(URI uri) {
-		return new ViewBuilder(uri.toString());
+	public static ViewBuilder getViewBuilder(URI uri, String osapiComputeLinkPrefix) {
+		return new ViewBuilder(uri.toString(), osapiComputeLinkPrefix);
 	}
 
-	private ViewBuilder(String baseUrl) {
+	private ViewBuilder(String baseUrl, String osapiComputeLinkPrefix) {
+		super(osapiComputeLinkPrefix);
 		this.baseUrl = baseUrl;
 	}
 
@@ -57,7 +48,7 @@ public class ViewBuilder {
 			Version proxy = new Version();
 			proxy.setId(version.getId());
 			proxy.setStatus(version.getStatus());
-			com.infinities.nova.response.model.Link link = new com.infinities.nova.response.model.Link();
+			Link link = new Link();
 			link.setRel("self");
 			link.setHref(generateHref(version.getId(), requestPath));
 			proxy.getLinks().add(link);
@@ -87,7 +78,7 @@ public class ViewBuilder {
 	}
 
 	private String generateHref(String version, String path) throws URISyntaxException {
-		String prefix = updateComputeLinkPrefix(this.baseUrl);
+		String prefix = updateComputeLinkPrefix(new URI(this.baseUrl)).toString();
 		String versionNumber = "";
 
 		if (version.contains("v3.")) {
@@ -102,35 +93,6 @@ public class ViewBuilder {
 			path = path.replaceAll("^/+|/+$", "");
 			return osPathJoin(prefix, versionNumber, path);
 		}
-	}
-
-	private String osPathJoin(String... strings) {
-		checkNotNull(strings);
-		checkArgument(strings.length > 0);
-		final CharMatcher joinCharMatcher = CharMatcher.is('/');
-		return Joiner.on('/').join(Iterables.transform(Arrays.asList(strings), new Function<String, String>() {
-
-			@Override
-			public String apply(final String input) {
-				return joinCharMatcher.trimFrom(input);
-			}
-		}));
-	}
-
-	private String updateComputeLinkPrefix(String origUrl) throws URISyntaxException {
-		return updateLinkPrefix(origUrl, Config.Instance.getOpt("osapi_compute_link_prefix").asText());
-	}
-
-	private String updateLinkPrefix(String origUrl, String prefix) throws URISyntaxException {
-		if (Strings.isNullOrEmpty(prefix)) {
-			return origUrl;
-		}
-
-		URI prefixParts = new URI(prefix);
-		URI urlParts =
-				UriBuilder.fromUri(origUrl).scheme(prefixParts.getScheme()).host(prefixParts.getHost())
-						.port(prefixParts.getPort()).replacePath(prefixParts.getPath()).build();
-		return urlParts.toString();
 	}
 
 	private List<Link> buildLinks(Version version) throws URISyntaxException {

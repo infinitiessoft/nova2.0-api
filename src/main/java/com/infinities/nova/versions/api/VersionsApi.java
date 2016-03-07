@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
+import com.infinities.api.openstack.commons.config.Config;
 import com.infinities.nova.response.model.CustomResponseStatus;
 import com.infinities.nova.response.model.MediaType;
 import com.infinities.nova.response.model.Version;
@@ -41,7 +42,7 @@ public class VersionsApi {
 		v2.setId("v2.0");
 		v2.setStatus("CURRENT");
 		v2.setUpdated("2011-01-21T11:33:21Z");
-		com.infinities.nova.response.model.Link linkV2 = new com.infinities.nova.response.model.Link();
+		com.infinities.api.openstack.commons.model.Link linkV2 = new com.infinities.api.openstack.commons.model.Link();
 		linkV2.setRel("describedby");
 		linkV2.setType("text/html");
 		linkV2.setHref(LINKS.get("v2.0").getHtml());
@@ -71,18 +72,24 @@ public class VersionsApi {
 		// v3.getMediaTypes().add(mediaType);
 		// VERSIONS.put("v3.0", v3);
 	}
+	private String osapiComputeLinkPrefix;
 
+
+	public VersionsApi(Config config) {
+		osapiComputeLinkPrefix = config.getOpt("osapi_compute_link_prefix").asText();
+	}
 
 	// status 300
 	public Response multi(URI uri, String requestPath) throws URISyntaxException {
-		ViewBuilder builder = ViewBuilder.getViewBuilder(uri);
+
+		ViewBuilder builder = ViewBuilder.getViewBuilder(uri, osapiComputeLinkPrefix);
 		VersionsWrapper versionsWrapper = builder.buildChoices(VERSIONS, requestPath);
 		return Response.status(CustomResponseStatus.MULTIPLE_CHOICES).entity(versionsWrapper).build();
 	}
 
 	// status 200
 	public Response index(URI uri) throws URISyntaxException {
-		ViewBuilder builder = ViewBuilder.getViewBuilder(uri);
+		ViewBuilder builder = ViewBuilder.getViewBuilder(uri, osapiComputeLinkPrefix);
 		VersionsWrapper versionsWrapper = builder.buildVersions(VERSIONS);
 		return Response.ok().entity(versionsWrapper).build();
 	}

@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.infinities.nova.exception;
 
-public class InvalidImageRefException extends NovaException {
+import com.infinities.api.openstack.commons.exception.OpenstackException;
+
+public class InvalidImageRefException extends OpenstackException {
 
 	/**
 	 * 

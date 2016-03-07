@@ -17,7 +17,7 @@ package com.infinities.nova.securitygroups.rules.controller;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.securitygroups.model.SecurityGroup.Rule;
 import com.infinities.nova.securitygroups.rules.api.SecurityGroupRulesApi;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleForCreateTemplate;
@@ -50,7 +50,7 @@ public class SecurityGroupRulesControllerImpl implements SecurityGroupRulesContr
 	@Override
 	public SecurityGroupRuleTemplate create(ContainerRequestContext requestContext, String projectId,
 			SecurityGroupRuleForCreateTemplate body) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Rule rule = securityGroupRulesApi.createRule(context, projectId, body);
 
 		return builder.show(requestContext, rule);
@@ -67,7 +67,7 @@ public class SecurityGroupRulesControllerImpl implements SecurityGroupRulesContr
 	@Override
 	public void delete(ContainerRequestContext requestContext, String projectId, String securityGroupRuleId)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		securityGroupRulesApi.deleteRule(context, projectId, securityGroupRuleId);
 	}
 

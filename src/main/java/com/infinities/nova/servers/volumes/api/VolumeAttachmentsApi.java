@@ -22,7 +22,7 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.servers.volumes.model.VolumeAttachment;
 
 /**
@@ -41,7 +41,7 @@ public interface VolumeAttachmentsApi {
 	 * @throws InternalException
 	 * @throws Exception
 	 */
-	List<VolumeAttachment> getVolumeAttachments(NovaRequestContext context, String projectId, String serverId)
+	List<VolumeAttachment> getVolumeAttachments(OpenstackRequestContext context, String projectId, String serverId)
 			throws InternalException, CloudException, ConcurrentException, Exception;
 
 	/**
@@ -52,7 +52,7 @@ public interface VolumeAttachmentsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	VolumeAttachment getVolumeAttachment(NovaRequestContext context, String projectId, String serverId, String volumeId)
+	VolumeAttachment getVolumeAttachment(OpenstackRequestContext context, String projectId, String serverId, String volumeId)
 			throws Exception;
 
 	/**
@@ -67,8 +67,9 @@ public interface VolumeAttachmentsApi {
 	 * @throws InterruptedException
 	 * @throws Exception
 	 */
-	void detach(NovaRequestContext context, String projectId, String serverId, String volumeId) throws InternalException,
-			CloudException, ConcurrentException, InterruptedException, ExecutionException, Exception;
+	void detach(OpenstackRequestContext context, String projectId, String serverId, String volumeId)
+			throws InternalException, CloudException, ConcurrentException, InterruptedException, ExecutionException,
+			Exception;
 
 	/**
 	 * @param context
@@ -79,7 +80,7 @@ public interface VolumeAttachmentsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	VolumeAttachment attach(NovaRequestContext context, String projectId, String serverId, String volumeId, String device)
-			throws Exception;
+	VolumeAttachment attach(OpenstackRequestContext context, String projectId, String serverId, String volumeId,
+			String device) throws Exception;
 
 }

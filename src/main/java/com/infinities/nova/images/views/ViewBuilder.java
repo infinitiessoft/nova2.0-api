@@ -24,17 +24,25 @@ import java.util.Map;
 import javax.ws.rs.container.ContainerRequestContext;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.common.config.Config;
+import com.infinities.api.openstack.commons.model.Link;
+import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImage;
 import com.infinities.nova.images.model.MinimalImageTemplate;
 import com.infinities.nova.images.model.MinimalImagesTemplate;
 import com.infinities.nova.response.model.Image;
-import com.infinities.nova.response.model.Link;
-import com.infinities.nova.views.AbstractViewBuilder;
 
 public class ViewBuilder extends AbstractViewBuilder {
+
+	private int osapiMaxLimit;
+
+
+	public ViewBuilder(String osapiComputeLinkPrefix, int osapiMaxLimit) {
+		super(osapiComputeLinkPrefix);
+		this.osapiMaxLimit = osapiMaxLimit;
+	}
+
 
 	private final static String COLLECTION_NAME = "images";
 
@@ -91,7 +99,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 			throws URISyntaxException {
 		List<Link> links = new ArrayList<Link>();
 		String limitQP = requestContext.getUriInfo().getQueryParameters().getFirst("limit");
-		int limitQ = Config.Instance.getOpt("osapi_max_limit").asInteger();
+		int limitQ = osapiMaxLimit;
 		int maxItems = limitQ;
 
 		if (!Strings.isNullOrEmpty(limitQP)) {

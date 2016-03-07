@@ -22,13 +22,12 @@ import java.util.Map.Entry;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 
-import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.exception.ImageNotFoundException;
-import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.images.api.ImagesApi;
 import com.infinities.nova.images.metadata.api.ImageMetadataApi;
 import com.infinities.nova.response.model.Image;
@@ -48,7 +47,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 
 	@Override
 	public MetadataTemplate index(String imageId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Image image = getImage(context, imageId);
 		Map<String, String> properties = image.getMetadata();
 		MetadataTemplate metadata = new MetadataTemplate();
@@ -57,7 +56,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 		return metadata;
 	}
 
-	private Image getImage(NovaRequestContext context, String imageId) throws Exception {
+	private Image getImage(OpenstackRequestContext context, String imageId) throws Exception {
 		try {
 			return imageApi.get(context, imageId);
 		} catch (ImageNotFoundException e) {
@@ -67,7 +66,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 
 	@Override
 	public MetaItemTemplate show(String imageId, String key, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Image image = getImage(context, imageId);
 		Map<String, String> properties = image.getMetadata();
 		MetaItemTemplate template = new MetaItemTemplate();
@@ -84,7 +83,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 	@Override
 	public MetadataTemplate create(String imageId, MetadataTemplate metadata, ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Image image = getImage(context, imageId);
 
 		if (metadata.getMetadata() != null) {
@@ -92,7 +91,6 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 				image.getMetadata().put(entry.getKey(), entry.getValue());
 			}
 		}
-		Common.checkImgMetadataPropertiesQuota(context, image.getMetadata());
 		metadataApi.create(context, imageId, metadata.getMetadata());
 		MetadataTemplate ret = new MetadataTemplate();
 		ret.setMetadata(image.getMetadata());
@@ -102,7 +100,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 	@Override
 	public MetaItemTemplate update(String imageId, String key, MetaItemTemplate body, ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 
 		Map<String, String> meta = body.getMeta();
 		if (meta == null) {
@@ -122,7 +120,6 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 
 		Image image = getImage(context, imageId);
 		image.getMetadata().put(key, meta.get(key));
-		Common.checkImgMetadataPropertiesQuota(context, image.getMetadata());
 
 		metadataApi.update(context, imageId, key, meta);
 
@@ -134,7 +131,7 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 
 	@Override
 	public Response delete(String imageId, String key, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Image image = getImage(context, imageId);
 
 		if (!image.getMetadata().containsKey(key)) {
@@ -150,13 +147,12 @@ public class ImageMetadataControllerImpl implements ImageMetadataController {
 	@Override
 	public MetadataTemplate updataAll(String imageId, MetadataTemplate body, ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Image image = getImage(context, imageId);
 		Map<String, String> metadata = body.getMetadata();
 		if (metadata == null) {
 			metadata = new HashMap<String, String>();
 		}
-		Common.checkImgMetadataPropertiesQuota(context, metadata);
 		image.setMetadata(metadata);
 		metadataApi.updateAll(context, imageId, metadata);
 		MetadataTemplate ret = new MetadataTemplate();

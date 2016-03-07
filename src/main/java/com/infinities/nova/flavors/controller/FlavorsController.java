@@ -17,7 +17,7 @@ package com.infinities.nova.flavors.controller;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.common.Controller;
+import com.infinities.nova.Controller;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;

@@ -21,8 +21,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.nova.response.model.Image;
-import com.infinities.nova.response.model.Link;
 
 public class ImagesTemplate implements Iterable<Image>, Serializable {
 

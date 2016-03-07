@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.namebinding.CheckProjectId;
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.ips.controller.ServerIpsController;

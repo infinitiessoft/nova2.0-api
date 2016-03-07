@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.exception.InterfaceAttachmentNotFoundException;
 import com.infinities.nova.servers.interfaces.api.InterfaceAttachmentsApi;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachment;
@@ -53,7 +53,7 @@ public class InterfaceAttachmentsControllerImpl implements InterfaceAttachmentsC
 	@Override
 	public InterfaceAttachments index(ContainerRequestContext requestContext, String projectId, String serverId)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<InterfaceAttachment> interfaceAttachmentAttachments =
 				interfaceAttachmentsApi.getInterfaceAttachments(context, projectId, serverId);
 		return builder.index(requestContext, interfaceAttachmentAttachments);
@@ -70,7 +70,7 @@ public class InterfaceAttachmentsControllerImpl implements InterfaceAttachmentsC
 	@Override
 	public InterfaceAttachmentTemplate show(ContainerRequestContext requestContext, String projectId, String serverId,
 			String interfaceAttachmentId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		InterfaceAttachment interfaceAttachment =
 				interfaceAttachmentsApi.getInterfaceAttachment(context, projectId, serverId, interfaceAttachmentId);
 		if (interfaceAttachment == null) {
@@ -91,7 +91,7 @@ public class InterfaceAttachmentsControllerImpl implements InterfaceAttachmentsC
 	@Override
 	public InterfaceAttachmentTemplate attach(ContainerRequestContext requestContext, String projectId, String serverId,
 			InterfaceAttachmentForCreateTemplate interfaceAttachmentForCreateTemplate) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		InterfaceAttachment ret =
 				interfaceAttachmentsApi.attach(context, projectId, serverId, interfaceAttachmentForCreateTemplate);
 
@@ -108,7 +108,7 @@ public class InterfaceAttachmentsControllerImpl implements InterfaceAttachmentsC
 	@Override
 	public void detach(String projectId, String serverId, String interfaceAttachmentId,
 			ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		interfaceAttachmentsApi.detach(context, projectId, serverId, interfaceAttachmentId);
 	}
 

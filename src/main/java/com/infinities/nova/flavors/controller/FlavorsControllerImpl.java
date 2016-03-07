@@ -25,27 +25,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
+import com.infinities.nova.AbstractPaginableController;
 import com.infinities.nova.db.model.InstanceType;
-import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.flavors.api.FlavorsApi;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
 import com.infinities.nova.flavors.views.ViewBuilder;
 
-public class FlavorsControllerImpl implements FlavorsController {
+public class FlavorsControllerImpl extends AbstractPaginableController implements FlavorsController {
 
 	private final static Logger logger = LoggerFactory.getLogger(FlavorsControllerImpl.class);
-	private final ViewBuilder builder = new ViewBuilder();
+	private final ViewBuilder builder;
 
 	private final FlavorsApi flavorsApi;
 
 
-	public FlavorsControllerImpl(FlavorsApi flavorsApi) {
+	public FlavorsControllerImpl(Config config, FlavorsApi flavorsApi) {
+		super(config.getOpt("osapi_max_limit").asInteger());
 		this.flavorsApi = flavorsApi;
+		String osapiComputeLinkPrefix = config.getOpt("osapi_compute_link_prefix").asText();
+		int osapiMaxLimit = config.getOpt("osapi_max_limit").asInteger();
+		builder = new ViewBuilder(osapiComputeLinkPrefix, osapiMaxLimit);
 	}
 
 	@Override
@@ -64,7 +69,7 @@ public class FlavorsControllerImpl implements FlavorsController {
 	@Override
 	public FlavorTemplate show(String flavorid, ContainerRequestContext requestContext) throws Exception {
 		try {
-			NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+			OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 			InstanceType flavor = flavorsApi.getFlavorByFlavorId(flavorid, context, "yes");
 			// requestContext.cache_db_flavor(flavor);
 			return builder.show(requestContext, flavor);
@@ -91,11 +96,11 @@ public class FlavorsControllerImpl implements FlavorsController {
 		// }
 		// String marker = uriInfo.getQueryParameters().getFirst("marker");
 
-		Entry<Integer, String> entry = Common.getLimitAndMarker(requestContext);
+		Entry<Integer, String> entry = getLimitAndMarker(requestContext);
 		Integer limit = entry.getKey();
 		String marker = entry.getValue();
 
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		if (context.getIsAdmin()) {
 			filter.setIsPublic(parseIsPublic(uriInfo.getQueryParameters().getFirst("is_public")));
 		} else {
@@ -124,8 +129,8 @@ public class FlavorsControllerImpl implements FlavorsController {
 		}
 
 		try {
-			List<InstanceType> limitedFlavors = flavorsApi.getAllFlavorsSortedList(context, filter, sortKey, sortDir, limit,
-					marker);
+			List<InstanceType> limitedFlavors =
+					flavorsApi.getAllFlavorsSortedList(context, filter, sortKey, sortDir, limit, marker);
 			return limitedFlavors;
 		} catch (Exception e) {
 			String msg = String.format("marker [%s] not found", marker);

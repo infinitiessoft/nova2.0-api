@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.infinities.nova.exception;
 
-public class FlavorMemoryTooSmallException extends NovaException {
+import com.infinities.api.openstack.commons.exception.OpenstackException;
+
+public class FlavorMemoryTooSmallException extends OpenstackException {
 
 	/**
 	 * 

@@ -17,7 +17,7 @@ package com.infinities.nova.networks.api;
 
 import java.util.List;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.networks.model.Network;
 import com.infinities.nova.networks.model.NetworkForCreateTemplate;
 
@@ -33,7 +33,7 @@ public interface NetworksApi {
 	 * @return
 	 * @throws Exception
 	 */
-	List<Network> getNetworks(NovaRequestContext context, String projectId) throws Exception;
+	List<Network> getNetworks(OpenstackRequestContext context, String projectId) throws Exception;
 
 	/**
 	 * @param context
@@ -42,7 +42,7 @@ public interface NetworksApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Network getNetwork(NovaRequestContext context, String projectId, String networkId) throws Exception;
+	Network getNetwork(OpenstackRequestContext context, String projectId, String networkId) throws Exception;
 
 	/**
 	 * @param context
@@ -51,8 +51,8 @@ public interface NetworksApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Network createNetwork(NovaRequestContext context, String projectId, NetworkForCreateTemplate networkForCreateTemplate)
-			throws Exception;
+	Network createNetwork(OpenstackRequestContext context, String projectId,
+			NetworkForCreateTemplate networkForCreateTemplate) throws Exception;
 
 	/**
 	 * @param context
@@ -60,6 +60,6 @@ public interface NetworksApi {
 	 * @param networkId
 	 * @throws Exception
 	 */
-	void deleteNetwork(NovaRequestContext context, String projectId, String networkId) throws Exception;
+	void deleteNetwork(OpenstackRequestContext context, String projectId, String networkId) throws Exception;
 
 }

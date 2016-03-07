@@ -13,14 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova.policy;
+package com.infinities.nova;
 
-import java.util.Set;
 
-public interface Credentials {
-
-	boolean getIsAdmin();
-
-	Set<String> getRoles();
+public interface Controller {
 
 }

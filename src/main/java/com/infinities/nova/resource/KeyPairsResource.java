@@ -31,11 +31,11 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.keypairs.controller.KeyPairsController;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
-import com.infinities.nova.namebinding.CheckProjectId;
 
 /**
  * @author pohsun

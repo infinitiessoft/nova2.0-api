@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.namebinding.CheckProjectId;
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

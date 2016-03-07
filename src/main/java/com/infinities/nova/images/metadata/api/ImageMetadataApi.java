@@ -17,16 +17,16 @@ package com.infinities.nova.images.metadata.api;
 
 import java.util.Map;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 
 public interface ImageMetadataApi {
 
-	void updateAll(NovaRequestContext context, String imageId, Map<String, String> metadata) throws Exception;
+	void updateAll(OpenstackRequestContext context, String imageId, Map<String, String> metadata) throws Exception;
 
-	void create(NovaRequestContext context, String imageId, Map<String, String> metadata) throws Exception;
+	void create(OpenstackRequestContext context, String imageId, Map<String, String> metadata) throws Exception;
 
-	void update(NovaRequestContext context, String imageId, String key, Map<String, String> meta) throws Exception;
+	void update(OpenstackRequestContext context, String imageId, String key, Map<String, String> meta) throws Exception;
 
-	void delete(NovaRequestContext context, String imageId, String key) throws Exception;
+	void delete(OpenstackRequestContext context, String imageId, String key) throws Exception;
 
 }

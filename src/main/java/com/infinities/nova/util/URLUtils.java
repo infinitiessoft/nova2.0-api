@@ -13,14 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package com.infinities.nova;
+package com.infinities.nova.util;
 
-public class Context {
+import java.net.URI;
+import java.net.URISyntaxException;
 
-	// readDeleted = no
-	public static NovaRequestContext getAdminContext(String readDeleted) throws Exception {
-		NovaRequestContext context = new NovaRequestContext(null, null, true, readDeleted, null, null, null, null, null,
-				false, null, null, null, null, false);
-		return context;
+/**
+ * @author pohsun
+ *
+ */
+public class URLUtils {
+
+	private URLUtils() {
+
 	}
+
+	public static String getIdFromHref(String imageRef) throws URISyntaxException {
+		URI uri = new URI(imageRef);
+		String path = uri.getPath();
+		if (path.endsWith("/")) {
+			path = path.substring(0, path.length() - 1);
+		}
+		String[] parts = path.split("/");
+
+		return parts[parts.length - 1];
+	}
+
 }

@@ -26,8 +26,8 @@ import org.dasein.cloud.compute.Volume;
 import org.dasein.cloud.compute.VolumeFilterOptions;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.exception.VolumeNotFoundException;
 import com.infinities.nova.servers.volumes.model.VolumeAttachment;
 import com.infinities.skyport.async.AsyncResult;
@@ -53,11 +53,11 @@ public class DaseinVolumeAttachmentsApi implements VolumeAttachmentsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.servers.volumes.api.VolumeAttachmentsApi#
-	 * getVolumeAttachments(com.infinities.nova.NovaRequestContext,
+	 * getVolumeAttachments(com.infinities.nova.OpenstackRequestContext,
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<VolumeAttachment> getVolumeAttachments(NovaRequestContext context, String projectId, String serverId)
+	public List<VolumeAttachment> getVolumeAttachments(OpenstackRequestContext context, String projectId, String serverId)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -79,11 +79,11 @@ public class DaseinVolumeAttachmentsApi implements VolumeAttachmentsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.servers.volumes.api.VolumeAttachmentsApi#
-	 * getVolumeAttachment(com.infinities.nova.NovaRequestContext,
+	 * getVolumeAttachment(com.infinities.nova.OpenstackRequestContext,
 	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public VolumeAttachment getVolumeAttachment(NovaRequestContext context, String projectId, String serverId,
+	public VolumeAttachment getVolumeAttachment(OpenstackRequestContext context, String projectId, String serverId,
 			String volumeId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -102,11 +102,11 @@ public class DaseinVolumeAttachmentsApi implements VolumeAttachmentsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.servers.volumes.api.VolumeAttachmentsApi#detach(com
-	 * .infinities.nova.NovaRequestContext, java.lang.String, java.lang.String,
-	 * java.lang.String)
+	 * .infinities.nova.OpenstackRequestContext, java.lang.String,
+	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void detach(NovaRequestContext context, String projectId, String serverId, String volumeId) throws Exception {
+	public void detach(OpenstackRequestContext context, String projectId, String serverId, String volumeId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -119,11 +119,11 @@ public class DaseinVolumeAttachmentsApi implements VolumeAttachmentsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.servers.volumes.api.VolumeAttachmentsApi#attach(com
-	 * .infinities.nova.NovaRequestContext, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String)
+	 * .infinities.nova.OpenstackRequestContext, java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public VolumeAttachment attach(NovaRequestContext context, String projectId, String serverId, String volumeId,
+	public VolumeAttachment attach(OpenstackRequestContext context, String projectId, String serverId, String volumeId,
 			String device) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");

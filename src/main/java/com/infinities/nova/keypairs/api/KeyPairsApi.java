@@ -17,7 +17,7 @@ package com.infinities.nova.keypairs.api;
 
 import java.util.List;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.response.model.KeyPair;
 
 /**
@@ -26,14 +26,14 @@ import com.infinities.nova.response.model.KeyPair;
  */
 public interface KeyPairsApi {
 
-	KeyPair createKeyPair(NovaRequestContext context, String userId, String keyName) throws Exception;
+	KeyPair createKeyPair(OpenstackRequestContext context, String userId, String keyName) throws Exception;
 
-	KeyPair importKeyPair(NovaRequestContext context, String userId, String keyName, String publicKey) throws Exception;
+	KeyPair importKeyPair(OpenstackRequestContext context, String userId, String keyName, String publicKey) throws Exception;
 
-	KeyPair getKeyPair(NovaRequestContext context, String userId, String keyName) throws Exception;
+	KeyPair getKeyPair(OpenstackRequestContext context, String userId, String keyName) throws Exception;
 
-	List<KeyPair> getKeyPairs(NovaRequestContext context, String userId) throws Exception;
+	List<KeyPair> getKeyPairs(OpenstackRequestContext context, String userId) throws Exception;
 
-	void deleteKeyPair(NovaRequestContext context, String userId, String keyName) throws Exception;
+	void deleteKeyPair(OpenstackRequestContext context, String userId, String keyName) throws Exception;
 
 }

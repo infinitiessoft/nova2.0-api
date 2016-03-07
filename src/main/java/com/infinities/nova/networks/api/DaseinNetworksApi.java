@@ -26,8 +26,8 @@ import org.dasein.cloud.network.VLAN;
 import org.dasein.cloud.network.VlanCreateOptions;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.networks.model.Network;
 import com.infinities.nova.networks.model.NetworkForCreateTemplate;
 import com.infinities.skyport.async.AsyncResult;
@@ -54,10 +54,10 @@ public class DaseinNetworksApi implements NetworksApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.networks.api.NetworksApi#getNetworks(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String)
 	 */
 	@Override
-	public List<Network> getNetworks(NovaRequestContext context, String projectId) throws Exception {
+	public List<Network> getNetworks(OpenstackRequestContext context, String projectId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -79,10 +79,10 @@ public class DaseinNetworksApi implements NetworksApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.networks.api.NetworksApi#getNetwork(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Network getNetwork(NovaRequestContext context, String projectId, String networkId) throws Exception {
+	public Network getNetwork(OpenstackRequestContext context, String projectId, String networkId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -97,11 +97,11 @@ public class DaseinNetworksApi implements NetworksApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.networks.api.NetworksApi#createNetwork(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String,
+	 * .nova.OpenstackRequestContext, java.lang.String,
 	 * com.infinities.nova.networks.model.NetworkForCreateTemplate)
 	 */
 	@Override
-	public Network createNetwork(NovaRequestContext context, String projectId,
+	public Network createNetwork(OpenstackRequestContext context, String projectId,
 			NetworkForCreateTemplate networkForCreateTemplate) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -137,10 +137,10 @@ public class DaseinNetworksApi implements NetworksApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.networks.api.NetworksApi#deleteNetwork(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void deleteNetwork(NovaRequestContext context, String projectId, String networkId) throws Exception {
+	public void deleteNetwork(OpenstackRequestContext context, String projectId, String networkId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

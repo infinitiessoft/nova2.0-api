@@ -17,27 +17,27 @@ package com.infinities.nova.images.api;
 
 import java.util.List;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.Common.PaginationParams;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.nova.AbstractPaginableController.PaginationParams;
 import com.infinities.nova.images.controller.ImagesFilter;
 import com.infinities.nova.response.model.Image;
 
 public interface ImagesApi {
 
-	// List<Image> getAll(NovaRequestContext context, Map<String, String>
+	// List<Image> getAll(OpenstackRequestContext context, Map<String, String>
 	// filters,
 	// Map<String, Object> pageParams);
 
 	// includeLocation=false, showDeleted=false
-	Image get(NovaRequestContext context, String imageId) throws Exception;
+	Image get(OpenstackRequestContext context, String imageId) throws Exception;
 
-	// void destroy(NovaRequestContext context, String imageId) throws
+	// void destroy(OpenstackRequestContext context, String imageId) throws
 	// Exception;
 
 	// marker=null, limit=null, sortKey="createdAt", sortDir="desc",
 	// memberStatus="accepted", isPublic=null, adminAsUser=false,
 	// returnTag=false
-	// List<Image> getAll(NovaRequestContext context, String name, String
+	// List<Image> getAll(OpenstackRequestContext context, String name, String
 	// status, String containerFormat, String diskFormat,
 	// Long minRam, Long minDisk, Long sizeMin, Long sizeMax, Calendar
 	// changesSince, Boolean protectedValue,
@@ -45,13 +45,14 @@ public interface ImagesApi {
 	// marker, String memberStatus,
 	// Boolean adminAsUser, String visibility) throws Exception;
 
-	List<Image> getAll(NovaRequestContext context, ImagesFilter filters, PaginationParams pageParams) throws Exception;
+	List<Image> getAll(OpenstackRequestContext context, ImagesFilter filters, PaginationParams pageParams) throws Exception;
 
 	// data=null, purgeProps=false
-	// Image update(NovaRequestContext context, String imageId, Image imageInfo,
+	// Image update(OpenstackRequestContext context, String imageId, Image
+	// imageInfo,
 	// Object data, Boolean purgeProps)
 	// throws Exception;
 
-	void delete(NovaRequestContext context, String imageId) throws Exception;
+	void delete(OpenstackRequestContext context, String imageId) throws Exception;
 
 }

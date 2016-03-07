@@ -32,16 +32,20 @@ import javax.ws.rs.container.ContainerRequestContext;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.model.Link;
+import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
 import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.response.model.Link;
 import com.infinities.nova.response.model.Server;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Fault;
+import com.infinities.nova.servers.api.TaskStates;
+import com.infinities.nova.servers.api.VmStates;
+import com.infinities.nova.servers.ips.controller.NetworkUtils;
 import com.infinities.nova.servers.model.CreatedServer;
 import com.infinities.nova.servers.model.CreatedServerTemplate;
 import com.infinities.nova.servers.model.MinimalServer;
@@ -49,16 +53,101 @@ import com.infinities.nova.servers.model.MinimalServerTemplate;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
 import com.infinities.nova.servers.model.ServerTemplate;
 import com.infinities.nova.servers.model.ServersTemplate;
-import com.infinities.nova.views.AbstractViewBuilder;
+import com.infinities.nova.util.URLUtils;
 
 public class ViewBuilder extends AbstractViewBuilder {
+
+	static {
+		Map<String, Map<String, String>> siteMap = new HashMap<String, Map<String, String>>();
+		Map<String, String> active = new HashMap<String, String>();
+		active.put("default", "ACTIVE");
+		active.put(TaskStates.REBOOTING, "REBOOT");
+		active.put(TaskStates.REBOOT_PENDING, "REBOOT");
+		active.put(TaskStates.REBOOT_STARTED, "REBOOT");
+		active.put(TaskStates.REBOOTING_HARD, "HARD_REBOOT");
+		active.put(TaskStates.REBOOT_PENDING_HARD, "HARD_REBOOT");
+		active.put(TaskStates.REBOOT_STARTED_HARD, "HARD_REBOOT");
+		active.put(TaskStates.UPDATING_PASSWORD, "PASSWORD");
+		active.put(TaskStates.REBUILDING, "REBUILD");
+		active.put(TaskStates.REBUILD_BLOCK_DEVICE_MAPPING, "REBUILD");
+		active.put(TaskStates.REBUILD_SPAWNING, "REBUILD");
+		active.put(TaskStates.MIGRATING, "MIGRATING");
+		active.put(TaskStates.RESIZE_PREP, "RESIZE");
+		active.put(TaskStates.RESIZE_MIGRATING, "RESIZE");
+		active.put(TaskStates.RESIZE_MIGRATED, "RESIZE");
+		active.put(TaskStates.RESIZE_FINISH, "RESIZE");
+		siteMap.put(VmStates.ACTIVE, active);
+
+		Map<String, String> building = new HashMap<String, String>();
+		building.put("default", "BUILD");
+		siteMap.put(VmStates.BUILDING, building);
+
+		Map<String, String> stopped = new HashMap<String, String>();
+		stopped.put("default", "SHUTOFF");
+		stopped.put(TaskStates.RESIZE_PREP, "RESIZE");
+		stopped.put(TaskStates.RESIZE_MIGRATING, "RESIZE");
+		stopped.put(TaskStates.RESIZE_MIGRATED, "RESIZE");
+		stopped.put(TaskStates.RESIZE_FINISH, "RESIZE");
+		siteMap.put(VmStates.STOPPED, stopped);
+
+		Map<String, String> resized = new HashMap<String, String>();
+		resized.put("default", "VERIFY_RESIZE");
+		resized.put(TaskStates.RESIZE_REVERTING, "REVERT_RESIZE");
+		siteMap.put(VmStates.RESIZED, resized);
+
+		Map<String, String> paused = new HashMap<String, String>();
+		paused.put("default", "PAUSED");
+		siteMap.put(VmStates.PAUSED, paused);
+
+		Map<String, String> suspended = new HashMap<String, String>();
+		suspended.put("default", "SUSPENDED");
+		siteMap.put(VmStates.SUSPENDED, suspended);
+
+		Map<String, String> rescued = new HashMap<String, String>();
+		rescued.put("default", "RESCUE");
+		siteMap.put(VmStates.RESCUED, rescued);
+
+		Map<String, String> error = new HashMap<String, String>();
+		error.put("default", "ERROR");
+		siteMap.put(VmStates.ERROR, error);
+
+		Map<String, String> deleted = new HashMap<String, String>();
+		deleted.put("default", "DELETED");
+		siteMap.put(VmStates.DELETED, deleted);
+
+		Map<String, String> softDeleted = new HashMap<String, String>();
+		softDeleted.put("default", "SOFT_DELETED");
+		siteMap.put(VmStates.SOFT_DELETED, softDeleted);
+
+		Map<String, String> shelved = new HashMap<String, String>();
+		shelved.put("default", "SHELVED");
+		siteMap.put(VmStates.SHELVED, shelved);
+
+		Map<String, String> shelvedOffloaded = new HashMap<String, String>();
+		shelvedOffloaded.put("default", "SHELVED_OFFLOADED");
+		siteMap.put(VmStates.SHELVED_OFFLOADED, shelvedOffloaded);
+
+		STATE_MAP = Collections.unmodifiableMap(siteMap);
+	}
+
+	private static final Logger logger = LoggerFactory.getLogger(ViewBuilder.class);
+	private int osapiMaxLimit;
+	private static final Map<String, Map<String, String>> STATE_MAP;
+
+
+	public ViewBuilder(String osapiComputeLinkPrefix, int osapiMaxLimit) {
+		super(osapiComputeLinkPrefix);
+		addressBuilder = new com.infinities.nova.servers.ips.views.ViewBuilder(osapiComputeLinkPrefix);
+		this.osapiMaxLimit = osapiMaxLimit;
+	}
+
 
 	// private final static Logger logger =
 	// LoggerFactory.getLogger(ViewBuilder.class);
 	private final static String COLLECTION_NAME = "servers";
 	private final static Set<String> PROGRESS_STATUSES;
 	private final static Map<String, String> FAULT_STATUSES;
-	private final com.infinities.nova.servers.ips.views.ViewBuilder addressBuilder = new com.infinities.nova.servers.ips.views.ViewBuilder();
+	private final com.infinities.nova.servers.ips.views.ViewBuilder addressBuilder;
 	// private final com.infinities.nova.views.flavors.ViewBuilder flavorBuilder
 	// = new com.infinities.nova.views.flavors.ViewBuilder();
 	// private final com.infinities.nova.views.images.ViewBuilder imageBuilder =
@@ -196,7 +285,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 
 		if (!Strings.isNullOrEmpty(fault.getDetails())) {
 			boolean isAdmin = false;
-			NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+			OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 			if (context != null) {
 				isAdmin = context.getIsAdmin();
 			}
@@ -211,8 +300,8 @@ public class ViewBuilder extends AbstractViewBuilder {
 
 	private Addresses getAddress(ContainerRequestContext requestContext, Instance instance) throws UnknownHostException,
 			CloneNotSupportedException {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Map<String, Common.CommonNetwork> networks = Common.getNetworksForInstance(context, instance);
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
+		Map<String, NetworkUtils.Network> networks = NetworkUtils.getNetworksForInstance(context, instance);
 		return addressBuilder.index(networks);
 	}
 
@@ -242,7 +331,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 		String imageRef = instance.getImageId();
 		com.infinities.nova.response.model.Server.Image image = new com.infinities.nova.response.model.Server.Image();
 		if (!Strings.isNullOrEmpty(imageRef)) {
-			String imageId = Common.getIdFromHref(imageRef);
+			String imageId = URLUtils.getIdFromHref(imageRef);
 			String bookmark = getBookmarkLink(requestContext, imageId, "images");
 			image.setId(imageId);
 			List<Link> links = new ArrayList<Link>();
@@ -276,14 +365,35 @@ public class ViewBuilder extends AbstractViewBuilder {
 		if (instance.getDeleted() == 1) {
 			return "DELETED";
 		}
-		return Common.statusFromState(instance.getVmState(), instance.getTaskState());
+		return statusFromState(instance.getVmState(), instance.getTaskState());
+	}
+
+	private String statusFromState(String vmState, String taskState) {
+		if (Strings.isNullOrEmpty(taskState)) {
+			taskState = "default";
+		}
+		Map<String, String> taskMap = STATE_MAP.get(vmState);
+		if (taskMap == null) {
+			taskMap = new HashMap<String, String>();
+			taskMap.put("default", "UNKNOWN");
+		}
+		String status = taskMap.get(taskState);
+		if (Strings.isNullOrEmpty(status)) {
+			status = taskMap.get("default");
+		}
+		if ("UNKNOWN".equals(status)) {
+			logger.error("status is UNKNOWN from vm_state={} task_state={}. Bad upgrade or db corrupted?", new Object[] {
+					vmState, taskState });
+		}
+
+		return status;
 	}
 
 	private List<Link> getCollectionLinks(ContainerRequestContext requestContext, List<Instance> instances,
 			String collectionName) throws URISyntaxException {
 		List<Link> links = new ArrayList<Link>();
 		String limitQP = requestContext.getUriInfo().getQueryParameters().getFirst("limit");
-		int limitQ = Config.Instance.getOpt("osapi_max_limit").asInteger();
+		int limitQ = osapiMaxLimit;
 		int maxItems = limitQ;
 
 		if (!Strings.isNullOrEmpty(limitQP)) {

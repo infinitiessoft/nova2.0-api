@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.infinities.nova.exception;
 
-public class FlavorDiskTooSmallException extends NovaException {
+import com.infinities.api.openstack.commons.exception.OpenstackException;
+
+public class FlavorDiskTooSmallException extends OpenstackException {
 
 	/**
 	 * 

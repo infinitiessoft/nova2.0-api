@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.nova.securitygroups.model.SecurityGroup;
 
 @XmlRootElement(name = "server")

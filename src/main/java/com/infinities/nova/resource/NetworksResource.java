@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.namebinding.CheckProjectId;
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.networks.controller.NetworksController;
 import com.infinities.nova.networks.model.NetworkForCreateTemplate;
 import com.infinities.nova.networks.model.NetworkTemplate;

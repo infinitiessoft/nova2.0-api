@@ -27,8 +27,8 @@ import org.dasein.cloud.network.RawAddress;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.exception.InterfaceAttachmentNotFoundException;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachment;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachment.FixedIp;
@@ -58,12 +58,12 @@ public class DaseinInterfaceAttachmentsApi implements InterfaceAttachmentsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.servers.interfaces.api.InterfaceAttachmentsApi#
-	 * getInterfaceAttachments(com.infinities.nova.NovaRequestContext,
+	 * getInterfaceAttachments(com.infinities.nova.OpenstackRequestContext,
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<InterfaceAttachment> getInterfaceAttachments(NovaRequestContext context, String projectId, String serverId)
-			throws Exception {
+	public List<InterfaceAttachment> getInterfaceAttachments(OpenstackRequestContext context, String projectId,
+			String serverId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -84,11 +84,11 @@ public class DaseinInterfaceAttachmentsApi implements InterfaceAttachmentsApi {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.infinities.nova.servers.interfaces.api.InterfaceAttachmentsApi#
-	 * getInterfaceAttachment(com.infinities.nova.NovaRequestContext,
+	 * getInterfaceAttachment(com.infinities.nova.OpenstackRequestContext,
 	 * java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public InterfaceAttachment getInterfaceAttachment(NovaRequestContext context, String projectId, String serverId,
+	public InterfaceAttachment getInterfaceAttachment(OpenstackRequestContext context, String projectId, String serverId,
 			String interfaceAttachmentId) throws Exception {
 		List<InterfaceAttachment> interfaceAttachments = getInterfaceAttachments(context, projectId, serverId);
 		for (InterfaceAttachment attachment : interfaceAttachments) {
@@ -104,12 +104,12 @@ public class DaseinInterfaceAttachmentsApi implements InterfaceAttachmentsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.servers.interfaces.api.InterfaceAttachmentsApi#attach
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String, com.infinities.nova.servers.interfaces.model.
 	 * InterfaceAttachmentForCreateTemplate)
 	 */
 	@Override
-	public InterfaceAttachment attach(NovaRequestContext context, String projectId, String serverId,
+	public InterfaceAttachment attach(OpenstackRequestContext context, String projectId, String serverId,
 			InterfaceAttachmentForCreateTemplate interfaceAttachmentForCreateTemplate) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -130,11 +130,11 @@ public class DaseinInterfaceAttachmentsApi implements InterfaceAttachmentsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.servers.interfaces.api.InterfaceAttachmentsApi#detach
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void detach(NovaRequestContext context, String projectId, String serverId, String interfaceAttachmentId)
+	public void detach(OpenstackRequestContext context, String projectId, String serverId, String interfaceAttachmentId)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");

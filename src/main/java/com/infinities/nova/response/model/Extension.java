@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.infinities.api.openstack.commons.model.Link;
+
 @XmlRootElement(name = "extension")
 public class Extension implements Serializable {
 

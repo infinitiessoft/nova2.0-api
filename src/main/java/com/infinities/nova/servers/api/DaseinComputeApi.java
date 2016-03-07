@@ -39,8 +39,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.Policy;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.InvalidInputException;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotImplementedException;
+import com.infinities.api.openstack.commons.policy.Policy;
+import com.infinities.api.openstack.commons.policy.Target;
 import com.infinities.nova.db.model.Address;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.db.model.InstanceType;
@@ -48,11 +51,8 @@ import com.infinities.nova.exception.CannotResizeToSameFlavorException;
 import com.infinities.nova.exception.FlavorNotFoundException;
 import com.infinities.nova.exception.InstanceNotFoundException;
 import com.infinities.nova.exception.InvalidFixedIpAndMaxCountRequestException;
-import com.infinities.nova.exception.InvalidInputException;
-import com.infinities.nova.exception.http.HTTPNotImplementedException;
 import com.infinities.nova.flavors.api.FlavorsApi;
 import com.infinities.nova.images.api.ImagesApi;
-import com.infinities.nova.policy.Target;
 import com.infinities.nova.response.model.Image;
 import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.servers.controller.ServersFilter;
@@ -85,7 +85,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public List<Instance> getAll(NovaRequestContext context, ServersFilter filters, String sortKey, String sortDir,
+	public List<Instance> getAll(OpenstackRequestContext context, ServersFilter filters, String sortKey, String sortDir,
 			Integer limit, String marker, List<String> expectedAttrs) throws Exception {
 		if (Strings.isNullOrEmpty(sortKey)) {
 			sortKey = "created_at";
@@ -128,7 +128,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	// limit=null, marker=null
-	private List<Instance> getInstancesByFilters(NovaRequestContext context, ServersFilter filters, String sortKey,
+	private List<Instance> getInstancesByFilters(OpenstackRequestContext context, ServersFilter filters, String sortKey,
 			String sortDir, Integer limit, String marker, List<String> expectedAttrs) throws InternalException,
 			CloudException, InterruptedException, ExecutionException, ConcurrentException {
 		List<String> fields = new ArrayList<String>();
@@ -140,7 +140,7 @@ public class DaseinComputeApi implements ComputeApi {
 		return instanceList_GetByFilters(context, filters, sortKey, sortDir, limit, marker, fields);
 	}
 
-	private List<Instance> instanceList_GetByFilters(NovaRequestContext context, ServersFilter filters, String sortKey,
+	private List<Instance> instanceList_GetByFilters(OpenstackRequestContext context, ServersFilter filters, String sortKey,
 			String sortDir, Integer limit, String marker, List<String> expectedAttrs) throws InternalException,
 			CloudException, InterruptedException, ExecutionException, ConcurrentException {
 		if (Strings.isNullOrEmpty(sortKey)) {
@@ -164,12 +164,12 @@ public class DaseinComputeApi implements ComputeApi {
 		return makeInstanceList(context, instances);
 	}
 
-	private List<Instance> makeInstanceList(NovaRequestContext context, List<Instance> dbInstList) {
+	private List<Instance> makeInstanceList(OpenstackRequestContext context, List<Instance> dbInstList) {
 		// pass
 		return dbInstList;
 	}
 
-	private void checkPolicy(NovaRequestContext context, String action, Target target, String scope) throws Exception {
+	private void checkPolicy(OpenstackRequestContext context, String action, Target target, String scope) throws Exception {
 		if (Strings.isNullOrEmpty(scope)) {
 			scope = "compute";
 		}
@@ -178,7 +178,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public Instance get(NovaRequestContext context, String serverId, List<String> expectedAttrs) throws Exception {
+	public Instance get(OpenstackRequestContext context, String serverId, List<String> expectedAttrs) throws Exception {
 		if (expectedAttrs == null) {
 			expectedAttrs = new ArrayList<String>();
 		}
@@ -197,7 +197,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public Entry<List<Instance>, UUID> create(NovaRequestContext context, String flavorId, String imageHref,
+	public Entry<List<Instance>, UUID> create(OpenstackRequestContext context, String flavorId, String imageHref,
 			String kernelId, String ramDiskId, Integer minCount, Integer maxCount, String displayName,
 			String displayDescription, String keyName, String keyData, List<String> securityGroup, String availabilityZone,
 			String userData, Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
@@ -217,7 +217,7 @@ public class DaseinComputeApi implements ComputeApi {
 				checkServerGroupQuota);
 	}
 
-	private Entry<List<Instance>, UUID> createInstance(NovaRequestContext context, String flavorId, String imageHref,
+	private Entry<List<Instance>, UUID> createInstance(OpenstackRequestContext context, String flavorId, String imageHref,
 			String kernelId, String ramDiskId, Integer minCount, Integer maxCount, String displayName,
 			String displayDescription, String keyName, String keyData, List<String> securityGroups, String availabilityZone,
 			String userData, Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,
@@ -278,7 +278,7 @@ public class DaseinComputeApi implements ComputeApi {
 		return Maps.immutableEntry(instances, reservationId);
 	}
 
-	private Entry<CreateVmBaseOptions, Integer> validateAndBuildBaseOptions(NovaRequestContext context,
+	private Entry<CreateVmBaseOptions, Integer> validateAndBuildBaseOptions(OpenstackRequestContext context,
 			InstanceType instType, Image bootMeta, String imageHref, String imageId, String kernelId, String ramDiskId,
 			String displayName, String displayDescription, String keyName, String keyData, List<String> securityGroups,
 			String availabilityZone, String forcedHost, String userData, Map<String, String> metadata,
@@ -343,7 +343,7 @@ public class DaseinComputeApi implements ComputeApi {
 		baseOptions.setAutoDiskConfig(autoDiskConfig);
 	}
 
-	private AvailabilityZone handleAvailabilityZone(NovaRequestContext context, String availabilityZone) {
+	private AvailabilityZone handleAvailabilityZone(OpenstackRequestContext context, String availabilityZone) {
 		String host = null;
 		String node = null;
 		if (!Strings.isNullOrEmpty(availabilityZone) && availabilityZone.contains(":")) {
@@ -373,7 +373,8 @@ public class DaseinComputeApi implements ComputeApi {
 		return ret;
 	}
 
-	private com.infinities.nova.response.model.Image getImage(NovaRequestContext context, String imageHref) throws Exception {
+	private com.infinities.nova.response.model.Image getImage(OpenstackRequestContext context, String imageHref)
+			throws Exception {
 		if (Strings.isNullOrEmpty(imageHref)) {
 			return null;
 		}
@@ -387,7 +388,7 @@ public class DaseinComputeApi implements ComputeApi {
 		throw new InvalidFixedIpAndMaxCountRequestException(msg);
 	}
 
-	private void checkCreatePolicies(NovaRequestContext context, String availabilityZone,
+	private void checkCreatePolicies(OpenstackRequestContext context, String availabilityZone,
 			List<ServerForCreate.NetworkForCreate> requestedNetworks) throws Exception {
 		ComputeTarget target = new ComputeTarget();
 		target.setProjectId(context.getProjectId());
@@ -440,7 +441,7 @@ public class DaseinComputeApi implements ComputeApi {
 
 
 	@Override
-	public void delete(NovaRequestContext context, Instance instance) throws Exception {
+	public void delete(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "delete", instance, "compute");
 		logger.debug("Going to try to terminate instance: {}", instance.getInstanceId());
 		computeTaskApi.terminateInstance(context, instance, null);
@@ -448,19 +449,19 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public Instance update(NovaRequestContext context, String serverId, String name, String ipv4, String ipv6)
+	public Instance update(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
 			throws Exception {
 		return computeTaskApi.updateInstance(context, serverId, name, ipv4, ipv6);
 	}
 
 	@Override
-	public Map<String, String> getInstanceMetadata(NovaRequestContext context, Instance instance) throws Exception {
+	public Map<String, String> getInstanceMetadata(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "get_instance_metadata", instance, null);
 		return instance.getMetadata();
 	}
 
 	@Override
-	public Map<String, String> updateInstanceMetadata(NovaRequestContext context, Instance instance,
+	public Map<String, String> updateInstanceMetadata(OpenstackRequestContext context, Instance instance,
 			Map<String, String> metadata, boolean delete) throws Exception {
 		checkPolicy(context, "update_instance_metadata", instance, null);
 
@@ -480,7 +481,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public void deleteInstanceMetadata(NovaRequestContext context, Instance instance, String key) throws Exception {
+	public void deleteInstanceMetadata(OpenstackRequestContext context, Instance instance, String key) throws Exception {
 		checkPolicy(context, "delete_instance_metadata", instance, null);
 		computeTaskApi.deleteInstanceMetadata(context, instance, key);
 	}
@@ -500,7 +501,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public void resize(NovaRequestContext context, Instance instance, String flavorId, String autoDiskConfig)
+	public void resize(OpenstackRequestContext context, Instance instance, String flavorId, String autoDiskConfig)
 			throws Exception {
 		checkPolicy(context, "resize", instance, null);
 		String currentInstanceTypeId = instance.getFlavorId();
@@ -526,7 +527,7 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public void reboot(NovaRequestContext context, Instance instance, String rebootType) throws Exception {
+	public void reboot(OpenstackRequestContext context, Instance instance, String rebootType) throws Exception {
 		checkPolicy(context, "reboot", instance, null);
 		if ("SOFT".equals(rebootType)) {
 			softReboot(context, instance);
@@ -535,42 +536,43 @@ public class DaseinComputeApi implements ComputeApi {
 		}
 	}
 
-	private void hardReboot(NovaRequestContext context, Instance instance) throws CloudException, InternalException,
+	private void hardReboot(OpenstackRequestContext context, Instance instance) throws CloudException, InternalException,
 			ConcurrentException {
 		this.getSupport(context.getProjectId()).reboot(instance.getInstanceId());
 	}
 
-	private void softReboot(NovaRequestContext context, Instance instance) {
+	private void softReboot(OpenstackRequestContext context, Instance instance) {
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
-	public void revertResize(NovaRequestContext context, Instance instance) throws Exception {
+	public void revertResize(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "revert_resize", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
-	public void confirmResize(NovaRequestContext context, Instance instance) throws Exception {
+	public void confirmResize(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "confirm_resize", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
-	public void setAdminPassword(NovaRequestContext context, Instance instance, String adminPass) throws Exception {
+	public void setAdminPassword(OpenstackRequestContext context, Instance instance, String adminPass) throws Exception {
 		checkPolicy(context, "set_admin_password", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
-	public void rebuild(NovaRequestContext context, Instance instance, String imageHref, String password, String accessIpV4,
-			String accessIpV6, String name, Map<String, String> metadata, String diskConfig) throws Exception {
+	public void rebuild(OpenstackRequestContext context, Instance instance, String imageHref, String password,
+			String accessIpV4, String accessIpV6, String name, Map<String, String> metadata, String diskConfig)
+			throws Exception {
 		checkPolicy(context, "rebuild", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
-	public void snapshot(NovaRequestContext context, Instance instance, String imageName, Map<String, String> metadata)
+	public void snapshot(OpenstackRequestContext context, Instance instance, String imageName, Map<String, String> metadata)
 			throws Exception {
 		checkPolicy(context, "snapshot", instance, null);
 		VirtualMachine fromVirtualMachine =
@@ -594,37 +596,37 @@ public class DaseinComputeApi implements ComputeApi {
 	}
 
 	@Override
-	public void pause(NovaRequestContext context, Instance instance) throws Exception {
+	public void pause(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "pause", instance, null);
 		this.getSupport(context.getProjectId()).pause(instance.getInstanceId());
 	}
 
 	@Override
-	public void unpause(NovaRequestContext context, Instance instance) throws Exception {
+	public void unpause(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "unpause", instance, null);
 		this.getSupport(context.getProjectId()).unpause(instance.getInstanceId());
 	}
 
 	@Override
-	public void suspend(NovaRequestContext context, Instance instance) throws Exception {
+	public void suspend(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "suspend", instance, null);
 		this.getSupport(context.getProjectId()).suspend(instance.getInstanceId());
 	}
 
 	@Override
-	public void resume(NovaRequestContext context, Instance instance) throws Exception {
+	public void resume(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "resume", instance, null);
 		this.getSupport(context.getProjectId()).resume(instance.getInstanceId());
 	}
 
 	@Override
-	public void start(NovaRequestContext context, Instance instance) throws Exception {
+	public void start(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "resume", instance, null);
 		this.getSupport(context.getProjectId()).start(instance.getInstanceId());
 	}
 
 	@Override
-	public void stop(NovaRequestContext context, Instance instance) throws Exception {
+	public void stop(OpenstackRequestContext context, Instance instance) throws Exception {
 		checkPolicy(context, "resume", instance, null);
 		this.getSupport(context.getProjectId()).stop(instance.getInstanceId());
 	}

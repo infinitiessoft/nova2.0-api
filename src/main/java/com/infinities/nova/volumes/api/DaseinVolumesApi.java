@@ -36,8 +36,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.exception.AvailabilityZoneNotFoundException;
 import com.infinities.nova.exception.VolumeNotFoundException;
 import com.infinities.nova.servers.volumes.model.VolumeAttachment;
@@ -82,10 +82,10 @@ public class DaseinVolumesApi implements VolumesApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.volumes.api.VolumesApi#getVolumes(com.infinities.
-	 * nova.NovaRequestContext, java.lang.String)
+	 * nova.OpenstackRequestContext, java.lang.String)
 	 */
 	@Override
-	public List<Volume> getVolumes(NovaRequestContext context, String projectId) throws Exception {
+	public List<Volume> getVolumes(OpenstackRequestContext context, String projectId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -157,10 +157,10 @@ public class DaseinVolumesApi implements VolumesApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.volumes.api.VolumesApi#getVolume(com.infinities.nova
-	 * .NovaRequestContext, java.lang.String, java.lang.String)
+	 * .OpenstackRequestContext, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Volume getVolume(NovaRequestContext context, String projectId, String volumeId) throws Exception {
+	public Volume getVolume(OpenstackRequestContext context, String projectId, String volumeId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -179,11 +179,11 @@ public class DaseinVolumesApi implements VolumesApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.volumes.api.VolumesApi#createVolume(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String,
+	 * .nova.OpenstackRequestContext, java.lang.String,
 	 * com.infinities.nova.volumes.model.VolumeForCreateTemplate)
 	 */
 	@Override
-	public Volume createVolume(NovaRequestContext context, String projectId,
+	public Volume createVolume(OpenstackRequestContext context, String projectId,
 			final VolumeForCreateTemplate volumeForCreateTemplate) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -240,10 +240,10 @@ public class DaseinVolumesApi implements VolumesApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.volumes.api.VolumesApi#deleteVolume(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void deleteVolume(NovaRequestContext context, String projectId, String volumeId) throws Exception {
+	public void deleteVolume(OpenstackRequestContext context, String projectId, String volumeId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

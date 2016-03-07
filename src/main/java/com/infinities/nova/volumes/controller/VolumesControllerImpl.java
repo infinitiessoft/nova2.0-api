@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.volumes.api.VolumesApi;
 import com.infinities.nova.volumes.model.Volume;
 import com.infinities.nova.volumes.model.VolumeForCreateTemplate;
@@ -50,7 +50,7 @@ public class VolumesControllerImpl implements VolumesController {
 	 */
 	@Override
 	public Volumes index(ContainerRequestContext requestContext, String projectId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<Volume> volumes = volumesApi.getVolumes(context, projectId);
 		return builder.index(requestContext, volumes);
 	}
@@ -65,7 +65,7 @@ public class VolumesControllerImpl implements VolumesController {
 	 */
 	@Override
 	public VolumeTemplate show(ContainerRequestContext requestContext, String projectId, String volumeId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Volume volume = volumesApi.getVolume(context, projectId, volumeId);
 
 		return builder.show(requestContext, volume);
@@ -82,7 +82,7 @@ public class VolumesControllerImpl implements VolumesController {
 	@Override
 	public VolumeTemplate create(ContainerRequestContext requestContext, String projectId,
 			VolumeForCreateTemplate volumeForCreateTemplate) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Volume volume = volumesApi.createVolume(context, projectId, volumeForCreateTemplate);
 
 		return builder.show(requestContext, volume);
@@ -98,7 +98,7 @@ public class VolumesControllerImpl implements VolumesController {
 	 */
 	@Override
 	public void delete(String projectId, String volumeId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		volumesApi.deleteVolume(context, projectId, volumeId);
 	}
 

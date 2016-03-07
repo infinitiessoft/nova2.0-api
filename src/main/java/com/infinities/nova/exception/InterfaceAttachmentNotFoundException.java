@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.infinities.nova.exception;
 
+import com.infinities.api.openstack.commons.exception.NotFoundException;
+
 public class InterfaceAttachmentNotFoundException extends NotFoundException {
 
 	/**

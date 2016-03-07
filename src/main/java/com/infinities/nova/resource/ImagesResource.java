@@ -31,15 +31,15 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.exception.http.HTTPMethodNotAllowException;
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
-import com.infinities.nova.exception.http.HTTPMethodNotAllowException;
 import com.infinities.nova.images.controller.ImagesController;
 import com.infinities.nova.images.metadata.controller.ImageMetadataController;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImagesTemplate;
-import com.infinities.nova.namebinding.CheckProjectId;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

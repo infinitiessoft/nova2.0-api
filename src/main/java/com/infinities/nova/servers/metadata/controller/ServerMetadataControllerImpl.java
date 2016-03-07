@@ -21,22 +21,13 @@ import java.util.Map.Entry;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.exception.InstanceInvalidStateException;
-import com.infinities.nova.exception.InstanceIsLockedException;
 import com.infinities.nova.exception.InstanceNotFoundException;
-import com.infinities.nova.exception.InvalidMetadataException;
-import com.infinities.nova.exception.InvalidMetadataSizeException;
-import com.infinities.nova.exception.QuotaError;
-import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPConflictException;
-import com.infinities.nova.exception.http.HTTPForbiddenException;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
-import com.infinities.nova.exception.http.HTTPRequestEntityTooLargeException;
 import com.infinities.nova.servers.api.ComputeApi;
 
 public class ServerMetadataControllerImpl implements ServerMetadataController {
@@ -50,14 +41,14 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 
 	@Override
 	public MetadataTemplate index(ContainerRequestContext requestContext, String serverId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Map<String, String> metadata = getMetadata(context, serverId);
 		MetadataTemplate wrapper = new MetadataTemplate();
 		wrapper.setMetadata(metadata);
 		return wrapper;
 	}
 
-	private Map<String, String> getMetadata(NovaRequestContext context, String serverId) throws Exception {
+	private Map<String, String> getMetadata(OpenstackRequestContext context, String serverId) throws Exception {
 		try {
 			Instance server = computeApi.get(context, serverId, null);
 			Map<String, String> meta = computeApi.getInstanceMetadata(context, server);
@@ -83,7 +74,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 			throw new HTTPBadRequestException(msg);
 		}
 
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Map<String, String> newMetadata = updateInstanceMetadata(context, serverId, metadata, false);
 		MetadataTemplate wrapperRet = new MetadataTemplate();
 		wrapperRet.setMetadata(newMetadata);
@@ -91,27 +82,10 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 	}
 
 	// delete = false
-	private Map<String, String> updateInstanceMetadata(NovaRequestContext context, String serverId,
+	private Map<String, String> updateInstanceMetadata(OpenstackRequestContext context, String serverId,
 			Map<String, String> metadata, boolean delete) throws Exception {
 		Instance server = null;
-		try {
-			server = computeApi.get(context, serverId, null);
-		} catch (InstanceNotFoundException e) {
-			String msg = "Server does not exist";
-			throw new HTTPNotFoundException(msg);
-		} catch (InvalidMetadataException e) {
-			throw new HTTPBadRequestException(e.getMessage());
-		} catch (InvalidMetadataSizeException e) {
-			throw new HTTPRequestEntityTooLargeException(e.getMessage());
-		} catch (QuotaError e) {
-			throw new HTTPForbiddenException(e.getMessage());
-		} catch (InstanceIsLockedException e) {
-			throw new HTTPConflictException(e.getMessage());
-		} catch (InstanceInvalidStateException e) {
-			Common.raiseHttpConflictForInstanceInvalidState(e, "update metadata");
-		} catch (Exception e) {
-			throw new HTTPBadRequestException(e.getMessage());
-		}
+		server = computeApi.get(context, serverId, null);
 		return computeApi.updateInstanceMetadata(context, server, metadata, delete);
 	}
 
@@ -133,7 +107,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 			String msg = "Request body contains too many items";
 			throw new HTTPBadRequestException(msg);
 		}
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		updateInstanceMetadata(context, serverId, metaItem, false);
 
 		return meta;
@@ -147,7 +121,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 			String msg = "Malformed request body";
 			throw new HTTPBadRequestException(msg);
 		}
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Map<String, String> newMetadata = updateInstanceMetadata(context, serverId, metadata, true);
 		MetadataTemplate wrapperRet = new MetadataTemplate();
 		wrapperRet.setMetadata(newMetadata);
@@ -156,7 +130,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 
 	@Override
 	public MetaItemTemplate show(ContainerRequestContext requestContext, String serverId, String key) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Map<String, String> data = getMetadata(context, serverId);
 		MetaItemTemplate wrapper = new MetaItemTemplate();
 		Map<String, String> meta = new HashMap<String, String>();
@@ -173,7 +147,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 
 	@Override
 	public void delete(ContainerRequestContext requestContext, String serverId, String key) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Map<String, String> metadata = getMetadata(context, serverId);
 		if (!metadata.containsKey(key)) {
 			String msg = "Metadata item was not found";

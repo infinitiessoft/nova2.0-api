@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.infinities.api.openstack.commons.config.Config;
 import com.infinities.nova.versions.api.VersionsApi;
 import com.infinities.nova.versions.model.VersionWrapper;
 import com.infinities.nova.versions.views.ViewBuilder;
@@ -31,11 +32,17 @@ public class Version2Api {
 
 	private Logger logger = LoggerFactory.getLogger(Version2Api.class);
 
+	private String osapiComputeLinkPrefix;
+
+
+	public Version2Api(Config config) {
+		this.osapiComputeLinkPrefix = config.getOpt("osapi_compute_link_prefix").asText();
+	}
 
 	public Response show(URI uri) {
 		// @extensions.expected_error(404)
 		try {
-			ViewBuilder builder = ViewBuilder.getViewBuilder(uri);
+			ViewBuilder builder = ViewBuilder.getViewBuilder(uri, osapiComputeLinkPrefix);
 			VersionWrapper versionWrapper = builder.buildVersion(VersionsApi.VERSIONS.get("v2.0"));
 			return Response.ok(versionWrapper).build();
 		} catch (Throwable t) {

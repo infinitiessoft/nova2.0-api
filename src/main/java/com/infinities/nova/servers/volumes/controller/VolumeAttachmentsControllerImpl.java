@@ -25,7 +25,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.exception.VolumeNotFoundException;
 import com.infinities.nova.servers.volumes.api.VolumeAttachmentsApi;
 import com.infinities.nova.servers.volumes.model.VolumeAttachment;
@@ -60,7 +60,7 @@ public class VolumeAttachmentsControllerImpl implements VolumeAttachmentsControl
 	@Override
 	public VolumeAttachments index(ContainerRequestContext requestContext, String projectId, String serverId)
 			throws InternalException, CloudException, ConcurrentException, Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<VolumeAttachment> volumeAttachments = volumeAttachmentsApi.getVolumeAttachments(context, projectId, serverId);
 		return builder.index(requestContext, volumeAttachments);
 	}
@@ -76,7 +76,7 @@ public class VolumeAttachmentsControllerImpl implements VolumeAttachmentsControl
 	@Override
 	public VolumeAttachmentTemplate show(ContainerRequestContext requestContext, String projectId, String serverId,
 			String volumeId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		VolumeAttachment volumeAttachment = volumeAttachmentsApi.getVolumeAttachment(context, projectId, serverId, volumeId);
 		if (volumeAttachment == null) {
 			throw new VolumeNotFoundException();
@@ -96,7 +96,7 @@ public class VolumeAttachmentsControllerImpl implements VolumeAttachmentsControl
 	public void detach(String projectId, String serverId, String volumeId, ContainerRequestContext requestContext)
 			throws InternalException, CloudException, ConcurrentException, InterruptedException, ExecutionException,
 			Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		volumeAttachmentsApi.detach(context, projectId, serverId, volumeId);
 
 	}
@@ -113,7 +113,7 @@ public class VolumeAttachmentsControllerImpl implements VolumeAttachmentsControl
 	@Override
 	public VolumeAttachmentTemplate attach(String projectId, String serverId, VolumeAttachmentTemplate volumeAttachment,
 			ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		VolumeAttachment ret =
 				volumeAttachmentsApi.attach(context, projectId, serverId, volumeAttachment.getVolumeAttachment()
 						.getVolumeId(), volumeAttachment.getVolumeAttachment().getDevice());

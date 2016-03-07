@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,17 +31,10 @@ import jersey.repackaged.com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Strings;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.db.model.ProjectUserQuota;
 import com.infinities.nova.db.model.Quota;
 import com.infinities.nova.db.model.QuotaClass;
-import com.infinities.nova.model.home.KeyPairHome;
-import com.infinities.nova.model.home.SecurityGroupIngressRuleHome;
-import com.infinities.nova.model.home.impl.KeyPairHomeImpl;
-import com.infinities.nova.model.home.impl.SecurityGroupIngressRuleHomeImpl;
 import com.infinities.nova.response.model.QuotaSet;
 
 public class QuotaEngine {
@@ -52,10 +44,6 @@ public class QuotaEngine {
 	private QuotaDriver driver;
 	private final ConcurrentHashMap<String, BaseResource> resources;
 
-
-	private QuotaEngine() {
-		this(null);
-	}
 
 	private QuotaEngine(String quotaDriverClass) {
 		this.resources = new ConcurrentHashMap<String, BaseResource>();
@@ -67,11 +55,6 @@ public class QuotaEngine {
 		if (driver != null) {
 			return driver;
 		}
-
-		if (Strings.isNullOrEmpty(driverCls)) {
-			driverCls = Config.Instance.getOpt("quota_driver").asText();
-		}
-
 		Class<?> c = Class.forName(driverCls);
 		driver = (QuotaDriver) c.newInstance();
 		return driver;
@@ -99,48 +82,49 @@ public class QuotaEngine {
 		}
 	}
 
-	public ProjectUserQuota getByProjectAndUser(NovaRequestContext context, String projectid, String userid, String resource)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public ProjectUserQuota getByProjectAndUser(OpenstackRequestContext context, String projectid, String userid,
+			String resource) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		return getDriver().getByProjectAndUser(context, projectid, userid, resource);
 	}
 
-	public Quota getByProject(NovaRequestContext context, String projectid, String resource) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+	public Quota getByProject(OpenstackRequestContext context, String projectid, String resource)
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		return getDriver().getByProject(context, projectid, resource);
 	}
 
-	public QuotaClass getByClass(NovaRequestContext context, String quotaClass, String resource)
+	public QuotaClass getByClass(OpenstackRequestContext context, String quotaClass, String resource)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		return getDriver().getByClass(context, quotaClass, resource);
 	}
 
-	public QuotaSet getDefaults(NovaRequestContext context) throws Exception {
+	public QuotaSet getDefaults(OpenstackRequestContext context) throws Exception {
 		return getDriver().getDefaults(context, resources);
 	}
 
 	// defaults = true
-	public QuotaSet getClassQuotas(NovaRequestContext context, String quotaClass, boolean defaults) throws Exception {
+	public QuotaSet getClassQuotas(OpenstackRequestContext context, String quotaClass, boolean defaults) throws Exception {
 		return getDriver().getClassQuotas(context, resources, quotaClass, defaults);
 	}
 
 	// defaults = true, usages = true
-	public QuotaUsageSet getUserQuotas(NovaRequestContext context, String projectid, String userid, String quotaClass,
+	public QuotaUsageSet getUserQuotas(OpenstackRequestContext context, String projectid, String userid, String quotaClass,
 			boolean defaults, boolean usages) throws Exception {
 		return getDriver().getUserQuotas(context, resources, projectid, userid, quotaClass, defaults, usages, null, null);
 	}
 
 	// quotaClass = null, defaults = true, usages = true, remains = false
-	public QuotaUsageSet getProjectQuotas(NovaRequestContext context, String projectid, String quotaClass, boolean defaults,
-			boolean usages, boolean remains) throws Exception {
+	public QuotaUsageSet getProjectQuotas(OpenstackRequestContext context, String projectid, String quotaClass,
+			boolean defaults, boolean usages, boolean remains) throws Exception {
 		return getDriver().getProjectQuotas(context, resources, projectid, quotaClass, defaults, usages, remains, null);
 	}
 
 	// userid = null;
-	public QuotaUsageSet getSettableQuotas(NovaRequestContext context, String projectid, String userid) throws Exception {
+	public QuotaUsageSet getSettableQuotas(OpenstackRequestContext context, String projectid, String userid)
+			throws Exception {
 		return getDriver().getSettableQuotas(context, resources, projectid, userid);
 	}
 
-	public long count(NovaRequestContext context, String resource, String arg) {
+	public long count(OpenstackRequestContext context, String resource, String arg) {
 		BaseResource res = resources.get(resource);
 		if (res == null || !(res instanceof CountableResource)) {
 			String msg = String.format("Unknown quota resources %s.", resource);
@@ -150,18 +134,18 @@ public class QuotaEngine {
 		return ((CountableResource) res).getCount().apply(Maps.immutableEntry(context, arg));
 	}
 
-	public void limitCheck(NovaRequestContext context, String projectid, String userid, Map<String, Integer> values)
+	public void limitCheck(OpenstackRequestContext context, String projectid, String userid, Map<String, Integer> values)
 			throws Exception {
 		logger.debug("resource: {}", resources);
 		getDriver().limitCheck(context, resources, values, projectid, userid);
 	}
 
-	public List<String> reserve(NovaRequestContext context, Calendar expire, String projectid, String userid,
+	public List<String> reserve(OpenstackRequestContext context, Calendar expire, String projectid, String userid,
 			Map<String, Integer> deltas) throws Exception {
 		return getDriver().reserve(context, resources, deltas, expire, projectid, userid);
 	}
 
-	public void commit(NovaRequestContext context, List<String> reservations, String projectid, String userid) {
+	public void commit(OpenstackRequestContext context, List<String> reservations, String projectid, String userid) {
 		try {
 			getDriver().commit(context, reservations, projectid, userid);
 		} catch (Exception e) {
@@ -171,7 +155,7 @@ public class QuotaEngine {
 		logger.debug("Committed reservations %s", reservations);
 	}
 
-	public void rollback(NovaRequestContext context, List<String> reservations, String projectid, String userid) {
+	public void rollback(OpenstackRequestContext context, List<String> reservations, String projectid, String userid) {
 		try {
 			getDriver().rollback(context, reservations, projectid, userid);
 		} catch (Exception e) {
@@ -181,21 +165,21 @@ public class QuotaEngine {
 		logger.debug("Rolled back reservations %s", reservations);
 	}
 
-	public void usageReset(NovaRequestContext context, List<String> resources) throws Exception {
+	public void usageReset(OpenstackRequestContext context, List<String> resources) throws Exception {
 		getDriver().usageReset(context, resources);
 	}
 
-	public void detroyAllByProjectAndUser(NovaRequestContext context, String projectid, String userid)
+	public void detroyAllByProjectAndUser(OpenstackRequestContext context, String projectid, String userid)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		getDriver().destroyAllByProjectAndUser(context, projectid, userid);
 	}
 
-	public void detroyAllByProject(NovaRequestContext context, String projectid) throws InstantiationException,
+	public void detroyAllByProject(OpenstackRequestContext context, String projectid) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 		getDriver().destroyAllByProject(context, projectid);
 	}
 
-	public void expire(NovaRequestContext context) throws InstantiationException, IllegalAccessException,
+	public void expire(OpenstackRequestContext context) throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 		getDriver().expire(context);
 	}
@@ -204,40 +188,24 @@ public class QuotaEngine {
 		return resources.keySet();
 	}
 
-
-	private static final class KeypairGetCountByUser implements Function<Entry<NovaRequestContext, String>, Long> {
-
-		private final KeyPairHome home;
-
-
-		private KeypairGetCountByUser() {
-			home = new KeyPairHomeImpl();
-		}
-
-		@Override
-		public Long apply(Entry<NovaRequestContext, String> entry) {
-			return home.getKeyPairCountByUser(entry.getKey(), entry.getValue());
-		}
-	}
-
-	private static final class SecurityGroupRuleCountByCount implements Function<Entry<NovaRequestContext, String>, Long> {
-
-		private final SecurityGroupIngressRuleHome home;
-
-
-		private SecurityGroupRuleCountByCount() {
-			home = new SecurityGroupIngressRuleHomeImpl();
-		}
-
-		@Override
-		public Long apply(Entry<NovaRequestContext, String> entry) {
-			return home.getSecurityGroupRuleCountByGroup(entry.getKey(), entry.getValue());
-		}
-	}
-
-
-	// private static final class ServerGroupCountMembersByUser implements
-	// Function<Entry<NovaRequestContext, String>, Long> {
+	// private static final class KeypairGetCountByUser implements
+	// Function<Entry<OpenstackRequestContext, String>, Long> {
+	//
+	// private final KeyPairHome home;
+	//
+	//
+	// private KeypairGetCountByUser() {
+	// home = new KeyPairHomeImpl();
+	// }
+	//
+	// @Override
+	// public Long apply(Entry<OpenstackRequestContext, String> entry) {
+	// return home.getKeyPairCountByUser(entry.getKey(), entry.getValue());
+	// }
+	// }
+	//
+	// private static final class SecurityGroupRuleCountByCount implements
+	// Function<Entry<OpenstackRequestContext, String>, Long> {
 	//
 	// private final SecurityGroupIngressRuleHome home;
 	//
@@ -247,39 +215,36 @@ public class QuotaEngine {
 	// }
 	//
 	// @Override
-	// public Long apply(Entry<NovaRequestContext, String> entry) {
+	// public Long apply(Entry<OpenstackRequestContext, String> entry) {
 	// return home.getSecurityGroupRuleCountByGroup(entry.getKey(),
 	// entry.getValue());
 	// }
 	// }
 
-	private static QuotaEngine quotas;
-
-
-	public static QuotaEngine getQUOTAS() {
-		if (quotas == null) {
-			quotas = new QuotaEngine();
-			List<BaseResource> resources = new ArrayList<BaseResource>();
-			resources.add(new ReservableResource("instances", "_sync_instances", "quota_instances"));
-			resources.add(new ReservableResource("cores", "_sync_instances", "quota_cores"));
-			resources.add(new ReservableResource("ram", "_sync_instances", "quota_ram"));
-			resources.add(new ReservableResource("security_groups", "_sync_security_groups", "quota_security_groups"));
-			resources.add(new ReservableResource("floating_ips", "_sync_floating_ips", "quota_floating_ips"));
-			resources.add(new ReservableResource("fixed_ips", "_sync_fixed_ips", "quota_fixed_ips"));
-			resources.add(new AbsoluteResource("metadata_items", "quota_metadata_items"));
-			resources.add(new AbsoluteResource("injected_files", "quota_injected_files"));
-			resources.add(new AbsoluteResource("injected_file_content_bytes", "quota_injected_file_content_bytes"));
-			resources.add(new AbsoluteResource("injected_file_path_bytes", "quota_injected_file_path_length"));
-			resources.add(new CountableResource("security_group_rules", new SecurityGroupRuleCountByCount(),
-					"quota_security_group_rules"));
-			resources.add(new CountableResource("key_pairs", new KeypairGetCountByUser(), "quota_key_pairs"));
-			// resources.add(new ReservableResource("server_groups",
-			// "_sync_server_groups", "quota_server_groups"));
-			// resources.add(new CountableResource("server_group_members", new
-			// ServerGroupCountMembersByUser(),
-			// "quota_server_group_members"));
-			quotas.registerResources(resources);
-		}
+	public static QuotaEngine getQUOTAS(String quotaDriverClass) {
+		QuotaEngine quotas = new QuotaEngine(quotaDriverClass);
+		List<BaseResource> resources = new ArrayList<BaseResource>();
+		resources.add(new ReservableResource("instances", "_sync_instances", "quota_instances"));
+		resources.add(new ReservableResource("cores", "_sync_instances", "quota_cores"));
+		resources.add(new ReservableResource("ram", "_sync_instances", "quota_ram"));
+		resources.add(new ReservableResource("security_groups", "_sync_security_groups", "quota_security_groups"));
+		resources.add(new ReservableResource("floating_ips", "_sync_floating_ips", "quota_floating_ips"));
+		resources.add(new ReservableResource("fixed_ips", "_sync_fixed_ips", "quota_fixed_ips"));
+		resources.add(new AbsoluteResource("metadata_items", "quota_metadata_items"));
+		resources.add(new AbsoluteResource("injected_files", "quota_injected_files"));
+		resources.add(new AbsoluteResource("injected_file_content_bytes", "quota_injected_file_content_bytes"));
+		resources.add(new AbsoluteResource("injected_file_path_bytes", "quota_injected_file_path_length"));
+		// resources.add(new CountableResource("security_group_rules", new
+		// SecurityGroupRuleCountByCount(),
+		// "quota_security_group_rules"));
+		// resources.add(new CountableResource("key_pairs", new
+		// KeypairGetCountByUser(), "quota_key_pairs"));
+		// resources.add(new ReservableResource("server_groups",
+		// "_sync_server_groups", "quota_server_groups"));
+		// resources.add(new CountableResource("server_group_members", new
+		// ServerGroupCountMembersByUser(),
+		// "quota_server_group_members"));
+		quotas.registerResources(resources);
 		return quotas;
 	}
 

@@ -18,7 +18,9 @@ package com.infinities.nova.exception;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuotaError extends NovaException {
+import com.infinities.api.openstack.commons.exception.OpenstackException;
+
+public class QuotaError extends OpenstackException {
 
 	/**
 	 * 

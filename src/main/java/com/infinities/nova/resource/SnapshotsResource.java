@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.stereotype.Component;
 
-import com.infinities.nova.namebinding.CheckProjectId;
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.snapshots.controller.SnapshotsController;
 import com.infinities.nova.snapshots.model.SnapshotForCreateTemplate;
 import com.infinities.nova.snapshots.model.SnapshotTemplate;

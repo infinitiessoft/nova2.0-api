@@ -17,7 +17,7 @@ package com.infinities.nova.snapshots.api;
 
 import java.util.List;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.snapshots.model.Snapshot;
 import com.infinities.nova.snapshots.model.SnapshotForCreateTemplate;
 
@@ -33,7 +33,7 @@ public interface SnapshotsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	List<Snapshot> getSnapshots(NovaRequestContext context, String projectId) throws Exception;
+	List<Snapshot> getSnapshots(OpenstackRequestContext context, String projectId) throws Exception;
 
 	/**
 	 * @param context
@@ -42,7 +42,7 @@ public interface SnapshotsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Snapshot getSnapshot(NovaRequestContext context, String projectId, String snapshotId) throws Exception;
+	Snapshot getSnapshot(OpenstackRequestContext context, String projectId, String snapshotId) throws Exception;
 
 	/**
 	 * @param context
@@ -51,8 +51,8 @@ public interface SnapshotsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	Snapshot createSnapshot(NovaRequestContext context, String projectId, SnapshotForCreateTemplate snapshotForCreateTemplate)
-			throws Exception;
+	Snapshot createSnapshot(OpenstackRequestContext context, String projectId,
+			SnapshotForCreateTemplate snapshotForCreateTemplate) throws Exception;
 
 	/**
 	 * @param context
@@ -60,6 +60,6 @@ public interface SnapshotsApi {
 	 * @param snapshotId
 	 * @throws Exception
 	 */
-	void deleteSnapshot(NovaRequestContext context, String projectId, String snapshotId) throws Exception;
+	void deleteSnapshot(OpenstackRequestContext context, String projectId, String snapshotId) throws Exception;
 
 }

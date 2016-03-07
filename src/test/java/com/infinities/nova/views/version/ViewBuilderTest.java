@@ -29,7 +29,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.infinities.nova.response.model.Link;
+import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.nova.response.model.MediaType;
 import com.infinities.nova.response.model.Version;
 import com.infinities.nova.versions.model.VersionWrapper;

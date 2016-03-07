@@ -30,14 +30,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.Resource;
+import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.response.model.Extension;
 import com.infinities.nova.response.model.Extensions;
 import com.infinities.skyport.util.FormatUtil;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@CheckProjectId
 public class ExtensionsResource {
 
 	private final static Extensions extensions = new Extensions();
@@ -80,8 +80,6 @@ public class ExtensionsResource {
 	@GET
 	public Extensions index(@PathParam("projectId") String projectId, @Context ContainerRequestContext requestContext)
 			throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
-		Resource.processStack(requestContext, projectId, novaContext);
 		return extensions;
 	}
 

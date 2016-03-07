@@ -26,8 +26,8 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.compute.SnapshotCreateOptions;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.exception.SnapshotNotFoundException;
 import com.infinities.nova.snapshots.model.Snapshot;
 import com.infinities.nova.snapshots.model.SnapshotForCreateTemplate;
@@ -55,10 +55,10 @@ public class DaseinSnapshotsApi implements SnapshotsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.snapshots.api.SnapshotsApi#getSnapshots(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String)
 	 */
 	@Override
-	public List<Snapshot> getSnapshots(NovaRequestContext context, String projectId) throws Exception {
+	public List<Snapshot> getSnapshots(OpenstackRequestContext context, String projectId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -81,10 +81,10 @@ public class DaseinSnapshotsApi implements SnapshotsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.snapshots.api.SnapshotsApi#getSnapshot(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Snapshot getSnapshot(NovaRequestContext context, String projectId, String snapshotId) throws Exception {
+	public Snapshot getSnapshot(OpenstackRequestContext context, String projectId, String snapshotId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -103,11 +103,11 @@ public class DaseinSnapshotsApi implements SnapshotsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.snapshots.api.SnapshotsApi#createVolume(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String,
+	 * .nova.OpenstackRequestContext, java.lang.String,
 	 * com.infinities.nova.snapshots.model.SnapshotForCreateTemplate)
 	 */
 	@Override
-	public Snapshot createSnapshot(NovaRequestContext context, String projectId,
+	public Snapshot createSnapshot(OpenstackRequestContext context, String projectId,
 			SnapshotForCreateTemplate snapshotForCreateTemplate) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -127,10 +127,10 @@ public class DaseinSnapshotsApi implements SnapshotsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.snapshots.api.SnapshotsApi#deleteVolume(com.infinities
-	 * .nova.NovaRequestContext, java.lang.String, java.lang.String)
+	 * .nova.OpenstackRequestContext, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void deleteSnapshot(NovaRequestContext context, String projectId, String snapshotId) throws Exception {
+	public void deleteSnapshot(OpenstackRequestContext context, String projectId, String snapshotId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

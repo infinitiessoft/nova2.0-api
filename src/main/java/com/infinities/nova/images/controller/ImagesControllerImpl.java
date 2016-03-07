@@ -28,15 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.Common;
-import com.infinities.nova.Common.PaginationParams;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.exception.ImageNotFoundException;
-import com.infinities.nova.exception.InvalidException;
-import com.infinities.nova.exception.InvalidImageRefException;
-import com.infinities.nova.exception.NotFoundException;
-import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
+import com.infinities.api.openstack.commons.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.nova.AbstractPaginableController;
 import com.infinities.nova.images.api.ImagesApi;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
@@ -45,79 +39,59 @@ import com.infinities.nova.images.views.ViewBuilder;
 import com.infinities.nova.response.model.Image;
 import com.infinities.skyport.util.FormatUtil;
 
-public class ImagesControllerImpl implements ImagesController {
+public class ImagesControllerImpl extends AbstractPaginableController implements ImagesController {
 
 	private final static Logger logger = LoggerFactory.getLogger(ImagesControllerImpl.class);
-	private final ViewBuilder builder = new ViewBuilder();
+	private final ViewBuilder builder;
 	private final ImagesApi imageApi;
 
 
-	public ImagesControllerImpl(ImagesApi imageApi) {
+	public ImagesControllerImpl(Config config, ImagesApi imageApi) {
+		super(config.getOpt("osapi_max_limit").asInteger());
 		this.imageApi = imageApi;
+		String osapiComputeLinkPrefix = config.getOpt("osapi_compute_link_prefix").asText();
+		int osapiMaxLimit = config.getOpt("osapi_max_limit").asInteger();
+		builder = new ViewBuilder(osapiComputeLinkPrefix, osapiMaxLimit);
 	}
 
 	@Override
 	public MinimalImagesTemplate index(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		ImagesFilter filters = getFilters(requestContext);
-		PaginationParams pageParams = Common.getPaginationParams(requestContext);
+		PaginationParams pageParams = getPaginationParams(requestContext);
 
-		try {
-			List<Image> images = imageApi.getAll(context, filters, pageParams);
-
-			return builder.index(requestContext, images);
-		} catch (InvalidException e) {
-			logger.error("List images failed", e);
-			throw new HTTPBadRequestException(e.getMessage());
-		}
+		List<Image> images = imageApi.getAll(context, filters, pageParams);
+		return builder.index(requestContext, images);
 	}
 
 	@Override
 	public ImagesTemplate detail(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		ImagesFilter filters = getFilters(requestContext);
-		PaginationParams pageParams = Common.getPaginationParams(requestContext);
+		PaginationParams pageParams = getPaginationParams(requestContext);
 
-		try {
-			List<Image> images = imageApi.getAll(context, filters, pageParams);
-			// requestContext.cache_db_items("images", images, "id");
-			return builder.detail(requestContext, images);
-		} catch (InvalidException e) {
-			logger.error("List images failed", e);
-			throw new HTTPBadRequestException(e.getMessage());
-		}
+		List<Image> images = imageApi.getAll(context, filters, pageParams);
+		// requestContext.cache_db_items("images", images, "id");
+		return builder.detail(requestContext, images);
 	}
 
 	@Override
 	public ImageTemplate show(String imageId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 
-		try {
-			Image image = imageApi.get(context, imageId);
-			logger.debug("Successfully retrieved image {}", imageId);
-			List<Image> images = new ArrayList<Image>();
-			images.add(image);
-			// requestContext.cache_db_items("image", images, "id");
-			return builder.show(requestContext, image);
-		} catch (NotFoundException | InvalidImageRefException e) {
-			logger.debug("image not found", e);
-			String msg = "Image not found";
-			throw new HTTPNotFoundException(msg);
-			// throw new
-			// WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
-		}
+		Image image = imageApi.get(context, imageId);
+		logger.debug("Successfully retrieved image {}", imageId);
+		List<Image> images = new ArrayList<Image>();
+		images.add(image);
+		// requestContext.cache_db_items("image", images, "id");
+		return builder.show(requestContext, image);
 
 	}
 
 	@Override
 	public Response delete(String imageId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
-		try {
-			imageApi.delete(context, imageId);
-		} catch (ImageNotFoundException e) {
-			String msg = "Image not found";
-			throw new HTTPNotFoundException(msg);
-		}
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
+		imageApi.delete(context, imageId);
 		return Response.status(Status.NO_CONTENT).build();
 	}
 

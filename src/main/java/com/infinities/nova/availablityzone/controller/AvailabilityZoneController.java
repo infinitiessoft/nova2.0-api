@@ -17,8 +17,8 @@ package com.infinities.nova.availablityzone.controller;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
+import com.infinities.nova.Controller;
 import com.infinities.nova.availablityzone.model.AvailabilityZoneTemplate;
-import com.infinities.nova.common.Controller;
 
 /**
  * @author pohsun

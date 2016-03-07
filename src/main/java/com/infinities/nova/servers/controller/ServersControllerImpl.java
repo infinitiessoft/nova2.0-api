@@ -18,6 +18,7 @@ package com.infinities.nova.servers.controller;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +32,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
 
 import org.bouncycastle.util.encoders.Base64;
@@ -40,23 +42,23 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.infinities.nova.Common;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.Policy;
-import com.infinities.nova.common.config.Config;
+import com.infinities.api.openstack.commons.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.InvalidException;
+import com.infinities.api.openstack.commons.exception.NotFoundException;
+import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
+import com.infinities.api.openstack.commons.exception.http.HTTPForbiddenException;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
+import com.infinities.api.openstack.commons.policy.Policy;
+import com.infinities.api.openstack.commons.policy.Target;
+import com.infinities.nova.AbstractPaginableController;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.CannotResizeToSameFlavorException;
 import com.infinities.nova.exception.FlavorNotFoundException;
 import com.infinities.nova.exception.ImageNotFoundException;
 import com.infinities.nova.exception.InstanceNotFoundException;
-import com.infinities.nova.exception.InvalidException;
 import com.infinities.nova.exception.MarkerNotFoundException;
-import com.infinities.nova.exception.NotFoundException;
-import com.infinities.nova.exception.http.HTTPBadRequestException;
-import com.infinities.nova.exception.http.HTTPForbiddenException;
-import com.infinities.nova.exception.http.HTTPNotFoundException;
 import com.infinities.nova.extensions.Extensions;
-import com.infinities.nova.policy.Target;
 import com.infinities.nova.response.model.PersonalityFile;
 import com.infinities.nova.response.model.ServerAction;
 import com.infinities.nova.response.model.ServerAction.Pause;
@@ -68,6 +70,8 @@ import com.infinities.nova.response.model.ServerAction.Unpause;
 import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.response.model.ServerForCreate.SecurityGroup;
 import com.infinities.nova.servers.api.ComputeApi;
+import com.infinities.nova.servers.api.TaskStates;
+import com.infinities.nova.servers.api.VmStates;
 import com.infinities.nova.servers.model.CreatedServerTemplate;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
 import com.infinities.nova.servers.model.NetworkRequest;
@@ -77,36 +81,102 @@ import com.infinities.nova.servers.views.ViewBuilder;
 import com.infinities.nova.util.InetAddressUtils;
 import com.infinities.nova.util.RandomStringGenerator;
 import com.infinities.nova.util.RandomStringGenerator.Mode;
+import com.infinities.nova.util.URLUtils;
 import com.infinities.skyport.util.FormatUtil;
 
-public class ServersControllerImpl implements ServersController {
+public class ServersControllerImpl extends AbstractPaginableController implements ServersController {
 
 	private final static Logger logger = LoggerFactory.getLogger(ServersControllerImpl.class);
 	// private final static List<String> SEARCH_OPTIONS;
 	private final ComputeApi computeApi;
-	private final ViewBuilder viewBuilder = new ViewBuilder();
+	private final ViewBuilder viewBuilder;
+	private Config config;
+
+	private static final Map<String, Map<String, String>> STATE_MAP;
+
+	// private final static boolean DHCP = false;
+
+	static {
+		Map<String, Map<String, String>> siteMap = new HashMap<String, Map<String, String>>();
+		Map<String, String> active = new HashMap<String, String>();
+		active.put("default", "ACTIVE");
+		active.put(TaskStates.REBOOTING, "REBOOT");
+		active.put(TaskStates.REBOOT_PENDING, "REBOOT");
+		active.put(TaskStates.REBOOT_STARTED, "REBOOT");
+		active.put(TaskStates.REBOOTING_HARD, "HARD_REBOOT");
+		active.put(TaskStates.REBOOT_PENDING_HARD, "HARD_REBOOT");
+		active.put(TaskStates.REBOOT_STARTED_HARD, "HARD_REBOOT");
+		active.put(TaskStates.UPDATING_PASSWORD, "PASSWORD");
+		active.put(TaskStates.REBUILDING, "REBUILD");
+		active.put(TaskStates.REBUILD_BLOCK_DEVICE_MAPPING, "REBUILD");
+		active.put(TaskStates.REBUILD_SPAWNING, "REBUILD");
+		active.put(TaskStates.MIGRATING, "MIGRATING");
+		active.put(TaskStates.RESIZE_PREP, "RESIZE");
+		active.put(TaskStates.RESIZE_MIGRATING, "RESIZE");
+		active.put(TaskStates.RESIZE_MIGRATED, "RESIZE");
+		active.put(TaskStates.RESIZE_FINISH, "RESIZE");
+		siteMap.put(VmStates.ACTIVE, active);
+
+		Map<String, String> building = new HashMap<String, String>();
+		building.put("default", "BUILD");
+		siteMap.put(VmStates.BUILDING, building);
+
+		Map<String, String> stopped = new HashMap<String, String>();
+		stopped.put("default", "SHUTOFF");
+		stopped.put(TaskStates.RESIZE_PREP, "RESIZE");
+		stopped.put(TaskStates.RESIZE_MIGRATING, "RESIZE");
+		stopped.put(TaskStates.RESIZE_MIGRATED, "RESIZE");
+		stopped.put(TaskStates.RESIZE_FINISH, "RESIZE");
+		siteMap.put(VmStates.STOPPED, stopped);
+
+		Map<String, String> resized = new HashMap<String, String>();
+		resized.put("default", "VERIFY_RESIZE");
+		resized.put(TaskStates.RESIZE_REVERTING, "REVERT_RESIZE");
+		siteMap.put(VmStates.RESIZED, resized);
+
+		Map<String, String> paused = new HashMap<String, String>();
+		paused.put("default", "PAUSED");
+		siteMap.put(VmStates.PAUSED, paused);
+
+		Map<String, String> suspended = new HashMap<String, String>();
+		suspended.put("default", "SUSPENDED");
+		siteMap.put(VmStates.SUSPENDED, suspended);
+
+		Map<String, String> rescued = new HashMap<String, String>();
+		rescued.put("default", "RESCUE");
+		siteMap.put(VmStates.RESCUED, rescued);
+
+		Map<String, String> error = new HashMap<String, String>();
+		error.put("default", "ERROR");
+		siteMap.put(VmStates.ERROR, error);
+
+		Map<String, String> deleted = new HashMap<String, String>();
+		deleted.put("default", "DELETED");
+		siteMap.put(VmStates.DELETED, deleted);
+
+		Map<String, String> softDeleted = new HashMap<String, String>();
+		softDeleted.put("default", "SOFT_DELETED");
+		siteMap.put(VmStates.SOFT_DELETED, softDeleted);
+
+		Map<String, String> shelved = new HashMap<String, String>();
+		shelved.put("default", "SHELVED");
+		siteMap.put(VmStates.SHELVED, shelved);
+
+		Map<String, String> shelvedOffloaded = new HashMap<String, String>();
+		shelvedOffloaded.put("default", "SHELVED_OFFLOADED");
+		siteMap.put(VmStates.SHELVED_OFFLOADED, shelvedOffloaded);
+
+		STATE_MAP = Collections.unmodifiableMap(siteMap);
+	}
 
 
-	// private final static String B64_REGEX =
-	// "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$";
-	// private final InstanceTypeHome instanceTypeHome = new
-	// InstanceTypeHomeImpl();
-
-	// static {
-	// List<String> list = new ArrayList<String>();
-	// list.add("reservation_id");
-	// list.add("status");
-	// list.add("name");
-	// list.add("image");
-	// list.add("flavor");
-	// list.add("ip");
-	// list.add("changes-since");
-	// list.add("all_tenants");
-	// SEARCH_OPTIONS = Collections.unmodifiableList(list);
-	// }
-
-	public ServersControllerImpl(ComputeApi computeApi) {
+	public ServersControllerImpl(Config config, ComputeApi computeApi) {
+		super(config.getOpt("osapi_max_limit").asInteger());
+		String osapiComputeLinkPrefix = config.getOpt("osapi_compute_link_prefix").asText();
+		int osapiMaxLimit = config.getOpt("osapi_max_limit").asInteger();
+		viewBuilder = new ViewBuilder(osapiComputeLinkPrefix, osapiMaxLimit);
 		this.computeApi = computeApi;
+		this.config = config;
 	}
 
 	@Override
@@ -133,7 +203,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public ServerTemplate show(String serverId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		try {
 			Instance instance = computeApi.get(context, serverId, null);
 			// requestContext.cache_db_instance(instance);
@@ -147,7 +217,7 @@ public class ServersControllerImpl implements ServersController {
 	// search options: reservation_id, name, status, image, flavor, ip,
 	// changes-since, all_tenants
 	private List<Instance> getServers(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		ServersFilter filter = new ServersFilter();
 		Map<String, String> searchOpts = new HashMap<String, String>();
 		searchOpts.putAll(copy(requestContext.getUriInfo().getQueryParameters()));
@@ -162,7 +232,7 @@ public class ServersControllerImpl implements ServersController {
 		searchOpts.remove("status");
 		if (requestContext.getUriInfo().getQueryParameters().containsKey("status")) {
 			List<String> statuses = requestContext.getUriInfo().getQueryParameters().get("status");
-			Entry<List<String>, List<String>> states = Common.taskAndVmStateFromStatus(statuses);
+			Entry<List<String>, List<String>> states = taskAndVmStateFromStatus(statuses);
 			List<String> vmState = states.getKey();
 			List<String> taskState = states.getValue();
 
@@ -235,7 +305,7 @@ public class ServersControllerImpl implements ServersController {
 			}
 		}
 
-		Entry<Integer, String> entry = Common.getLimitAndMarker(requestContext);
+		Entry<Integer, String> entry = getLimitAndMarker(requestContext);
 		Integer limit = entry.getKey();
 		String marker = entry.getValue();
 
@@ -262,7 +332,7 @@ public class ServersControllerImpl implements ServersController {
 		return instanceList;
 	}
 
-	private void removeInvalidOptions(NovaRequestContext context, Map<String, String> searchOpts,
+	private void removeInvalidOptions(OpenstackRequestContext context, Map<String, String> searchOpts,
 			Set<String> allowedSearchOptions) {
 		if (context.getIsAdmin()) {
 			return;
@@ -300,7 +370,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response create(ContainerRequestContext requestContext, ServerForCreate server) throws Exception {
-		NovaRequestContext novaContext = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext novaContext = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		String password = getServerAdminPassword(server);
 
 		if (Strings.isNullOrEmpty(server.getName())) {
@@ -417,7 +487,7 @@ public class ServersControllerImpl implements ServersController {
 			throw new HTTPBadRequestException(msg);
 		}
 
-		return Common.getIdFromHref(flavorRef);
+		return URLUtils.getIdFromHref(flavorRef);
 	}
 
 	private void validateAccessIpv6(String accessIpV6) {
@@ -557,7 +627,7 @@ public class ServersControllerImpl implements ServersController {
 	private String getServerAdminPassword(ServerForCreate server) {
 		String password = server.getAdminPass();
 		if (Strings.isNullOrEmpty(password)) {
-			int length = Config.Instance.getOpt("password_length").asInteger();
+			int length = config.getOpt("password_length").asInteger();
 			password = RandomStringGenerator.generateRandomString(length, Mode.ALPHANUMERIC);
 		}
 		return password;
@@ -566,7 +636,7 @@ public class ServersControllerImpl implements ServersController {
 	private String getServerAdminPassword(ServerAction.Rebuild body) {
 		String password = body.getAdminPass();
 		if (Strings.isNullOrEmpty(password)) {
-			int length = Config.Instance.getOpt("password_length").asInteger();
+			int length = config.getOpt("password_length").asInteger();
 			password = RandomStringGenerator.generateRandomString(length, Mode.ALPHANUMERIC);
 		}
 		return password;
@@ -574,7 +644,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public void delete(String serverId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		computeApi.delete(context, instance);
 	}
@@ -616,7 +686,7 @@ public class ServersControllerImpl implements ServersController {
 			logger.error(msg);
 			throw new HTTPBadRequestException(msg);
 		}
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		computeApi.reboot(context, instance, rebootType);
 		return Response.status(Status.ACCEPTED).build();
@@ -634,7 +704,7 @@ public class ServersControllerImpl implements ServersController {
 
 		imageHref = imageUuidFromHref(imageHref);
 		String password = getServerAdminPassword(body);
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 
 		String accessIpV4 = body.getAccessIPv4();
@@ -658,7 +728,7 @@ public class ServersControllerImpl implements ServersController {
 
 		instance = getServer(context, requestContext, serverId);
 		ServerTemplate view = viewBuilder.show(requestContext, instance);
-		if (Config.Instance.getOpt("enable_instance_password").asBoolean()) {
+		if (config.getOpt("enable_instance_password").asBoolean()) {
 			view.getServer().setAdminPass(password);
 		}
 
@@ -668,7 +738,7 @@ public class ServersControllerImpl implements ServersController {
 	@Override
 	public Response revertResize(String serverId, ContainerRequestContext requestContext, ServerAction.RevertResize body)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		computeApi.revertResize(context, instance);
 		return Response.status(Status.ACCEPTED).build();
@@ -677,7 +747,7 @@ public class ServersControllerImpl implements ServersController {
 	@Override
 	public Response confirmResize(String serverId, ContainerRequestContext requestContext, ServerAction.ConfirmResize body)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		computeApi.confirmResize(context, instance);
 		return Response.status(Status.ACCEPTED).build();
@@ -692,7 +762,7 @@ public class ServersControllerImpl implements ServersController {
 			throw new HTTPBadRequestException(msg);
 		}
 
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		computeApi.setAdminPassword(context, instance, body.getAdminPass());
 		return Response.status(Status.ACCEPTED).build();
@@ -701,7 +771,7 @@ public class ServersControllerImpl implements ServersController {
 	@Override
 	public Response createImage(String serverId, ContainerRequestContext requestContext, ServerAction.CreateImage body)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		String imageName = body.getName();
 		if (Strings.isNullOrEmpty(imageName)) {
 			String msg = "createImage entity requires name attribute";
@@ -718,7 +788,7 @@ public class ServersControllerImpl implements ServersController {
 
 	private Response resize(ContainerRequestContext requestContext, String serverId, String flavorId, String autoDiskConfig)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.resize(context, instance, flavorId, autoDiskConfig);
@@ -738,7 +808,7 @@ public class ServersControllerImpl implements ServersController {
 		return Response.status(Status.ACCEPTED).build();
 	}
 
-	private Instance getServer(NovaRequestContext context, ContainerRequestContext requestContext, String serverId)
+	private Instance getServer(OpenstackRequestContext context, ContainerRequestContext requestContext, String serverId)
 			throws Exception {
 		try {
 			Instance instance = computeApi.get(context, serverId, null);
@@ -752,7 +822,7 @@ public class ServersControllerImpl implements ServersController {
 	@Override
 	public ServerTemplate update(ContainerRequestContext requestContext, String serverId, ServerForCreate server)
 			throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		String name = server.getName();
 		String ipv4 = server.getAccessIPv4();
 		String ipv6 = server.getAccessIPv6();
@@ -770,7 +840,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response pause(String serverId, ContainerRequestContext requestContext, Pause value) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, "pause");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
@@ -784,7 +854,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response unpause(String serverId, ContainerRequestContext requestContext, Unpause value) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, "unpause");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
@@ -798,7 +868,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response suspend(String serverId, ContainerRequestContext requestContext, Suspend value) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, "suspend");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
@@ -812,7 +882,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response resume(String serverId, ContainerRequestContext requestContext, Resume value) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		authorize(context, "resume");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
@@ -826,7 +896,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response start(String serverId, ContainerRequestContext requestContext, Start value) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		checkComputePolicy(context, "start", instance, null);
 		try {
@@ -840,7 +910,7 @@ public class ServersControllerImpl implements ServersController {
 
 	@Override
 	public Response stop(String serverId, ContainerRequestContext requestContext, Stop value) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
 		checkComputePolicy(context, "stop", instance, null);
 		try {
@@ -852,7 +922,8 @@ public class ServersControllerImpl implements ServersController {
 		return Response.status(Status.ACCEPTED).build();
 	}
 
-	private void checkComputePolicy(NovaRequestContext context, String action, Target target, String scope) throws Exception {
+	private void checkComputePolicy(OpenstackRequestContext context, String action, Target target, String scope)
+			throws Exception {
 		if (Strings.isNullOrEmpty(scope)) {
 			scope = "compute";
 		}
@@ -860,9 +931,39 @@ public class ServersControllerImpl implements ServersController {
 		Policy.enforce(context, action, target, true, null);
 	}
 
-	private void authorize(NovaRequestContext context, String actionName) throws Exception {
+	private void authorize(OpenstackRequestContext context, String actionName) throws Exception {
 		String action = String.format("admin_actions:%s", actionName);
 		Extensions.extensionAuthorizer("compute", action).authorize(context, null, null);
+	}
+
+	private Entry<List<String>, List<String>> taskAndVmStateFromStatus(List<String> statuses) {
+		Set<String> vmStates = new HashSet<String>();
+		Set<String> taskStates = new HashSet<String>();
+		Set<String> lowerStatuses = new HashSet<String>();
+		for (String status : statuses) {
+			lowerStatuses.add(status.toLowerCase());
+		}
+
+		for (Entry<String, Map<String, String>> entry : STATE_MAP.entrySet()) {
+			String state = entry.getKey();
+			Map<String, String> taskMap = entry.getValue();
+			for (Entry<String, String> entry2 : taskMap.entrySet()) {
+				String taskState = entry2.getKey();
+				String mappedState = entry2.getValue();
+				String statusString = mappedState;
+				if (lowerStatuses.contains(statusString.toLowerCase())) {
+					vmStates.add(state);
+					taskStates.add(taskState);
+				}
+			}
+		}
+		List<String> vmStatesList = Lists.newArrayList(vmStates);
+		Collections.sort(vmStatesList);
+
+		List<String> taskStatesList = Lists.newArrayList(taskStates);
+		Collections.sort(taskStatesList);
+
+		return Maps.immutableEntry(vmStatesList, taskStatesList);
 	}
 
 }

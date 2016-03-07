@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import com.infinities.nova.response.model.Link;
+import com.infinities.api.openstack.commons.model.Link;
 
 public class MinimalServersTemplate implements Iterable<MinimalServer>, Serializable {
 

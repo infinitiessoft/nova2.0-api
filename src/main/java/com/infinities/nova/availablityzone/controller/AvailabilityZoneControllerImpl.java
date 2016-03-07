@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.availablityzone.api.AvailabilityZoneApi;
 import com.infinities.nova.availablityzone.model.AvailabilityZone;
 import com.infinities.nova.availablityzone.model.AvailabilityZoneTemplate;
@@ -52,7 +52,7 @@ public class AvailabilityZoneControllerImpl implements AvailabilityZoneControlle
 	 */
 	@Override
 	public AvailabilityZoneTemplate index(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<AvailabilityZone> zones = availabilityZoneApi.getAvailabilityZones(context);
 		return builder.index(requestContext, zones);
 	}
@@ -66,7 +66,7 @@ public class AvailabilityZoneControllerImpl implements AvailabilityZoneControlle
 	 */
 	@Override
 	public AvailabilityZoneTemplate detail(ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<AvailabilityZone> zones = availabilityZoneApi.getAvailabilityZones(context);
 		return builder.detail(requestContext, zones);
 	}

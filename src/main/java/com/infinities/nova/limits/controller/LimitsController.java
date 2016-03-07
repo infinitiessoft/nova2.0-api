@@ -17,7 +17,7 @@ package com.infinities.nova.limits.controller;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.common.Controller;
+import com.infinities.nova.Controller;
 import com.infinities.nova.limits.model.LimitsTemplate;
 
 public interface LimitsController extends Controller {

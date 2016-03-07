@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.infinities.nova.response.model.Link;
+import com.infinities.api.openstack.commons.model.Link;
 
 @XmlRootElement(name = "server")
 public class CreatedServer implements Serializable {

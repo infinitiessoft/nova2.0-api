@@ -31,9 +31,9 @@ import org.dasein.cloud.network.FirewallCreateOptions;
 import org.dasein.cloud.network.FirewallRule;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.exception.http.HTTPNotImplementedException;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
+import com.infinities.api.openstack.commons.exception.http.HTTPNotImplementedException;
 import com.infinities.nova.securitygroups.model.SecurityForCreateTemplate;
 import com.infinities.nova.securitygroups.model.SecurityGroup;
 import com.infinities.nova.securitygroups.model.SecurityGroup.Rule;
@@ -65,12 +65,12 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.api.SecurityGroupsApi#createSecurityGroup
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * com.infinities.nova.securitygroups.model.SecurityGroupTemplate)
 	 */
 	@Override
-	public SecurityGroup createSecurityGroup(NovaRequestContext context, String projectId, SecurityForCreateTemplate body)
-			throws InterruptedException, ExecutionException, Exception {
+	public SecurityGroup createSecurityGroup(OpenstackRequestContext context, String projectId,
+			SecurityForCreateTemplate body) throws InterruptedException, ExecutionException, Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -88,10 +88,10 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.api.SecurityGroupsApi#getSecurityGroups
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String)
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String)
 	 */
 	@Override
-	public List<SecurityGroup> getSecurityGroups(NovaRequestContext context, String projectId) throws Exception {
+	public List<SecurityGroup> getSecurityGroups(OpenstackRequestContext context, String projectId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -116,7 +116,7 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * @throws ExecutionException
 	 * @throws InterruptedException
 	 */
-	private SecurityGroup toSecurityGroup(NovaRequestContext context, Firewall firewall, String projectId)
+	private SecurityGroup toSecurityGroup(OpenstackRequestContext context, Firewall firewall, String projectId)
 			throws CloudException, InternalException, ConcurrentException, InterruptedException, ExecutionException {
 		SecurityGroup securityGroup = new SecurityGroup();
 		securityGroup.setDescription(firewall.getDescription());
@@ -167,11 +167,11 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.api.SecurityGroupsApi#getSecurityGroup
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public SecurityGroup getSecurityGroup(NovaRequestContext context, String projectId, String securityGroupId)
+	public SecurityGroup getSecurityGroup(OpenstackRequestContext context, String projectId, String securityGroupId)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -187,11 +187,12 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.api.SecurityGroupsApi#deleteSecurityGroup
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public void deleteSecurityGroup(NovaRequestContext context, String projectId, String securityGroupId) throws Exception {
+	public void deleteSecurityGroup(OpenstackRequestContext context, String projectId, String securityGroupId)
+			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -226,12 +227,12 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.api.SecurityGroupsApi#updateSecurityGroup
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String,
 	 * com.infinities.nova.securitygroups.model.SecurityGroupTemplate)
 	 */
 	@Override
-	public SecurityGroup updateSecurityGroup(NovaRequestContext context, String projectId, String securityGroupId,
+	public SecurityGroup updateSecurityGroup(OpenstackRequestContext context, String projectId, String securityGroupId,
 			SecurityGroupTemplate body) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -244,11 +245,11 @@ public class DaseinSecurityGroupsApi implements SecurityGroupsApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.api.SecurityGroupsApi#getSecurityGroups
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public List<SecurityGroup> getSecurityGroups(NovaRequestContext context, String projectId, String serverId)
+	public List<SecurityGroup> getSecurityGroups(OpenstackRequestContext context, String projectId, String serverId)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");

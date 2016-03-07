@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.infinities.api.openstack.commons.model.Link;
+
 public class Version implements java.io.Serializable, Cloneable {
 
 	/**

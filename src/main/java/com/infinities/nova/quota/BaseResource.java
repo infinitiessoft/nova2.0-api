@@ -18,16 +18,21 @@ package com.infinities.nova.quota;
 import javax.ws.rs.NotFoundException;
 
 import com.google.common.base.Strings;
-import com.infinities.nova.NovaRequestContext;
-import com.infinities.nova.common.config.Config;
+import com.infinities.api.openstack.commons.config.Config;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 
 public abstract class BaseResource {
 
+	private Config config;
 	private String name;
 	private String flag;
 
 
-	public int quota(QuotaDriver driver, NovaRequestContext context, String projectid, String quotaClass) {
+	public BaseResource(Config config) {
+		this.config = config;
+	}
+
+	public int quota(QuotaDriver driver, OpenstackRequestContext context, String projectid, String quotaClass) {
 		if (Strings.isNullOrEmpty(projectid)) {
 			projectid = context.getProjectId();
 		}
@@ -78,7 +83,7 @@ public abstract class BaseResource {
 	}
 
 	public int getDefault() {
-		return Strings.isNullOrEmpty(flag) ? -1 : Config.Instance.getOpt(flag).asInteger();
+		return Strings.isNullOrEmpty(flag) ? -1 : config.getOpt(flag).asInteger();
 	}
 
 	public abstract String getValidMethod();

@@ -33,8 +33,8 @@ import org.dasein.cloud.network.Protocol;
 import org.dasein.cloud.network.RuleTarget;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.securitygroups.model.SecurityGroup.Rule;
 import com.infinities.nova.securitygroups.model.SecurityGroup.Rule.Group;
 import com.infinities.nova.securitygroups.model.SecurityGroup.Rule.IpRange;
@@ -78,12 +78,12 @@ public class DaseinSecurityGroupRulesApi implements SecurityGroupRulesApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.rules.api.SecurityGroupRulesApi#createRule
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * com.infinities.
 	 * nova.securitygroups.rules.model.SecurityGroupRuleForCreateTemplate)
 	 */
 	@Override
-	public Rule createRule(NovaRequestContext context, String projectId, SecurityGroupRuleForCreateTemplate body)
+	public Rule createRule(OpenstackRequestContext context, String projectId, SecurityGroupRuleForCreateTemplate body)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -115,7 +115,7 @@ public class DaseinSecurityGroupRulesApi implements SecurityGroupRulesApi {
 	 * @throws ExecutionException
 	 * @throws InterruptedException
 	 */
-	private Rule getRule(NovaRequestContext context, String projectId, String securityGroupId, String ruleId, Rule rule)
+	private Rule getRule(OpenstackRequestContext context, String projectId, String securityGroupId, String ruleId, Rule rule)
 			throws InternalException, CloudException, ConcurrentException, InterruptedException, ExecutionException {
 		AsyncResult<Firewall> result = this.getSupport(context.getProjectId()).getFirewall(securityGroupId);
 		Firewall firewall = result.get();
@@ -139,11 +139,11 @@ public class DaseinSecurityGroupRulesApi implements SecurityGroupRulesApi {
 	 * 
 	 * @see
 	 * com.infinities.nova.securitygroups.rules.api.SecurityGroupRulesApi#deleteRule
-	 * (com.infinities.nova.NovaRequestContext, java.lang.String,
+	 * (com.infinities.nova.OpenstackRequestContext, java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public void deleteRule(NovaRequestContext context, String projectId, String securityGroupRuleId) throws Exception {
+	public void deleteRule(OpenstackRequestContext context, String projectId, String securityGroupRuleId) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

@@ -26,8 +26,8 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.dasein.cloud.dc.DataCenter;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.availablityzone.model.AvailabilityZone;
 import com.infinities.nova.availablityzone.model.Service;
 import com.infinities.skyport.async.AsyncResult;
@@ -46,7 +46,7 @@ public class DaseinAvailabilityZoneApi implements AvailabilityZoneApi {
 	}
 
 	@Override
-	public List<AvailabilityZone> getAvailabilityZones(NovaRequestContext context) throws Exception {
+	public List<AvailabilityZone> getAvailabilityZones(OpenstackRequestContext context) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}

@@ -17,7 +17,7 @@ package com.infinities.nova.servers.interfaces.api;
 
 import java.util.List;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachment;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachmentForCreateTemplate;
 
@@ -34,7 +34,7 @@ public interface InterfaceAttachmentsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	List<InterfaceAttachment> getInterfaceAttachments(NovaRequestContext context, String projectId, String serverId)
+	List<InterfaceAttachment> getInterfaceAttachments(OpenstackRequestContext context, String projectId, String serverId)
 			throws Exception;
 
 	/**
@@ -45,7 +45,7 @@ public interface InterfaceAttachmentsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	InterfaceAttachment getInterfaceAttachment(NovaRequestContext context, String projectId, String serverId,
+	InterfaceAttachment getInterfaceAttachment(OpenstackRequestContext context, String projectId, String serverId,
 			String interfaceAttachmentId) throws Exception;
 
 	/**
@@ -56,7 +56,7 @@ public interface InterfaceAttachmentsApi {
 	 * @return
 	 * @throws Exception
 	 */
-	InterfaceAttachment attach(NovaRequestContext context, String projectId, String serverId,
+	InterfaceAttachment attach(OpenstackRequestContext context, String projectId, String serverId,
 			InterfaceAttachmentForCreateTemplate interfaceAttachmentForCreateTemplate) throws Exception;
 
 	/**
@@ -66,7 +66,7 @@ public interface InterfaceAttachmentsApi {
 	 * @param interfaceAttachmentId
 	 * @throws Exception
 	 */
-	void detach(NovaRequestContext context, String projectId, String serverId, String interfaceAttachmentId)
+	void detach(OpenstackRequestContext context, String projectId, String serverId, String interfaceAttachmentId)
 			throws Exception;
 
 }

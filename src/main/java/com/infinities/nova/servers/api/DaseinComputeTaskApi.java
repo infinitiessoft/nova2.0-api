@@ -34,8 +34,8 @@ import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.network.Firewall;
 
 import com.google.common.base.Preconditions;
-import com.infinities.nova.Context;
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.Context;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.response.model.Image;
 import com.infinities.nova.response.model.ServerForCreate;
@@ -56,8 +56,8 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public List<Instance> buildInstances(NovaRequestContext context, CreateVmBaseOptions options, int num, Image bootMeta,
-			String adminPassword, List<Entry<String, String>> injectedFiles,
+	public List<Instance> buildInstances(OpenstackRequestContext context, CreateVmBaseOptions options, int num,
+			Image bootMeta, String adminPassword, List<Entry<String, String>> injectedFiles,
 			List<ServerForCreate.NetworkForCreate> requestedNetworks, List<String> securityGroups) throws CloudException,
 			InternalException, ConcurrentException, InterruptedException, ExecutionException {
 		VMLaunchOptions withLaunchOptions =
@@ -94,7 +94,7 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 		return provisionInstances(context, options, ids);
 	}
 
-	private List<Instance> provisionInstances(NovaRequestContext context, CreateVmBaseOptions baseOptions,
+	private List<Instance> provisionInstances(OpenstackRequestContext context, CreateVmBaseOptions baseOptions,
 			Iterable<String> ids) {
 		List<Instance> instances = new ArrayList<Instance>();
 		Iterator<String> iterator = ids.iterator();
@@ -120,7 +120,8 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void terminateInstance(NovaRequestContext context, Instance instance, List<String> reservations) throws Exception {
+	public void terminateInstance(OpenstackRequestContext context, Instance instance, List<String> reservations)
+			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -128,7 +129,7 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public Instance updateInstance(NovaRequestContext context, String serverId, String name, String ipv4, String ipv6)
+	public Instance updateInstance(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
 			throws Exception {
 		VirtualMachine vm =
 				getSupport(context.getProjectId()).updateVirtualMachine(serverId, VMUpdateOptions.getInstance(name)).get();
@@ -136,7 +137,7 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void deleteInstanceMetadata(NovaRequestContext context, Instance instance, String key) throws Exception {
+	public void deleteInstanceMetadata(OpenstackRequestContext context, Instance instance, String key) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
@@ -144,7 +145,7 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void updateInstanceMetadata(NovaRequestContext context, Instance instance, Map<String, String> metadata,
+	public void updateInstanceMetadata(OpenstackRequestContext context, Instance instance, Map<String, String> metadata,
 			boolean delete) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -191,8 +192,8 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void resizeInstance(NovaRequestContext context, Instance instance, String newInstanceTypeId, boolean cleanShutdown)
-			throws Exception {
+	public void resizeInstance(OpenstackRequestContext context, Instance instance, String newInstanceTypeId,
+			boolean cleanShutdown) throws Exception {
 		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getInstanceId(), newInstanceTypeId).get();
 	}
 

@@ -21,28 +21,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.infinities.nova.Common;
-import com.infinities.nova.Common.CommonNetwork;
+import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
-import com.infinities.nova.views.AbstractViewBuilder;
+import com.infinities.nova.servers.ips.controller.NetworkUtils;
+import com.infinities.nova.servers.ips.controller.NetworkUtils.Network;
 
 public class ViewBuilder extends AbstractViewBuilder {
 
 	// private final static String COLLECTION_NAME = "addresses";
 
-	public Addresses index(Map<String, Common.CommonNetwork> networks) {
+	/**
+	 * @param config
+	 */
+	public ViewBuilder(String osapiComputeLinkPrefix) {
+		super(osapiComputeLinkPrefix);
+	}
+
+	public Addresses index(Map<String, NetworkUtils.Network> networks) {
 		Addresses addresses = new Addresses();
-		for (Entry<String, Common.CommonNetwork> entry : networks.entrySet()) {
+		for (Entry<String, NetworkUtils.Network> entry : networks.entrySet()) {
 			String label = entry.getKey();
-			Common.CommonNetwork network = entry.getValue();
+			NetworkUtils.Network network = entry.getValue();
 			Map<String, List<Address>> map = show(network, label);
 			addresses.add(label, map.get(label));
 		}
 		return addresses;
 	}
 
-	public Map<String, List<Address>> show(CommonNetwork network, String label) {
+	public Map<String, List<Address>> show(Network network, String label) {
 		List<com.infinities.nova.db.model.Address> allIps = new ArrayList<com.infinities.nova.db.model.Address>();
 		allIps.addAll(network.getIps());
 		allIps.addAll(network.getFloatingIps());

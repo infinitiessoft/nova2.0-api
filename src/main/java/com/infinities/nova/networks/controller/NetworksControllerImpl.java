@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.NovaRequestContext;
+import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.networks.api.NetworksApi;
 import com.infinities.nova.networks.model.Network;
 import com.infinities.nova.networks.model.NetworkForCreateTemplate;
@@ -50,7 +50,7 @@ public class NetworksControllerImpl implements NetworksController {
 	 */
 	@Override
 	public Networks index(ContainerRequestContext requestContext, String projectId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		List<Network> networks = networksApi.getNetworks(context, projectId);
 		return builder.index(requestContext, networks);
 	}
@@ -65,7 +65,7 @@ public class NetworksControllerImpl implements NetworksController {
 	 */
 	@Override
 	public NetworkTemplate show(ContainerRequestContext requestContext, String projectId, String networkId) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Network network = networksApi.getNetwork(context, projectId, networkId);
 
 		return builder.show(requestContext, network);
@@ -82,7 +82,7 @@ public class NetworksControllerImpl implements NetworksController {
 	@Override
 	public NetworkTemplate create(ContainerRequestContext requestContext, String projectId,
 			NetworkForCreateTemplate networkForCreateTemplate) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Network network = networksApi.createNetwork(context, projectId, networkForCreateTemplate);
 
 		return builder.show(requestContext, network);
@@ -98,7 +98,7 @@ public class NetworksControllerImpl implements NetworksController {
 	 */
 	@Override
 	public void delete(String projectId, String networkId, ContainerRequestContext requestContext) throws Exception {
-		NovaRequestContext context = (NovaRequestContext) requestContext.getProperty("nova.context");
+		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		networksApi.deleteNetwork(context, projectId, networkId);
 	}
 
