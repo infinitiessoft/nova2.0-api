@@ -23,16 +23,12 @@ import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 
 public abstract class BaseResource {
 
-	private Config config;
 	private String name;
 	private String flag;
+	private Config config;
 
 
-	public BaseResource(Config config) {
-		this.config = config;
-	}
-
-	public int quota(QuotaDriver driver, OpenstackRequestContext context, String projectid, String quotaClass) {
+	public int quota(Config config, QuotaDriver driver, OpenstackRequestContext context, String projectid, String quotaClass) {
 		if (Strings.isNullOrEmpty(projectid)) {
 			projectid = context.getProjectId();
 		}
