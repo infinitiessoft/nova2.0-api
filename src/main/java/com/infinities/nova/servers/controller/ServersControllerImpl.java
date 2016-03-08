@@ -49,8 +49,6 @@ import com.infinities.api.openstack.commons.exception.NotFoundException;
 import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
 import com.infinities.api.openstack.commons.exception.http.HTTPForbiddenException;
 import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
-import com.infinities.api.openstack.commons.policy.Policy;
-import com.infinities.api.openstack.commons.policy.Target;
 import com.infinities.nova.AbstractPaginableController;
 import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.CannotResizeToSameFlavorException;
@@ -58,7 +56,6 @@ import com.infinities.nova.exception.FlavorNotFoundException;
 import com.infinities.nova.exception.ImageNotFoundException;
 import com.infinities.nova.exception.InstanceNotFoundException;
 import com.infinities.nova.exception.MarkerNotFoundException;
-import com.infinities.nova.extensions.Extensions;
 import com.infinities.nova.response.model.PersonalityFile;
 import com.infinities.nova.response.model.ServerAction;
 import com.infinities.nova.response.model.ServerAction.Pause;
@@ -292,7 +289,8 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		}
 
 		if (searchOpts.containsKey("all_tenants")) {
-			Policy.enforce(context, "compute:get_all_tenants", context, true, null);
+			// Policy.enforce(context, "compute:get_all_tenants", context, true,
+			// null);
 			searchOpts.remove("all_tenants");
 			filter.setAllTenants(null);
 		} else {
@@ -829,7 +827,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 
 		try {
 			Instance instance = computeApi.get(context, serverId, null);
-			Policy.enforce(context, "compute:update", instance, true, null);
+			// Policy.enforce(context, "compute:update", instance, true, null);
 			instance = computeApi.update(context, serverId, name, ipv4, ipv6);
 			return viewBuilder.show(requestContext, instance);
 		} catch (NotFoundException e) {
@@ -841,7 +839,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public Response pause(String serverId, ContainerRequestContext requestContext, Pause value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		authorize(context, "pause");
+		// authorize(context, "pause");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.pause(context, instance);
@@ -855,7 +853,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public Response unpause(String serverId, ContainerRequestContext requestContext, Unpause value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		authorize(context, "unpause");
+		// authorize(context, "unpause");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.unpause(context, instance);
@@ -869,7 +867,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public Response suspend(String serverId, ContainerRequestContext requestContext, Suspend value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		authorize(context, "suspend");
+		// authorize(context, "suspend");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.suspend(context, instance);
@@ -883,7 +881,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public Response resume(String serverId, ContainerRequestContext requestContext, Resume value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		authorize(context, "resume");
+		// authorize(context, "resume");
 		Instance instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.resume(context, instance);
@@ -898,7 +896,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response start(String serverId, ContainerRequestContext requestContext, Start value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
-		checkComputePolicy(context, "start", instance, null);
+		// checkComputePolicy(context, "start", instance, null);
 		try {
 			computeApi.start(context, instance);
 		} catch (InstanceNotFoundException e) {
@@ -912,7 +910,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response stop(String serverId, ContainerRequestContext requestContext, Stop value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		Instance instance = getServer(context, requestContext, serverId);
-		checkComputePolicy(context, "stop", instance, null);
+		// checkComputePolicy(context, "stop", instance, null);
 		try {
 			computeApi.stop(context, instance);
 		} catch (InstanceNotFoundException e) {
@@ -922,19 +920,22 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		return Response.status(Status.ACCEPTED).build();
 	}
 
-	private void checkComputePolicy(OpenstackRequestContext context, String action, Target target, String scope)
-			throws Exception {
-		if (Strings.isNullOrEmpty(scope)) {
-			scope = "compute";
-		}
-		action = String.format("%s:%s", scope, action);
-		Policy.enforce(context, action, target, true, null);
-	}
+	// private void checkComputePolicy(OpenstackRequestContext context, String
+	// action, Target target, String scope)
+	// throws Exception {
+	// if (Strings.isNullOrEmpty(scope)) {
+	// scope = "compute";
+	// }
+	// action = String.format("%s:%s", scope, action);
+	// Policy.enforce(context, action, target, true, null);
+	// }
 
-	private void authorize(OpenstackRequestContext context, String actionName) throws Exception {
-		String action = String.format("admin_actions:%s", actionName);
-		Extensions.extensionAuthorizer("compute", action).authorize(context, null, null);
-	}
+	// private void authorize(OpenstackRequestContext context, String
+	// actionName) throws Exception {
+	// String action = String.format("admin_actions:%s", actionName);
+	// Extensions.extensionAuthorizer("compute", action).authorize(context,
+	// null, null);
+	// }
 
 	private Entry<List<String>, List<String>> taskAndVmStateFromStatus(List<String> statuses) {
 		Set<String> vmStates = new HashSet<String>();

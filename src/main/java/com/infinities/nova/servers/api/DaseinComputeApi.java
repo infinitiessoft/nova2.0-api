@@ -42,7 +42,6 @@ import com.google.common.base.Strings;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.api.openstack.commons.exception.InvalidInputException;
 import com.infinities.api.openstack.commons.exception.http.HTTPNotImplementedException;
-import com.infinities.api.openstack.commons.policy.Policy;
 import com.infinities.api.openstack.commons.policy.Target;
 import com.infinities.nova.db.model.Address;
 import com.infinities.nova.db.model.Instance;
@@ -93,7 +92,7 @@ public class DaseinComputeApi implements ComputeApi {
 		if (Strings.isNullOrEmpty(sortDir)) {
 			sortDir = "desc";
 		}
-		checkPolicy(context, "get_all", context, null);
+		// checkPolicy(context, "get_all", context, null);
 
 		if (filters == null) {
 			filters = new ServersFilter();
@@ -169,13 +168,14 @@ public class DaseinComputeApi implements ComputeApi {
 		return dbInstList;
 	}
 
-	private void checkPolicy(OpenstackRequestContext context, String action, Target target, String scope) throws Exception {
-		if (Strings.isNullOrEmpty(scope)) {
-			scope = "compute";
-		}
-		String _action = String.format("%s:%s", scope, action);
-		Policy.enforce(context, _action, target, true, null);
-	}
+	// private void checkPolicy(OpenstackRequestContext context, String action,
+	// Target target, String scope) throws Exception {
+	// if (Strings.isNullOrEmpty(scope)) {
+	// scope = "compute";
+	// }
+	// String _action = String.format("%s:%s", scope, action);
+	// Policy.enforce(context, _action, target, true, null);
+	// }
 
 	@Override
 	public Instance get(OpenstackRequestContext context, String serverId, List<String> expectedAttrs) throws Exception {
@@ -192,7 +192,7 @@ public class DaseinComputeApi implements ComputeApi {
 			throw new InstanceNotFoundException(null, serverId);
 		}
 		instance = Instance.toInstance(vm);
-		checkPolicy(context, "get", instance, null);
+		// checkPolicy(context, "get", instance, null);
 		return instance;
 	}
 
@@ -250,18 +250,19 @@ public class DaseinComputeApi implements ComputeApi {
 		AvailabilityZone az = handleAvailabilityZone(context, availabilityZone);
 		availabilityZone = az.getZone();
 		String forcedHost = az.getHost();
-		String forcedNode = az.getNode();
+		// String forcedNode = az.getNode();
 
-		if (!Strings.isNullOrEmpty(forcedHost) || !Strings.isNullOrEmpty(forcedNode)) {
-			checkPolicy(context, "create:forced_host", new Target() {
-
-				@Override
-				public String getName() {
-					return "check create:forced_host";
-				}
-
-			}, null);
-		}
+		// if (!Strings.isNullOrEmpty(forcedHost) ||
+		// !Strings.isNullOrEmpty(forcedNode)) {
+		// checkPolicy(context, "create:forced_host", new Target() {
+		//
+		// @Override
+		// public String getName() {
+		// return "check create:forced_host";
+		// }
+		//
+		// }, null);
+		// }
 
 		Entry<CreateVmBaseOptions, Integer> options =
 				validateAndBuildBaseOptions(context, instanceType, bootMeta, imageHref, imageId, kernelId, ramDiskId,
@@ -394,11 +395,11 @@ public class DaseinComputeApi implements ComputeApi {
 		target.setProjectId(context.getProjectId());
 		target.setUsertId(context.getUserId());
 		target.setAvailabilityZone(availabilityZone);
-		checkPolicy(context, "create", target, null);
+		// checkPolicy(context, "create", target, null);
 
-		if (requestedNetworks != null && !requestedNetworks.isEmpty()) {
-			checkPolicy(context, "create:attach_network", target, null);
-		}
+		// if (requestedNetworks != null && !requestedNetworks.isEmpty()) {
+		// checkPolicy(context, "create:attach_network", target, null);
+		// }
 	}
 
 
@@ -442,7 +443,7 @@ public class DaseinComputeApi implements ComputeApi {
 
 	@Override
 	public void delete(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "delete", instance, "compute");
+		// checkPolicy(context, "delete", instance, "compute");
 		logger.debug("Going to try to terminate instance: {}", instance.getInstanceId());
 		computeTaskApi.terminateInstance(context, instance, null);
 		// deleteInstance(context, instance);
@@ -456,14 +457,14 @@ public class DaseinComputeApi implements ComputeApi {
 
 	@Override
 	public Map<String, String> getInstanceMetadata(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "get_instance_metadata", instance, null);
+		// checkPolicy(context, "get_instance_metadata", instance, null);
 		return instance.getMetadata();
 	}
 
 	@Override
 	public Map<String, String> updateInstanceMetadata(OpenstackRequestContext context, Instance instance,
 			Map<String, String> metadata, boolean delete) throws Exception {
-		checkPolicy(context, "update_instance_metadata", instance, null);
+		// checkPolicy(context, "update_instance_metadata", instance, null);
 
 		Map<String, String> m;
 		if (delete) {
@@ -482,7 +483,7 @@ public class DaseinComputeApi implements ComputeApi {
 
 	@Override
 	public void deleteInstanceMetadata(OpenstackRequestContext context, Instance instance, String key) throws Exception {
-		checkPolicy(context, "delete_instance_metadata", instance, null);
+		// checkPolicy(context, "delete_instance_metadata", instance, null);
 		computeTaskApi.deleteInstanceMetadata(context, instance, key);
 	}
 
@@ -503,7 +504,7 @@ public class DaseinComputeApi implements ComputeApi {
 	@Override
 	public void resize(OpenstackRequestContext context, Instance instance, String flavorId, String autoDiskConfig)
 			throws Exception {
-		checkPolicy(context, "resize", instance, null);
+		// checkPolicy(context, "resize", instance, null);
 		String currentInstanceTypeId = instance.getFlavorId();
 		String newInstanceTypeId = null;
 		InstanceType newInstanceType;
@@ -528,7 +529,7 @@ public class DaseinComputeApi implements ComputeApi {
 
 	@Override
 	public void reboot(OpenstackRequestContext context, Instance instance, String rebootType) throws Exception {
-		checkPolicy(context, "reboot", instance, null);
+		// checkPolicy(context, "reboot", instance, null);
 		if ("SOFT".equals(rebootType)) {
 			softReboot(context, instance);
 		} else {
@@ -547,19 +548,19 @@ public class DaseinComputeApi implements ComputeApi {
 
 	@Override
 	public void revertResize(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "revert_resize", instance, null);
+		// checkPolicy(context, "revert_resize", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
 	public void confirmResize(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "confirm_resize", instance, null);
+		// checkPolicy(context, "confirm_resize", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
 	public void setAdminPassword(OpenstackRequestContext context, Instance instance, String adminPass) throws Exception {
-		checkPolicy(context, "set_admin_password", instance, null);
+		// checkPolicy(context, "set_admin_password", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
@@ -567,14 +568,14 @@ public class DaseinComputeApi implements ComputeApi {
 	public void rebuild(OpenstackRequestContext context, Instance instance, String imageHref, String password,
 			String accessIpV4, String accessIpV6, String name, Map<String, String> metadata, String diskConfig)
 			throws Exception {
-		checkPolicy(context, "rebuild", instance, null);
+		// checkPolicy(context, "rebuild", instance, null);
 		throw new HTTPNotImplementedException("service not supported");
 	}
 
 	@Override
 	public void snapshot(OpenstackRequestContext context, Instance instance, String imageName, Map<String, String> metadata)
 			throws Exception {
-		checkPolicy(context, "snapshot", instance, null);
+		// checkPolicy(context, "snapshot", instance, null);
 		VirtualMachine fromVirtualMachine =
 				this.getSupport(context.getProjectId()).getVirtualMachine(instance.getInstanceId()).get();
 		ImageCreateOptions options = ImageCreateOptions.getInstance(fromVirtualMachine, imageName, null);
@@ -597,37 +598,37 @@ public class DaseinComputeApi implements ComputeApi {
 
 	@Override
 	public void pause(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "pause", instance, null);
+		// checkPolicy(context, "pause", instance, null);
 		this.getSupport(context.getProjectId()).pause(instance.getInstanceId());
 	}
 
 	@Override
 	public void unpause(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "unpause", instance, null);
+		// checkPolicy(context, "unpause", instance, null);
 		this.getSupport(context.getProjectId()).unpause(instance.getInstanceId());
 	}
 
 	@Override
 	public void suspend(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "suspend", instance, null);
+		// checkPolicy(context, "suspend", instance, null);
 		this.getSupport(context.getProjectId()).suspend(instance.getInstanceId());
 	}
 
 	@Override
 	public void resume(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "resume", instance, null);
+		// checkPolicy(context, "resume", instance, null);
 		this.getSupport(context.getProjectId()).resume(instance.getInstanceId());
 	}
 
 	@Override
 	public void start(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "resume", instance, null);
+		// checkPolicy(context, "resume", instance, null);
 		this.getSupport(context.getProjectId()).start(instance.getInstanceId());
 	}
 
 	@Override
 	public void stop(OpenstackRequestContext context, Instance instance) throws Exception {
-		checkPolicy(context, "resume", instance, null);
+		// checkPolicy(context, "resume", instance, null);
 		this.getSupport(context.getProjectId()).stop(instance.getInstanceId());
 	}
 
