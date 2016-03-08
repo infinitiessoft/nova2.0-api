@@ -48,24 +48,24 @@ import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
 import com.infinities.api.openstack.commons.exception.http.HTTPNotImplementedException;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
-import com.infinities.nova.response.model.ServerAction.ChangePassword;
-import com.infinities.nova.response.model.ServerAction.ConfirmResize;
-import com.infinities.nova.response.model.ServerAction.CreateImage;
-import com.infinities.nova.response.model.ServerAction.Pause;
-import com.infinities.nova.response.model.ServerAction.Reboot;
-import com.infinities.nova.response.model.ServerAction.Rebuild;
-import com.infinities.nova.response.model.ServerAction.Resize;
-import com.infinities.nova.response.model.ServerAction.Resume;
-import com.infinities.nova.response.model.ServerAction.RevertResize;
-import com.infinities.nova.response.model.ServerAction.Start;
-import com.infinities.nova.response.model.ServerAction.Stop;
-import com.infinities.nova.response.model.ServerAction.Suspend;
-import com.infinities.nova.response.model.ServerAction.Unpause;
 import com.infinities.nova.servers.controller.ServersController;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
 import com.infinities.nova.servers.model.ServerForCreateTemplate;
 import com.infinities.nova.servers.model.ServerTemplate;
 import com.infinities.nova.servers.model.ServersTemplate;
+import com.infinities.nova.servers.model.ServerAction.ChangePassword;
+import com.infinities.nova.servers.model.ServerAction.ConfirmResize;
+import com.infinities.nova.servers.model.ServerAction.CreateImage;
+import com.infinities.nova.servers.model.ServerAction.Pause;
+import com.infinities.nova.servers.model.ServerAction.Reboot;
+import com.infinities.nova.servers.model.ServerAction.Rebuild;
+import com.infinities.nova.servers.model.ServerAction.Resize;
+import com.infinities.nova.servers.model.ServerAction.Resume;
+import com.infinities.nova.servers.model.ServerAction.RevertResize;
+import com.infinities.nova.servers.model.ServerAction.Start;
+import com.infinities.nova.servers.model.ServerAction.Stop;
+import com.infinities.nova.servers.model.ServerAction.Suspend;
+import com.infinities.nova.servers.model.ServerAction.Unpause;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

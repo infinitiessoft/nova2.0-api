@@ -17,8 +17,6 @@ package com.infinities.nova.limits.model;
 
 import java.io.Serializable;
 
-import com.infinities.nova.response.model.Limits;
-
 public class LimitsTemplate implements Serializable {
 
 	/**

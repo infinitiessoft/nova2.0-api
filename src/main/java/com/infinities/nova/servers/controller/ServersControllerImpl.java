@@ -50,28 +50,28 @@ import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestExcepti
 import com.infinities.api.openstack.commons.exception.http.HTTPForbiddenException;
 import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
 import com.infinities.nova.AbstractPaginableController;
-import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.CannotResizeToSameFlavorException;
 import com.infinities.nova.exception.FlavorNotFoundException;
 import com.infinities.nova.exception.ImageNotFoundException;
 import com.infinities.nova.exception.InstanceNotFoundException;
 import com.infinities.nova.exception.MarkerNotFoundException;
-import com.infinities.nova.response.model.PersonalityFile;
-import com.infinities.nova.response.model.ServerAction;
-import com.infinities.nova.response.model.ServerAction.Pause;
-import com.infinities.nova.response.model.ServerAction.Resume;
-import com.infinities.nova.response.model.ServerAction.Start;
-import com.infinities.nova.response.model.ServerAction.Stop;
-import com.infinities.nova.response.model.ServerAction.Suspend;
-import com.infinities.nova.response.model.ServerAction.Unpause;
-import com.infinities.nova.response.model.ServerForCreate;
-import com.infinities.nova.response.model.ServerForCreate.SecurityGroup;
 import com.infinities.nova.servers.api.ComputeApi;
 import com.infinities.nova.servers.api.TaskStates;
 import com.infinities.nova.servers.api.VmStates;
 import com.infinities.nova.servers.model.CreatedServerTemplate;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
 import com.infinities.nova.servers.model.NetworkRequest;
+import com.infinities.nova.servers.model.PersonalityFile;
+import com.infinities.nova.servers.model.Server;
+import com.infinities.nova.servers.model.ServerAction;
+import com.infinities.nova.servers.model.ServerAction.Pause;
+import com.infinities.nova.servers.model.ServerAction.Resume;
+import com.infinities.nova.servers.model.ServerAction.Start;
+import com.infinities.nova.servers.model.ServerAction.Stop;
+import com.infinities.nova.servers.model.ServerAction.Suspend;
+import com.infinities.nova.servers.model.ServerAction.Unpause;
+import com.infinities.nova.servers.model.ServerForCreate;
+import com.infinities.nova.servers.model.ServerForCreate.SecurityGroup;
 import com.infinities.nova.servers.model.ServerTemplate;
 import com.infinities.nova.servers.model.ServersTemplate;
 import com.infinities.nova.servers.views.ViewBuilder;
@@ -179,7 +179,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public MinimalServersTemplate index(ContainerRequestContext requestContext) throws Exception {
 		try {
-			List<Instance> instances = getServers(requestContext);
+			List<Server> instances = getServers(requestContext);
 			return viewBuilder.index(requestContext, instances);
 		} catch (InvalidException e) {
 			logger.error("servers index failed", e);
@@ -190,7 +190,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public ServersTemplate detail(ContainerRequestContext requestContext) throws Exception {
 		try {
-			List<Instance> instances = getServers(requestContext);
+			List<Server> instances = getServers(requestContext);
 			return viewBuilder.detail(requestContext, instances);
 		} catch (InvalidException e) {
 			logger.error("servers detail failed", e);
@@ -202,7 +202,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public ServerTemplate show(String serverId, ContainerRequestContext requestContext) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		try {
-			Instance instance = computeApi.get(context, serverId, null);
+			Server instance = computeApi.get(context, serverId, null);
 			// requestContext.cache_db_instance(instance);
 			return viewBuilder.show(requestContext, instance);
 		} catch (NotFoundException e) {
@@ -213,7 +213,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 
 	// search options: reservation_id, name, status, image, flavor, ip,
 	// changes-since, all_tenants
-	private List<Instance> getServers(ContainerRequestContext requestContext) throws Exception {
+	private List<Server> getServers(ContainerRequestContext requestContext) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		ServersFilter filter = new ServersFilter();
 		Map<String, String> searchOpts = new HashMap<String, String>();
@@ -234,7 +234,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 			List<String> taskState = states.getValue();
 
 			if ((vmState == null || vmState.isEmpty()) && (taskState == null || taskState.isEmpty())) {
-				return new ArrayList<Instance>();
+				return new ArrayList<Server>();
 			}
 			filter.setVmState(vmState);
 
@@ -307,7 +307,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		Integer limit = entry.getKey();
 		String marker = entry.getValue();
 
-		List<Instance> instanceList = null;
+		List<Server> instanceList = null;
 
 		try {
 			instanceList = computeApi.getAll(context, filter, null, null, limit, marker, null);
@@ -318,12 +318,12 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 			// WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
 		} catch (MarkerNotFoundException e) {
 			logger.error("unexpected exception", e);
-			instanceList = new ArrayList<Instance>();
+			instanceList = new ArrayList<Server>();
 			String msg = String.format("marker [%s] not found", marker);
 			throw new HTTPBadRequestException(msg);
 		} catch (FlavorNotFoundException e) {
 			logger.error("Flavor '{}' could not be found", filter.getFlavor());
-			instanceList = new ArrayList<Instance>();
+			instanceList = new ArrayList<Server>();
 		}
 
 		// requestContext.cache_db_instances(instanceList);
@@ -451,7 +451,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		boolean checkServerGroupQuota = true;
 
 		Map<String, String> metadata = server.getMetadata();
-		Entry<List<Instance>, UUID> entry =
+		Entry<List<Server>, UUID> entry =
 				computeApi.create(novaContext, flavorId, imageUuid, null, null, minCount, maxCount, name, name, keyName,
 						null, sgNames, availabilityZone, userData, metadata, injectedFiles, password, accessIpV4,
 						accessIpV6, requestedNetworks, configDrive, autoDiskConfig, checkServerGroupQuota);
@@ -460,7 +460,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		// maxCount, requestedNetworks,
 		// sgNames, userData, availabilityZone, configDrive,
 		// checkServerGroupQuota);
-		List<Instance> instances = entry.getKey();
+		List<Server> instances = entry.getKey();
 
 		CreatedServerTemplate template = viewBuilder.create(requestContext, instances.get(0));
 
@@ -643,7 +643,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public void delete(String serverId, ContainerRequestContext requestContext) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		computeApi.delete(context, instance);
 	}
 
@@ -685,7 +685,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 			throw new HTTPBadRequestException(msg);
 		}
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		computeApi.reboot(context, instance, rebootType);
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -703,7 +703,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		imageHref = imageUuidFromHref(imageHref);
 		String password = getServerAdminPassword(body);
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 
 		String accessIpV4 = body.getAccessIPv4();
 		validateAccessIpv4(accessIpV4);
@@ -737,7 +737,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response revertResize(String serverId, ContainerRequestContext requestContext, ServerAction.RevertResize body)
 			throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		computeApi.revertResize(context, instance);
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -746,7 +746,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response confirmResize(String serverId, ContainerRequestContext requestContext, ServerAction.ConfirmResize body)
 			throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		computeApi.confirmResize(context, instance);
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -761,7 +761,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		}
 
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		computeApi.setAdminPassword(context, instance, body.getAdminPass());
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -775,7 +775,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 			String msg = "createImage entity requires name attribute";
 			throw new HTTPBadRequestException(msg);
 		}
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.snapshot(context, instance, imageName, body.getMetadata());
 		} catch (InvalidException e) {
@@ -787,7 +787,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	private Response resize(ContainerRequestContext requestContext, String serverId, String flavorId, String autoDiskConfig)
 			throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.resize(context, instance, flavorId, autoDiskConfig);
 		} catch (FlavorNotFoundException e) {
@@ -806,10 +806,10 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		return Response.status(Status.ACCEPTED).build();
 	}
 
-	private Instance getServer(OpenstackRequestContext context, ContainerRequestContext requestContext, String serverId)
+	private Server getServer(OpenstackRequestContext context, ContainerRequestContext requestContext, String serverId)
 			throws Exception {
 		try {
-			Instance instance = computeApi.get(context, serverId, null);
+			Server instance = computeApi.get(context, serverId, null);
 			return instance;
 		} catch (NotFoundException e) {
 			String msg = "Instance could not be found";
@@ -826,7 +826,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 		String ipv6 = server.getAccessIPv6();
 
 		try {
-			Instance instance = computeApi.get(context, serverId, null);
+			Server instance = computeApi.get(context, serverId, null);
 			// Policy.enforce(context, "compute:update", instance, true, null);
 			instance = computeApi.update(context, serverId, name, ipv4, ipv6);
 			return viewBuilder.show(requestContext, instance);
@@ -840,7 +840,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response pause(String serverId, ContainerRequestContext requestContext, Pause value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		// authorize(context, "pause");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.pause(context, instance);
 		} catch (InstanceNotFoundException e) {
@@ -854,7 +854,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response unpause(String serverId, ContainerRequestContext requestContext, Unpause value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		// authorize(context, "unpause");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.unpause(context, instance);
 		} catch (InstanceNotFoundException e) {
@@ -868,7 +868,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response suspend(String serverId, ContainerRequestContext requestContext, Suspend value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		// authorize(context, "suspend");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.suspend(context, instance);
 		} catch (InstanceNotFoundException e) {
@@ -882,7 +882,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	public Response resume(String serverId, ContainerRequestContext requestContext, Resume value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
 		// authorize(context, "resume");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		try {
 			computeApi.resume(context, instance);
 		} catch (InstanceNotFoundException e) {
@@ -895,7 +895,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public Response start(String serverId, ContainerRequestContext requestContext, Start value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		// checkComputePolicy(context, "start", instance, null);
 		try {
 			computeApi.start(context, instance);
@@ -909,7 +909,7 @@ public class ServersControllerImpl extends AbstractPaginableController implement
 	@Override
 	public Response stop(String serverId, ContainerRequestContext requestContext, Stop value) throws Exception {
 		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Instance instance = getServer(context, requestContext, serverId);
+		Server instance = getServer(context, requestContext, serverId);
 		// checkComputePolicy(context, "stop", instance, null);
 		try {
 			computeApi.stop(context, instance);

@@ -32,126 +32,38 @@ import javax.ws.rs.container.ContainerRequestContext;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
-import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.response.model.Server;
-import com.infinities.nova.response.model.Server.Addresses;
-import com.infinities.nova.response.model.Server.Fault;
-import com.infinities.nova.servers.api.TaskStates;
-import com.infinities.nova.servers.api.VmStates;
-import com.infinities.nova.servers.ips.controller.NetworkUtils;
 import com.infinities.nova.servers.model.CreatedServer;
 import com.infinities.nova.servers.model.CreatedServerTemplate;
 import com.infinities.nova.servers.model.MinimalServer;
 import com.infinities.nova.servers.model.MinimalServerTemplate;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
+import com.infinities.nova.servers.model.Server;
+import com.infinities.nova.servers.model.Server.Fault;
 import com.infinities.nova.servers.model.ServerTemplate;
 import com.infinities.nova.servers.model.ServersTemplate;
 import com.infinities.nova.util.URLUtils;
 
 public class ViewBuilder extends AbstractViewBuilder {
 
-	static {
-		Map<String, Map<String, String>> siteMap = new HashMap<String, Map<String, String>>();
-		Map<String, String> active = new HashMap<String, String>();
-		active.put("default", "ACTIVE");
-		active.put(TaskStates.REBOOTING, "REBOOT");
-		active.put(TaskStates.REBOOT_PENDING, "REBOOT");
-		active.put(TaskStates.REBOOT_STARTED, "REBOOT");
-		active.put(TaskStates.REBOOTING_HARD, "HARD_REBOOT");
-		active.put(TaskStates.REBOOT_PENDING_HARD, "HARD_REBOOT");
-		active.put(TaskStates.REBOOT_STARTED_HARD, "HARD_REBOOT");
-		active.put(TaskStates.UPDATING_PASSWORD, "PASSWORD");
-		active.put(TaskStates.REBUILDING, "REBUILD");
-		active.put(TaskStates.REBUILD_BLOCK_DEVICE_MAPPING, "REBUILD");
-		active.put(TaskStates.REBUILD_SPAWNING, "REBUILD");
-		active.put(TaskStates.MIGRATING, "MIGRATING");
-		active.put(TaskStates.RESIZE_PREP, "RESIZE");
-		active.put(TaskStates.RESIZE_MIGRATING, "RESIZE");
-		active.put(TaskStates.RESIZE_MIGRATED, "RESIZE");
-		active.put(TaskStates.RESIZE_FINISH, "RESIZE");
-		siteMap.put(VmStates.ACTIVE, active);
-
-		Map<String, String> building = new HashMap<String, String>();
-		building.put("default", "BUILD");
-		siteMap.put(VmStates.BUILDING, building);
-
-		Map<String, String> stopped = new HashMap<String, String>();
-		stopped.put("default", "SHUTOFF");
-		stopped.put(TaskStates.RESIZE_PREP, "RESIZE");
-		stopped.put(TaskStates.RESIZE_MIGRATING, "RESIZE");
-		stopped.put(TaskStates.RESIZE_MIGRATED, "RESIZE");
-		stopped.put(TaskStates.RESIZE_FINISH, "RESIZE");
-		siteMap.put(VmStates.STOPPED, stopped);
-
-		Map<String, String> resized = new HashMap<String, String>();
-		resized.put("default", "VERIFY_RESIZE");
-		resized.put(TaskStates.RESIZE_REVERTING, "REVERT_RESIZE");
-		siteMap.put(VmStates.RESIZED, resized);
-
-		Map<String, String> paused = new HashMap<String, String>();
-		paused.put("default", "PAUSED");
-		siteMap.put(VmStates.PAUSED, paused);
-
-		Map<String, String> suspended = new HashMap<String, String>();
-		suspended.put("default", "SUSPENDED");
-		siteMap.put(VmStates.SUSPENDED, suspended);
-
-		Map<String, String> rescued = new HashMap<String, String>();
-		rescued.put("default", "RESCUE");
-		siteMap.put(VmStates.RESCUED, rescued);
-
-		Map<String, String> error = new HashMap<String, String>();
-		error.put("default", "ERROR");
-		siteMap.put(VmStates.ERROR, error);
-
-		Map<String, String> deleted = new HashMap<String, String>();
-		deleted.put("default", "DELETED");
-		siteMap.put(VmStates.DELETED, deleted);
-
-		Map<String, String> softDeleted = new HashMap<String, String>();
-		softDeleted.put("default", "SOFT_DELETED");
-		siteMap.put(VmStates.SOFT_DELETED, softDeleted);
-
-		Map<String, String> shelved = new HashMap<String, String>();
-		shelved.put("default", "SHELVED");
-		siteMap.put(VmStates.SHELVED, shelved);
-
-		Map<String, String> shelvedOffloaded = new HashMap<String, String>();
-		shelvedOffloaded.put("default", "SHELVED_OFFLOADED");
-		siteMap.put(VmStates.SHELVED_OFFLOADED, shelvedOffloaded);
-
-		STATE_MAP = Collections.unmodifiableMap(siteMap);
-	}
-
-	private static final Logger logger = LoggerFactory.getLogger(ViewBuilder.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(ViewBuilder.class);
 	private int osapiMaxLimit;
-	private static final Map<String, Map<String, String>> STATE_MAP;
 
 
 	public ViewBuilder(String osapiComputeLinkPrefix, int osapiMaxLimit) {
 		super(osapiComputeLinkPrefix);
-		addressBuilder = new com.infinities.nova.servers.ips.views.ViewBuilder(osapiComputeLinkPrefix);
 		this.osapiMaxLimit = osapiMaxLimit;
 	}
 
 
-	// private final static Logger logger =
-	// LoggerFactory.getLogger(ViewBuilder.class);
 	private final static String COLLECTION_NAME = "servers";
 	private final static Set<String> PROGRESS_STATUSES;
 	private final static Map<String, String> FAULT_STATUSES;
-	private final com.infinities.nova.servers.ips.views.ViewBuilder addressBuilder;
-	// private final com.infinities.nova.views.flavors.ViewBuilder flavorBuilder
-	// = new com.infinities.nova.views.flavors.ViewBuilder();
-	// private final com.infinities.nova.views.images.ViewBuilder imageBuilder =
-	// new com.infinities.nova.views.images.ViewBuilder();
 
 	static {
 		Set<String> set = new HashSet<String>();
@@ -168,11 +80,11 @@ public class ViewBuilder extends AbstractViewBuilder {
 	}
 
 
-	public ServersTemplate detail(ContainerRequestContext requestContext, List<Instance> instanceList)
+	public ServersTemplate detail(ContainerRequestContext requestContext, List<Server> instanceList)
 			throws URISyntaxException, NoSuchAlgorithmException, UnknownHostException, CloneNotSupportedException {
 		String collName = ViewBuilder.COLLECTION_NAME + "/detail";
 		List<Server> serverList = new ArrayList<Server>();
-		for (Instance instance : instanceList) {
+		for (Server instance : instanceList) {
 			serverList.add(show(requestContext, instance).getServer());
 		}
 
@@ -187,11 +99,11 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return servers;
 	}
 
-	public MinimalServersTemplate index(ContainerRequestContext requestContext, List<Instance> instanceList)
+	public MinimalServersTemplate index(ContainerRequestContext requestContext, List<Server> instanceList)
 			throws URISyntaxException {
 		String collName = ViewBuilder.COLLECTION_NAME;
 		List<MinimalServer> serverList = new ArrayList<MinimalServer>();
-		for (Instance instance : instanceList) {
+		for (Server instance : instanceList) {
 			serverList.add(basic(requestContext, instance).getServer());
 		}
 
@@ -206,23 +118,23 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return servers;
 	}
 
-	private MinimalServerTemplate basic(ContainerRequestContext requestContext, Instance instance) throws URISyntaxException {
+	private MinimalServerTemplate basic(ContainerRequestContext requestContext, Server instance) throws URISyntaxException {
 		MinimalServer server = new MinimalServer();
-		server.setId(instance.getInstanceId());
+		server.setId(instance.getId());
 		server.setName(instance.getName());
-		server.setLinks(getLinks(requestContext, instance.getInstanceId(), COLLECTION_NAME));
+		server.setLinks(getLinks(requestContext, instance.getId(), COLLECTION_NAME));
 		MinimalServerTemplate template = new MinimalServerTemplate(server);
 		return template;
 	}
 
-	public ServerTemplate show(ContainerRequestContext requestContext, Instance instance) throws NoSuchAlgorithmException,
+	public ServerTemplate show(ContainerRequestContext requestContext, Server instance) throws NoSuchAlgorithmException,
 			URISyntaxException, UnknownHostException, CloneNotSupportedException {
-		String ipV4 = instance.getAccessIpV4();
-		String ipV6 = instance.getAccessIpV6();
+		String ipV4 = instance.getAccessIPv4();
+		String ipV6 = instance.getAccessIPv6();
 		Server server = new Server();
-		server.setId(instance.getInstanceId());
+		server.setId(instance.getId());
 		server.setName(instance.getName());
-		server.setStatus(getVmStatus(instance));
+		server.setStatus(instance.getStatus());
 		String projectId = instance.getTenantId();
 		if (Strings.isNullOrEmpty(projectId)) {
 			projectId = "";
@@ -233,7 +145,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 			userId = "";
 		}
 		server.setUserId(instance.getUserId());
-		server.setMetadata(getMetadata(instance));
+		server.setMetadata(instance.getMetadata());
 		String hostId = getHostId(instance);
 		if (Strings.isNullOrEmpty(hostId)) {
 			hostId = "";
@@ -241,9 +153,9 @@ public class ViewBuilder extends AbstractViewBuilder {
 		server.setHostId(hostId);
 		server.setImage(getImage(requestContext, instance));
 		server.setFlavor(getFlavor(requestContext, instance));
-		server.setCreated(instance.getCreatedAt());
-		server.setUpdated(instance.getUpdatedAt());
-		server.setAddresses(getAddress(requestContext, instance));
+		server.setCreated(instance.getCreated());
+		server.setUpdated(instance.getUpdated());
+		server.setAddresses(instance.getAddresses());
 		if (Strings.isNullOrEmpty(ipV4)) {
 			ipV4 = "";
 		}
@@ -252,7 +164,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 			ipV6 = "";
 		}
 		server.setAccessIPv6(ipV6);
-		server.setLinks(getLinks(requestContext, instance.getInstanceId(), COLLECTION_NAME));
+		server.setLinks(getLinks(requestContext, instance.getId(), COLLECTION_NAME));
 
 		if (FAULT_STATUSES.containsKey(server.getStatus())) {
 			Fault instFault = getFault(requestContext, instance);
@@ -271,8 +183,8 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return new ServerTemplate(server);
 	}
 
-	private Fault getFault(ContainerRequestContext requestContext, Instance instance) {
-		com.infinities.nova.db.model.Fault fault = instance.getFault();
+	private Fault getFault(ContainerRequestContext requestContext, Server server) {
+		Fault fault = server.getFault();
 
 		if (fault == null) {
 			return null;
@@ -298,22 +210,15 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return f;
 	}
 
-	private Addresses getAddress(ContainerRequestContext requestContext, Instance instance) throws UnknownHostException,
-			CloneNotSupportedException {
-		OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-		Map<String, NetworkUtils.Network> networks = NetworkUtils.getNetworksForInstance(context, instance);
-		return addressBuilder.index(networks);
-	}
-
-	private com.infinities.nova.response.model.Server.Flavor getFlavor(ContainerRequestContext requestContext,
-			Instance instance) throws URISyntaxException {
-		com.infinities.nova.response.model.Server.Flavor flavor = new com.infinities.nova.response.model.Server.Flavor();
+	private com.infinities.nova.servers.model.Server.Flavor getFlavor(ContainerRequestContext requestContext, Server instance)
+			throws URISyntaxException {
+		com.infinities.nova.servers.model.Server.Flavor flavor = new com.infinities.nova.servers.model.Server.Flavor();
 		// InstanceType instanceType = Common.extractFlavor(instance, null);
 		// if (instanceType == null) {
 		// logger.warn("Instance has had its instance_type removed from the DB");
 		// return flavor;
 		// }
-		String flavorId = instance.getFlavorId();
+		String flavorId = instance.getFlavor().getId();
 		String flavorBookmark = getBookmarkLink(requestContext, flavorId, "flavors");
 		flavor.setId(flavorId);
 		List<Link> links = new ArrayList<Link>();
@@ -326,10 +231,10 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return flavor;
 	}
 
-	private com.infinities.nova.response.model.Server.Image getImage(ContainerRequestContext requestContext,
-			Instance instance) throws URISyntaxException {
-		String imageRef = instance.getImageId();
-		com.infinities.nova.response.model.Server.Image image = new com.infinities.nova.response.model.Server.Image();
+	private com.infinities.nova.servers.model.Server.Image getImage(ContainerRequestContext requestContext, Server instance)
+			throws URISyntaxException {
+		String imageRef = instance.getImage().getId();
+		com.infinities.nova.servers.model.Server.Image image = new com.infinities.nova.servers.model.Server.Image();
 		if (!Strings.isNullOrEmpty(imageRef)) {
 			String imageId = URLUtils.getIdFromHref(imageRef);
 			String bookmark = getBookmarkLink(requestContext, imageId, "images");
@@ -344,7 +249,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return image;
 	}
 
-	private String getHostId(Instance instance) throws NoSuchAlgorithmException {
+	private String getHostId(Server instance) throws NoSuchAlgorithmException {
 		String host = instance.getHost();
 		String project = instance.getTenantId();
 		if (!Strings.isNullOrEmpty(host)) {
@@ -357,39 +262,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return null;
 	}
 
-	private Map<String, String> getMetadata(Instance instance) {
-		return instance.getMetadata();
-	}
-
-	private String getVmStatus(Instance instance) {
-		if (instance.getDeleted() == 1) {
-			return "DELETED";
-		}
-		return statusFromState(instance.getVmState(), instance.getTaskState());
-	}
-
-	private String statusFromState(String vmState, String taskState) {
-		if (Strings.isNullOrEmpty(taskState)) {
-			taskState = "default";
-		}
-		Map<String, String> taskMap = STATE_MAP.get(vmState);
-		if (taskMap == null) {
-			taskMap = new HashMap<String, String>();
-			taskMap.put("default", "UNKNOWN");
-		}
-		String status = taskMap.get(taskState);
-		if (Strings.isNullOrEmpty(status)) {
-			status = taskMap.get("default");
-		}
-		if ("UNKNOWN".equals(status)) {
-			logger.error("status is UNKNOWN from vm_state={} task_state={}. Bad upgrade or db corrupted?", new Object[] {
-					vmState, taskState });
-		}
-
-		return status;
-	}
-
-	private List<Link> getCollectionLinks(ContainerRequestContext requestContext, List<Instance> instances,
+	private List<Link> getCollectionLinks(ContainerRequestContext requestContext, List<Server> instances,
 			String collectionName) throws URISyntaxException {
 		List<Link> links = new ArrayList<Link>();
 		String limitQP = requestContext.getUriInfo().getQueryParameters().getFirst("limit");
@@ -404,8 +277,8 @@ public class ViewBuilder extends AbstractViewBuilder {
 		if (maxItems == instances.size()) {
 			int item = instances.size() - 1;
 			if (item >= 0) {
-				Instance lastItem = instances.get(item);
-				String lastItemId = lastItem.getInstanceId();
+				Server lastItem = instances.get(item);
+				String lastItemId = lastItem.getId();
 				Link link = new Link();
 				link.setRel("next");
 				link.setHref(getNextLink(requestContext, lastItemId, collectionName));
@@ -420,11 +293,11 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return links;
 	}
 
-	public CreatedServerTemplate create(ContainerRequestContext requestContext, Instance instance) throws URISyntaxException {
+	public CreatedServerTemplate create(ContainerRequestContext requestContext, Server instance) throws URISyntaxException {
 		CreatedServer server = new CreatedServer();
 		CreatedServerTemplate template = new CreatedServerTemplate(server);
-		server.setId(instance.getInstanceId());
-		server.setLinks(getLinks(requestContext, instance.getInstanceId(), COLLECTION_NAME));
+		server.setId(instance.getId());
+		server.setLinks(getLinks(requestContext, instance.getId(), COLLECTION_NAME));
 		return template;
 	}
 }

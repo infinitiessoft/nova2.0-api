@@ -19,8 +19,6 @@ import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.infinities.nova.response.model.Version;
-
 @XmlRootElement
 public class VersionsWrapper {
 

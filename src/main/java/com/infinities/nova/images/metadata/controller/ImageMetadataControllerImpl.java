@@ -30,7 +30,7 @@ import com.infinities.nova.common.model.MetadataTemplate;
 import com.infinities.nova.exception.ImageNotFoundException;
 import com.infinities.nova.images.api.ImagesApi;
 import com.infinities.nova.images.metadata.api.ImageMetadataApi;
-import com.infinities.nova.response.model.Image;
+import com.infinities.nova.images.model.Image;
 
 public class ImageMetadataControllerImpl implements ImageMetadataController {
 

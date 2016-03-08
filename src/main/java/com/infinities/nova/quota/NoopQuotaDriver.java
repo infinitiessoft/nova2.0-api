@@ -22,11 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.ProjectUserQuota;
-import com.infinities.nova.db.model.Quota;
-import com.infinities.nova.db.model.QuotaClass;
-import com.infinities.nova.quota.QuotaUsageSet.Usage;
-import com.infinities.nova.response.model.QuotaSet;
+import com.infinities.nova.quota.model.ProjectQuotaSet;
+import com.infinities.nova.quota.model.ProjectUserQuota;
+import com.infinities.nova.quota.model.ProjectUserQuotaSet;
+import com.infinities.nova.quota.model.Quota;
+import com.infinities.nova.quota.model.QuotaClass;
+import com.infinities.nova.quota.model.QuotaSet;
+import com.infinities.nova.quota.model.QuotaUsageSet;
+import com.infinities.nova.quota.model.QuotaUsageSet.Usage;
 import com.infinities.nova.util.StringUtils;
 
 public class NoopQuotaDriver implements QuotaDriver {
@@ -34,32 +37,32 @@ public class NoopQuotaDriver implements QuotaDriver {
 	@Override
 	public ProjectUserQuota getByProjectAndUser(OpenstackRequestContext context, String projectid, String userid,
 			String resource) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Quota getByProject(OpenstackRequestContext context, String projectid, String resource) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public QuotaClass getByClass(OpenstackRequestContext context, String quotaClass, String resource) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public QuotaSet getDefaults(OpenstackRequestContext context, Map<String, BaseResource> resources) throws Exception {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public QuotaSet getClassQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources, String quotaClass,
 			boolean defaults) throws Exception {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -67,7 +70,7 @@ public class NoopQuotaDriver implements QuotaDriver {
 	public QuotaUsageSet getUserQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources,
 			String projectid, String userid, String quotaClass, boolean defaults, boolean usages,
 			ProjectQuotaSet projectQuotas, ProjectUserQuotaSet userQuotas) throws Exception {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -108,59 +111,52 @@ public class NoopQuotaDriver implements QuotaDriver {
 	@Override
 	public QuotaUsageSet getSettableQuotas(OpenstackRequestContext context, Map<String, BaseResource> resources,
 			String projectid, String userid) throws Exception {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void limitCheck(OpenstackRequestContext context, Map<String, BaseResource> resources,
 			Map<String, Integer> values, String projectid, String userid) throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public List<String> reserve(OpenstackRequestContext context, Map<String, BaseResource> resources,
 			Map<String, Integer> deltas, Calendar expire, String projectid, String userid) throws Exception {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public void commit(OpenstackRequestContext context, List<String> reservations, String projectid, String userid)
 			throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void rollback(OpenstackRequestContext context, List<String> reservations, String projectid, String userid)
 			throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void usageReset(OpenstackRequestContext context, List<String> resources) throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void destroyAllByProjectAndUser(OpenstackRequestContext context, String projectid, String userid) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void expire(OpenstackRequestContext context) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void destroyAllByProject(OpenstackRequestContext context, String projectid) {
-		// TODO Auto-generated method stub
 
 	}
 

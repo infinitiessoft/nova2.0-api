@@ -28,7 +28,7 @@ import org.dasein.cloud.identity.SSHKeypair;
 import com.google.common.base.Preconditions;
 import com.infinities.api.openstack.commons.context.Context;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.response.model.KeyPair;
+import com.infinities.nova.keypairs.model.KeyPair;
 import com.infinities.skyport.async.AsyncResult;
 import com.infinities.skyport.async.service.identity.AsyncShellKeySupport;
 import com.infinities.skyport.cache.CachedServiceProvider;

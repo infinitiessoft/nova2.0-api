@@ -24,7 +24,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import com.google.common.base.Strings;
 import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
-import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.flavors.model.Flavor;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
@@ -49,33 +48,32 @@ public class ViewBuilder extends AbstractViewBuilder {
 	private final static String COLLECTION_NAME = "flavors";
 
 
-	public MinimalFlavorTemplate basic(ContainerRequestContext requestContext, InstanceType flavor)
-			throws URISyntaxException {
+	public MinimalFlavorTemplate basic(ContainerRequestContext requestContext, Flavor flavor) throws URISyntaxException {
 		MinimalFlavor f = new MinimalFlavor();
-		f.setId(flavor.getFlavorid());
+		f.setId(flavor.getId());
 		f.setName(flavor.getName());
-		f.setLinks(getLinks(requestContext, flavor.getFlavorid(), COLLECTION_NAME));
+		f.setLinks(getLinks(requestContext, flavor.getId(), COLLECTION_NAME));
 		return new MinimalFlavorTemplate(f);
 	}
 
-	public FlavorTemplate show(ContainerRequestContext requestContext, InstanceType flavor) throws URISyntaxException {
+	public FlavorTemplate show(ContainerRequestContext requestContext, Flavor flavor) throws URISyntaxException {
 		Flavor f = new Flavor();
-		f.setId(flavor.getFlavorid());
+		f.setId(flavor.getId());
 		f.setName(flavor.getName());
-		f.setRam(flavor.getMemoryMb());
-		f.setDisk(flavor.getRootGb());
+		f.setRam(flavor.getRam());
+		f.setDisk(flavor.getDisk());
 		f.setVcpus(flavor.getVcpus());
 		// String swap = flavor.getSwap() == null ? "" :
 		// flavor.getSwap().toString();
 		// f.setSwap(swap);
-		f.setLinks(getLinks(requestContext, flavor.getFlavorid(), COLLECTION_NAME));
+		f.setLinks(getLinks(requestContext, flavor.getId(), COLLECTION_NAME));
 		return new FlavorTemplate(f);
 	}
 
-	public MinimalFlavorsTemplate index(ContainerRequestContext requestContext, List<InstanceType> flavors)
+	public MinimalFlavorsTemplate index(ContainerRequestContext requestContext, List<Flavor> flavors)
 			throws URISyntaxException {
 		List<MinimalFlavor> flavorList = new ArrayList<MinimalFlavor>();
-		for (InstanceType flavor : flavors) {
+		for (Flavor flavor : flavors) {
 			flavorList.add(basic(requestContext, flavor).getFlavor());
 		}
 		List<Link> flavorsLinks = getCollectionLinks(requestContext, flavors, COLLECTION_NAME);
@@ -86,8 +84,8 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return ret;
 	}
 
-	private List<Link> getCollectionLinks(ContainerRequestContext requestContext, List<InstanceType> flavors,
-			String collectionName) throws URISyntaxException {
+	private List<Link> getCollectionLinks(ContainerRequestContext requestContext, List<Flavor> flavors, String collectionName)
+			throws URISyntaxException {
 		List<Link> links = new ArrayList<Link>();
 		String limitQP = requestContext.getUriInfo().getQueryParameters().getFirst("limit");
 		int limitQ = osapiMaxLimit;
@@ -101,8 +99,8 @@ public class ViewBuilder extends AbstractViewBuilder {
 		if (maxItems == flavors.size()) {
 			int item = flavors.size() - 1;
 			if (item >= 0) {
-				InstanceType lastItem = flavors.get(item);
-				String lastItemId = lastItem.getFlavorid();
+				Flavor lastItem = flavors.get(item);
+				String lastItemId = lastItem.getId();
 				Link link = new Link();
 				link.setRel("next");
 				link.setHref(getNextLink(requestContext, lastItemId, collectionName));
@@ -117,10 +115,9 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return links;
 	}
 
-	public FlavorsTemplate detail(ContainerRequestContext requestContext, List<InstanceType> flavors)
-			throws URISyntaxException {
+	public FlavorsTemplate detail(ContainerRequestContext requestContext, List<Flavor> flavors) throws URISyntaxException {
 		List<Flavor> flavorList = new ArrayList<Flavor>();
-		for (InstanceType flavor : flavors) {
+		for (Flavor flavor : flavors) {
 			flavorList.add(show(requestContext, flavor).getFlavor());
 		}
 

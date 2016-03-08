@@ -26,12 +26,12 @@ import javax.ws.rs.container.ContainerRequestContext;
 import com.google.common.base.Strings;
 import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
+import com.infinities.nova.images.model.Image;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImage;
 import com.infinities.nova.images.model.MinimalImageTemplate;
 import com.infinities.nova.images.model.MinimalImagesTemplate;
-import com.infinities.nova.response.model.Image;
 
 public class ViewBuilder extends AbstractViewBuilder {
 
@@ -82,7 +82,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 	}
 
 	public ImagesTemplate detail(ContainerRequestContext requestContext, List<Image> images) throws URISyntaxException {
-		List<com.infinities.nova.response.model.Image> imageList = new ArrayList<com.infinities.nova.response.model.Image>();
+		List<com.infinities.nova.images.model.Image> imageList = new ArrayList<com.infinities.nova.images.model.Image>();
 		for (Image image : images) {
 			imageList.add(show(requestContext, image).getImage());
 		}
@@ -157,7 +157,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 	}
 
 	public ImageTemplate show(ContainerRequestContext requestContext, Image image) throws URISyntaxException {
-		com.infinities.nova.response.model.Image m = new com.infinities.nova.response.model.Image();
+		com.infinities.nova.images.model.Image m = new com.infinities.nova.images.model.Image();
 		m.setId(image.getId());
 		m.setName(image.getName());
 		Integer minRam = image.getMinRam() == null ? 0 : image.getMinRam();
@@ -180,7 +180,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 		String instanceUuid = m.getMetadata().get("instance_uuid");
 		if (!Strings.isNullOrEmpty(instanceUuid)) {
 			String serverRef = getHrefLink(requestContext, instanceUuid, "servers");
-			com.infinities.nova.response.model.Image.Server server = new com.infinities.nova.response.model.Image.Server();
+			com.infinities.nova.images.model.Image.Server server = new com.infinities.nova.images.model.Image.Server();
 			server.setId(instanceUuid);
 			Link link = new Link();
 			link.setHref(serverRef);

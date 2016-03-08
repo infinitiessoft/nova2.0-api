@@ -27,7 +27,7 @@ import com.infinities.nova.limits.model.LimitWrapper;
 import com.infinities.nova.limits.model.LimitsTemplate;
 import com.infinities.nova.limits.views.ViewBuilder;
 import com.infinities.nova.quota.QuotaEngine;
-import com.infinities.nova.quota.QuotaUsageSet;
+import com.infinities.nova.quota.model.QuotaUsageSet;
 
 public class LimitsControllerImpl implements LimitsController {
 

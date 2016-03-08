@@ -30,15 +30,15 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.compute.VMLaunchOptions;
-import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.network.Firewall;
 
 import com.google.common.base.Preconditions;
 import com.infinities.api.openstack.commons.context.Context;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.response.model.Image;
-import com.infinities.nova.response.model.ServerForCreate;
+import com.infinities.nova.images.model.Image;
+import com.infinities.nova.servers.model.Server;
+import com.infinities.nova.servers.model.Server.Flavor;
+import com.infinities.nova.servers.model.ServerForCreate;
 import com.infinities.skyport.async.service.network.AsyncFirewallSupport;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
@@ -56,7 +56,7 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public List<Instance> buildInstances(OpenstackRequestContext context, CreateVmBaseOptions options, int num,
+	public List<Server> buildInstances(OpenstackRequestContext context, CreateVmBaseOptions options, int num,
 			Image bootMeta, String adminPassword, List<Entry<String, String>> injectedFiles,
 			List<ServerForCreate.NetworkForCreate> requestedNetworks, List<String> securityGroups) throws CloudException,
 			InternalException, ConcurrentException, InterruptedException, ExecutionException {
@@ -94,25 +94,29 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 		return provisionInstances(context, options, ids);
 	}
 
-	private List<Instance> provisionInstances(OpenstackRequestContext context, CreateVmBaseOptions baseOptions,
+	private List<Server> provisionInstances(OpenstackRequestContext context, CreateVmBaseOptions baseOptions,
 			Iterable<String> ids) {
-		List<Instance> instances = new ArrayList<Instance>();
+		List<Server> instances = new ArrayList<Server>();
 		Iterator<String> iterator = ids.iterator();
 		while (iterator.hasNext()) {
 			String id = iterator.next();
-			Instance instance = new Instance();
+			Server instance = new Server();
 			// instance.setReservationId(baseOptions.getReservationId().toString());
-			instance.setInstanceId(id);
-			instance.setImageId(baseOptions.getImageRef());
+			instance.setId(id);
+			com.infinities.nova.servers.model.Server.Image image = new com.infinities.nova.servers.model.Server.Image();
+			image.setId(baseOptions.getImageRef());
+			instance.setImage(image);
 			instance.setConfigDrive(String.valueOf(baseOptions.isConfigDrive()));
 			instance.setUserId(baseOptions.getUserId());
 			instance.setTenantId(baseOptions.getProjectId());
-			instance.setFlavorId(baseOptions.getInstanceTypeId());
+			Flavor flavor = new Flavor();
+			flavor.setId(baseOptions.getInstanceTypeId());
+			instance.setFlavor(flavor);
 			instance.setName(baseOptions.getDisplayName());
 			instance.setKeyName(baseOptions.getKeyName());
 			instance.setMetadata(baseOptions.getMetadata());
-			instance.setAccessIpV4(baseOptions.getAccessIpV4());
-			instance.setAccessIpV6(baseOptions.getAccessIpV6());
+			instance.setAccessIPv4(baseOptions.getAccessIpV4());
+			instance.setAccessIPv6(baseOptions.getAccessIpV6());
 			instance.setAvailabilityZone(baseOptions.getAvailabilityZone());
 			instances.add(instance);
 		}
@@ -120,32 +124,31 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void terminateInstance(OpenstackRequestContext context, Instance instance, List<String> reservations)
+	public void terminateInstance(OpenstackRequestContext context, Server instance, List<String> reservations)
 			throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
-		getSupport(context.getProjectId()).terminate(instance.getInstanceId());
+		getSupport(context.getProjectId()).terminate(instance.getId());
 	}
 
 	@Override
-	public Instance updateInstance(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
+	public Server updateInstance(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
 			throws Exception {
-		VirtualMachine vm =
-				getSupport(context.getProjectId()).updateVirtualMachine(serverId, VMUpdateOptions.getInstance(name)).get();
-		return Instance.toInstance(vm);
+		getSupport(context.getProjectId()).updateVirtualMachine(serverId, VMUpdateOptions.getInstance(name)).get();
+		return ServerUtils.toServer(getSupport(context.getProjectId()).getNovaStyleVirtualMachine(serverId).get());
 	}
 
 	@Override
-	public void deleteInstanceMetadata(OpenstackRequestContext context, Instance instance, String key) throws Exception {
+	public void deleteInstanceMetadata(OpenstackRequestContext context, Server instance, String key) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
 		}
-		getSupport(context.getProjectId()).removeTags(instance.getInstanceId(), new Tag(key, ""));
+		getSupport(context.getProjectId()).removeTags(instance.getId(), new Tag(key, ""));
 	}
 
 	@Override
-	public void updateInstanceMetadata(OpenstackRequestContext context, Instance instance, Map<String, String> metadata,
+	public void updateInstanceMetadata(OpenstackRequestContext context, Server instance, Map<String, String> metadata,
 			boolean delete) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -157,9 +160,9 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 			tags[i++] = new Tag(meta.getKey(), meta.getValue());
 		}
 		if (delete) {
-			getSupport(context.getProjectId()).setTags(instance.getInstanceId(), tags);
+			getSupport(context.getProjectId()).setTags(instance.getId(), tags);
 		} else {
-			getSupport(context.getProjectId()).updateTags(instance.getInstanceId(), tags);
+			getSupport(context.getProjectId()).updateTags(instance.getId(), tags);
 		}
 	}
 
@@ -192,9 +195,9 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	}
 
 	@Override
-	public void resizeInstance(OpenstackRequestContext context, Instance instance, String newInstanceTypeId,
+	public void resizeInstance(OpenstackRequestContext context, Server instance, String newInstanceTypeId,
 			boolean cleanShutdown) throws Exception {
-		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getInstanceId(), newInstanceTypeId).get();
+		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getId(), newInstanceTypeId).get();
 	}
 
 }

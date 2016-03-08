@@ -30,8 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.infinities.api.openstack.commons.model.Link;
-import com.infinities.nova.response.model.MediaType;
-import com.infinities.nova.response.model.Version;
+import com.infinities.nova.versions.model.MediaType;
+import com.infinities.nova.versions.model.Version;
 import com.infinities.nova.versions.model.VersionWrapper;
 import com.infinities.nova.versions.model.VersionsWrapper;
 import com.infinities.nova.versions.views.ViewBuilder;

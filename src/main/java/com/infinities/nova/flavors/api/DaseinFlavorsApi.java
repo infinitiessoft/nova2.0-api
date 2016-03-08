@@ -27,8 +27,8 @@ import org.dasein.cloud.compute.VirtualMachineProduct;
 import com.google.common.base.Preconditions;
 import com.infinities.api.openstack.commons.context.Context;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.flavors.controller.FlavorsFilter;
+import com.infinities.nova.flavors.model.Flavor;
 import com.infinities.skyport.async.AsyncResult;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
@@ -47,7 +47,7 @@ public class DaseinFlavorsApi implements FlavorsApi {
 	// context=null, inactive=false,
 	// filters=null,sortKey=flavorid,sortDir=asc,limit=null,marker=null
 	@Override
-	public List<InstanceType> getAllFlavorsSortedList(OpenstackRequestContext context, FlavorsFilter filter, String sortKey,
+	public List<Flavor> getAllFlavorsSortedList(OpenstackRequestContext context, FlavorsFilter filter, String sortKey,
 			String sortDir, Integer limit, String marker) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext("no");
@@ -56,35 +56,33 @@ public class DaseinFlavorsApi implements FlavorsApi {
 		AsyncResult<Iterable<VirtualMachineProduct>> result = getSupport(context.getProjectId()).listAllProducts();
 		Iterable<VirtualMachineProduct> iterable = result.get();
 		Iterator<VirtualMachineProduct> iterator = iterable.iterator();
-		List<InstanceType> instTypes = new ArrayList<InstanceType>();
+		List<Flavor> instTypes = new ArrayList<Flavor>();
 		while (iterator.hasNext()) {
 			VirtualMachineProduct product = iterator.next();
-			InstanceType type = toInstanceType(product);
+			Flavor type = toFlavor(product);
 			instTypes.add(type);
 		}
 
 		return instTypes;
 	}
 
-	private InstanceType toInstanceType(VirtualMachineProduct product) {
-		InstanceType type = new InstanceType();
+	private Flavor toFlavor(VirtualMachineProduct product) {
+		Flavor type = new Flavor();
 		type.setId(product.getProviderProductId());
-		type.setFlavorid(product.getProviderProductId());
 		type.setName(product.getName());
 		type.setVcpus(product.getCpuCount());
 		if (product.getRamSize() != null) {
-			type.setMemoryMb(product.getRamSize().intValue());
+			type.setRam(product.getRamSize().intValue());
 		}
 		if (product.getRootVolumeSize() != null) {
-			type.setRootGb(product.getRootVolumeSize().intValue());
+			type.setDisk(product.getRootVolumeSize().intValue());
 		}
 		return type;
 	}
 
 	// context=null,readDeleted = yes
 	@Override
-	public InstanceType getFlavorByFlavorId(String flavorid, OpenstackRequestContext context, String readDeleted)
-			throws Exception {
+	public Flavor getFlavorByFlavorId(String flavorid, OpenstackRequestContext context, String readDeleted) throws Exception {
 		if (context == null) {
 			context = Context.getAdminContext(readDeleted);
 		}
@@ -94,7 +92,7 @@ public class DaseinFlavorsApi implements FlavorsApi {
 		if (product == null) {
 			throw new IllegalArgumentException("invalid flavor:" + flavorid);
 		}
-		return toInstanceType(product);
+		return toFlavor(product);
 	}
 
 	private CachedVirtualMachineSupport getSupport(String id) throws ConcurrentException {
@@ -110,21 +108,4 @@ public class DaseinFlavorsApi implements FlavorsApi {
 		throw new UnsupportedOperationException("service not supported for " + id);
 
 	}
-	// @Override
-	// public InstanceType getDefaultFlavor() throws Exception {
-	// String name = Config.Instance.getOpt("default_flavor").asText();
-	// return getFlavorByName(name, null);
-	// }
-	//
-	// private InstanceType getFlavorByName(String name, OpenstackRequestContext
-	// context) throws Exception {
-	// if (Strings.isNullOrEmpty(name)) {
-	// return getDefaultFlavor();
-	// }
-	// if (context == null) {
-	// context = Context.getAdminContext("no");
-	// }
-	//
-	// return db.flavorGetByName(context, name);
-	// }
 }

@@ -20,8 +20,8 @@ import java.util.Map;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-import com.infinities.nova.response.model.Server.Addresses;
-import com.infinities.nova.response.model.Server.Addresses.Address;
+import com.infinities.nova.servers.model.Server.Addresses;
+import com.infinities.nova.servers.model.Server.Addresses.Address;
 
 public interface ServerIpsController {
 

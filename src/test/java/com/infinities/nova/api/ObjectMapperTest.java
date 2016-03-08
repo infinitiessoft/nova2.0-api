@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import com.infinities.nova.response.model.ServerAction.Pause;
+import com.infinities.nova.servers.model.ServerAction.Pause;
 
 public class ObjectMapperTest {
 

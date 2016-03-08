@@ -24,9 +24,9 @@ import java.util.Map;
 import javax.ws.rs.core.Response;
 
 import com.infinities.api.openstack.commons.config.Config;
-import com.infinities.nova.response.model.CustomResponseStatus;
-import com.infinities.nova.response.model.MediaType;
-import com.infinities.nova.response.model.Version;
+import com.infinities.nova.common.model.ExtendedStatus;
+import com.infinities.nova.versions.model.MediaType;
+import com.infinities.nova.versions.model.Version;
 import com.infinities.nova.versions.model.VersionsWrapper;
 import com.infinities.nova.versions.views.ViewBuilder;
 
@@ -84,7 +84,7 @@ public class VersionsApi {
 
 		ViewBuilder builder = ViewBuilder.getViewBuilder(uri, osapiComputeLinkPrefix);
 		VersionsWrapper versionsWrapper = builder.buildChoices(VERSIONS, requestPath);
-		return Response.status(CustomResponseStatus.MULTIPLE_CHOICES).entity(versionsWrapper).build();
+		return Response.status(ExtendedStatus.MULTIPLE_CHOICES).entity(versionsWrapper).build();
 	}
 
 	// status 200

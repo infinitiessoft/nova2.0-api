@@ -17,8 +17,6 @@ package com.infinities.nova.versions.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.infinities.nova.response.model.Version;
-
 @XmlRootElement
 public class VersionWrapper {
 

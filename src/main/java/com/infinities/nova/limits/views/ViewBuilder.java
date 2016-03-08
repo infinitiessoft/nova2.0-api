@@ -21,10 +21,10 @@ import java.util.List;
 
 import com.infinities.nova.limits.model.LimitWrapper;
 import com.infinities.nova.limits.model.LimitsTemplate;
-import com.infinities.nova.quota.QuotaUsageSet;
-import com.infinities.nova.response.model.Limits.AbsoluteLimit;
-import com.infinities.nova.response.model.Limits.RateLimit;
-import com.infinities.nova.response.model.Limits.RateLimit.LimitEntry;
+import com.infinities.nova.limits.model.Limits.AbsoluteLimit;
+import com.infinities.nova.limits.model.Limits.RateLimit;
+import com.infinities.nova.limits.model.Limits.RateLimit.LimitEntry;
+import com.infinities.nova.quota.model.QuotaUsageSet;
 
 public class ViewBuilder {
 
@@ -80,7 +80,7 @@ public class ViewBuilder {
 		List<RateLimit> rates = buildRateLimits(rateLimits);
 		AbsoluteLimit absolute = buildAboluteLimits(absLimits);
 
-		com.infinities.nova.response.model.Limits limits = new com.infinities.nova.response.model.Limits();
+		com.infinities.nova.limits.model.Limits limits = new com.infinities.nova.limits.model.Limits();
 		limits.setAbsolute(absolute);
 		limits.setRate(rates);
 		LimitsTemplate output = new LimitsTemplate(limits);

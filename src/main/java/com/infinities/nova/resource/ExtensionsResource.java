@@ -32,8 +32,8 @@ import javax.ws.rs.core.Response.Status;
 
 import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
-import com.infinities.nova.response.model.Extension;
-import com.infinities.nova.response.model.Extensions;
+import com.infinities.nova.extensions.model.Extension;
+import com.infinities.nova.extensions.model.Extensions;
 import com.infinities.skyport.util.FormatUtil;
 
 @Consumes(MediaType.APPLICATION_JSON)

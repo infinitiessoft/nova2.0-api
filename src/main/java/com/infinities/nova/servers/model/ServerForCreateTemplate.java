@@ -17,8 +17,6 @@ package com.infinities.nova.servers.model;
 
 import java.io.Serializable;
 
-import com.infinities.nova.response.model.ServerForCreate;
-
 /**
  * @author pohsun
  *

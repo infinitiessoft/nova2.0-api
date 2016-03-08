@@ -20,27 +20,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.response.model.Image;
-import com.infinities.nova.response.model.ServerForCreate;
+import com.infinities.nova.images.model.Image;
+import com.infinities.nova.servers.model.Server;
+import com.infinities.nova.servers.model.ServerForCreate;
 
 public interface ComputeTaskApi {
 
-	public List<Instance> buildInstances(OpenstackRequestContext context, CreateVmBaseOptions options, int num,
+	public List<Server> buildInstances(OpenstackRequestContext context, CreateVmBaseOptions options, int num,
 			Image bootMeta, String adminPassword, List<Entry<String, String>> injectedFiles,
 			List<ServerForCreate.NetworkForCreate> requestedNetworks, List<String> securityGroups) throws Exception;
 
-	public void terminateInstance(OpenstackRequestContext context, Instance instance, List<String> reservations)
+	public void terminateInstance(OpenstackRequestContext context, Server instance, List<String> reservations)
 			throws Exception;
 
-	public Instance updateInstance(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
+	public Server updateInstance(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
 			throws Exception;
 
-	public void deleteInstanceMetadata(OpenstackRequestContext context, Instance instance, String key) throws Exception;
+	public void deleteInstanceMetadata(OpenstackRequestContext context, Server instance, String key) throws Exception;
 
-	public void updateInstanceMetadata(OpenstackRequestContext context, Instance instance, Map<String, String> metadata,
+	public void updateInstanceMetadata(OpenstackRequestContext context, Server instance, Map<String, String> metadata,
 			boolean delete) throws Exception;
 
-	public void resizeInstance(OpenstackRequestContext context, Instance instance, String newInstanceTypeId,
+	public void resizeInstance(OpenstackRequestContext context, Server instance, String newInstanceTypeId,
 			boolean cleanShutdown) throws Exception;
 }

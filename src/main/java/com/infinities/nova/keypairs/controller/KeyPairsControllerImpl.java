@@ -28,11 +28,11 @@ import com.infinities.api.openstack.commons.policy.Target;
 import com.infinities.nova.exception.KeyPairNotFoundException;
 import com.infinities.nova.extensions.Extensions;
 import com.infinities.nova.keypairs.api.KeyPairsApi;
+import com.infinities.nova.keypairs.model.KeyPair;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPair;
 import com.infinities.nova.keypairs.model.MinimalKeyPairTemplate;
 import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
-import com.infinities.nova.response.model.KeyPair;
 
 /**
  * @author pohsun

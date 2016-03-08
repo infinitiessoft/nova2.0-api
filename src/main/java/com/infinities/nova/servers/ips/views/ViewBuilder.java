@@ -15,17 +15,13 @@
  *******************************************************************************/
 package com.infinities.nova.servers.ips.views;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
-import com.infinities.nova.response.model.Server.Addresses;
-import com.infinities.nova.response.model.Server.Addresses.Address;
-import com.infinities.nova.servers.ips.controller.NetworkUtils;
-import com.infinities.nova.servers.ips.controller.NetworkUtils.Network;
+import com.infinities.nova.servers.model.Server.Addresses;
+import com.infinities.nova.servers.model.Server.Addresses.Address;
 
 public class ViewBuilder extends AbstractViewBuilder {
 
@@ -38,38 +34,13 @@ public class ViewBuilder extends AbstractViewBuilder {
 		super(osapiComputeLinkPrefix);
 	}
 
-	public Addresses index(Map<String, NetworkUtils.Network> networks) {
-		Addresses addresses = new Addresses();
-		for (Entry<String, NetworkUtils.Network> entry : networks.entrySet()) {
-			String label = entry.getKey();
-			NetworkUtils.Network network = entry.getValue();
-			Map<String, List<Address>> map = show(network, label);
-			addresses.add(label, map.get(label));
-		}
-		return addresses;
+	public Addresses index(Addresses addressess) {
+		return addressess;
 	}
 
-	public Map<String, List<Address>> show(Network network, String label) {
-		List<com.infinities.nova.db.model.Address> allIps = new ArrayList<com.infinities.nova.db.model.Address>();
-		allIps.addAll(network.getIps());
-		allIps.addAll(network.getFloatingIps());
-
-		List<Address> addresses = new ArrayList<Address>();
-		for (com.infinities.nova.db.model.Address ip : allIps) {
-			addresses.add(basic(ip));
-		}
+	public Map<String, List<Address>> show(List<Address> addresses, String label) {
 		Map<String, List<Address>> map = new HashMap<String, List<Address>>();
 		map.put(label, addresses);
-
 		return map;
 	}
-
-	private Address basic(com.infinities.nova.db.model.Address ip) {
-		Address address = new Address();
-		address.setAddr(ip.getAddr());
-		String version = ip.getIpVersion().replace("IPV", "");
-		address.setVersion(Integer.parseInt(version));
-		return address;
-	}
-
 }

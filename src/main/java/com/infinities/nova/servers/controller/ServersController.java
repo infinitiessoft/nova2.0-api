@@ -18,22 +18,22 @@ package com.infinities.nova.servers.controller;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 
-import com.infinities.nova.response.model.ServerAction;
-import com.infinities.nova.response.model.ServerAction.ChangePassword;
-import com.infinities.nova.response.model.ServerAction.ConfirmResize;
-import com.infinities.nova.response.model.ServerAction.CreateImage;
-import com.infinities.nova.response.model.ServerAction.Pause;
-import com.infinities.nova.response.model.ServerAction.Rebuild;
-import com.infinities.nova.response.model.ServerAction.Resume;
-import com.infinities.nova.response.model.ServerAction.RevertResize;
-import com.infinities.nova.response.model.ServerAction.Start;
-import com.infinities.nova.response.model.ServerAction.Stop;
-import com.infinities.nova.response.model.ServerAction.Suspend;
-import com.infinities.nova.response.model.ServerAction.Unpause;
-import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.servers.model.MinimalServersTemplate;
+import com.infinities.nova.servers.model.ServerAction;
+import com.infinities.nova.servers.model.ServerForCreate;
 import com.infinities.nova.servers.model.ServerTemplate;
 import com.infinities.nova.servers.model.ServersTemplate;
+import com.infinities.nova.servers.model.ServerAction.ChangePassword;
+import com.infinities.nova.servers.model.ServerAction.ConfirmResize;
+import com.infinities.nova.servers.model.ServerAction.CreateImage;
+import com.infinities.nova.servers.model.ServerAction.Pause;
+import com.infinities.nova.servers.model.ServerAction.Rebuild;
+import com.infinities.nova.servers.model.ServerAction.Resume;
+import com.infinities.nova.servers.model.ServerAction.RevertResize;
+import com.infinities.nova.servers.model.ServerAction.Start;
+import com.infinities.nova.servers.model.ServerAction.Stop;
+import com.infinities.nova.servers.model.ServerAction.Suspend;
+import com.infinities.nova.servers.model.ServerAction.Unpause;
 
 public interface ServersController {
 

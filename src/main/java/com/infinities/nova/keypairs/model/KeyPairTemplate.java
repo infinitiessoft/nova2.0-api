@@ -17,8 +17,6 @@ package com.infinities.nova.keypairs.model;
 
 import java.io.Serializable;
 
-import com.infinities.nova.response.model.KeyPair;
-
 /**
  * @author pohsun
  *

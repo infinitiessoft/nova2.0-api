@@ -18,7 +18,7 @@ package com.infinities.nova.keypairs.api;
 import java.util.List;
 
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.response.model.KeyPair;
+import com.infinities.nova.keypairs.model.KeyPair;
 
 /**
  * @author pohsun

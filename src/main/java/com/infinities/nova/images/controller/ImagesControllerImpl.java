@@ -32,11 +32,11 @@ import com.infinities.api.openstack.commons.config.Config;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.AbstractPaginableController;
 import com.infinities.nova.images.api.ImagesApi;
+import com.infinities.nova.images.model.Image;
 import com.infinities.nova.images.model.ImageTemplate;
 import com.infinities.nova.images.model.ImagesTemplate;
 import com.infinities.nova.images.model.MinimalImagesTemplate;
 import com.infinities.nova.images.views.ViewBuilder;
-import com.infinities.nova.response.model.Image;
 import com.infinities.skyport.util.FormatUtil;
 
 public class ImagesControllerImpl extends AbstractPaginableController implements ImagesController {

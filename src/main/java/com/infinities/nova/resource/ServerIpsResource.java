@@ -32,9 +32,9 @@ import org.springframework.stereotype.Component;
 
 import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
-import com.infinities.nova.response.model.Server.Addresses;
-import com.infinities.nova.response.model.Server.Addresses.Address;
 import com.infinities.nova.servers.ips.controller.ServerIpsController;
+import com.infinities.nova.servers.model.Server.Addresses;
+import com.infinities.nova.servers.model.Server.Addresses.Address;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)

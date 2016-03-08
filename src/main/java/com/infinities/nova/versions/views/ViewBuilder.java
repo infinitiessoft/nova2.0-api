@@ -24,7 +24,7 @@ import java.util.Map;
 import com.google.common.base.Strings;
 import com.infinities.api.openstack.commons.model.Link;
 import com.infinities.api.openstack.commons.views.AbstractViewBuilder;
-import com.infinities.nova.response.model.Version;
+import com.infinities.nova.versions.model.Version;
 import com.infinities.nova.versions.model.VersionWrapper;
 import com.infinities.nova.versions.model.VersionsWrapper;
 

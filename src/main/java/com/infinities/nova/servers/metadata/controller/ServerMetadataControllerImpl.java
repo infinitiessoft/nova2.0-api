@@ -26,9 +26,9 @@ import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestExcepti
 import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
-import com.infinities.nova.db.model.Instance;
 import com.infinities.nova.exception.InstanceNotFoundException;
 import com.infinities.nova.servers.api.ComputeApi;
+import com.infinities.nova.servers.model.Server;
 
 public class ServerMetadataControllerImpl implements ServerMetadataController {
 
@@ -50,7 +50,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 
 	private Map<String, String> getMetadata(OpenstackRequestContext context, String serverId) throws Exception {
 		try {
-			Instance server = computeApi.get(context, serverId, null);
+			Server server = computeApi.get(context, serverId, null);
 			Map<String, String> meta = computeApi.getInstanceMetadata(context, server);
 
 			Map<String, String> metaDict = new HashMap<String, String>();
@@ -84,7 +84,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 	// delete = false
 	private Map<String, String> updateInstanceMetadata(OpenstackRequestContext context, String serverId,
 			Map<String, String> metadata, boolean delete) throws Exception {
-		Instance server = null;
+		Server server = null;
 		server = computeApi.get(context, serverId, null);
 		return computeApi.updateInstanceMetadata(context, server, metadata, delete);
 	}
@@ -154,7 +154,7 @@ public class ServerMetadataControllerImpl implements ServerMetadataController {
 			throw new HTTPNotFoundException(msg);
 		}
 
-		Instance server = computeApi.get(context, serverId, null);
+		Server server = computeApi.get(context, serverId, null);
 		computeApi.deleteInstanceMetadata(context, server, key);
 	}
 

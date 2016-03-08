@@ -32,10 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.ProjectUserQuota;
-import com.infinities.nova.db.model.Quota;
-import com.infinities.nova.db.model.QuotaClass;
-import com.infinities.nova.response.model.QuotaSet;
+import com.infinities.nova.quota.model.ProjectUserQuota;
+import com.infinities.nova.quota.model.Quota;
+import com.infinities.nova.quota.model.QuotaClass;
+import com.infinities.nova.quota.model.QuotaSet;
+import com.infinities.nova.quota.model.QuotaUsageSet;
 
 public class QuotaEngine {
 

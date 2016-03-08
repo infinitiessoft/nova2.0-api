@@ -21,60 +21,59 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.Instance;
-import com.infinities.nova.response.model.ServerForCreate;
 import com.infinities.nova.servers.controller.ServersFilter;
+import com.infinities.nova.servers.model.Server;
+import com.infinities.nova.servers.model.ServerForCreate;
 
 public interface ComputeApi {
 
 	// expectedAttrs=null
-	List<Instance> getAll(OpenstackRequestContext context, ServersFilter searchOpts, String sortKey, String sortDir,
+	List<Server> getAll(OpenstackRequestContext context, ServersFilter searchOpts, String sortKey, String sortDir,
 			Integer limit, String marker, List<String> expectedAttrs) throws Exception;
 
 	// expectedAttrs=null
-	Instance get(OpenstackRequestContext context, String serverId, List<String> expectedAttrs) throws Exception;
+	Server get(OpenstackRequestContext context, String serverId, List<String> expectedAttrs) throws Exception;
 
-	void delete(OpenstackRequestContext context, Instance instance) throws Exception;
+	void delete(OpenstackRequestContext context, Server instance) throws Exception;
 
-	Instance update(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
-			throws Exception;
+	Server update(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6) throws Exception;
 
-	Map<String, String> getInstanceMetadata(OpenstackRequestContext context, Instance server) throws Exception;
+	Map<String, String> getInstanceMetadata(OpenstackRequestContext context, Server server) throws Exception;
 
-	Map<String, String> updateInstanceMetadata(OpenstackRequestContext context, Instance server,
-			Map<String, String> metadata, boolean delete) throws Exception;
+	Map<String, String> updateInstanceMetadata(OpenstackRequestContext context, Server server, Map<String, String> metadata,
+			boolean delete) throws Exception;
 
-	void deleteInstanceMetadata(OpenstackRequestContext context, Instance server, String key) throws Exception;
+	void deleteInstanceMetadata(OpenstackRequestContext context, Server server, String key) throws Exception;
 
-	void resize(OpenstackRequestContext context, Instance instance, String flavorId, String autoDiskConfig) throws Exception;
+	void resize(OpenstackRequestContext context, Server instance, String flavorId, String autoDiskConfig) throws Exception;
 
-	void reboot(OpenstackRequestContext context, Instance instance, String rebootType) throws Exception;
+	void reboot(OpenstackRequestContext context, Server instance, String rebootType) throws Exception;
 
-	void revertResize(OpenstackRequestContext context, Instance instance) throws Exception;
+	void revertResize(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void confirmResize(OpenstackRequestContext context, Instance instance) throws Exception;
+	void confirmResize(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void setAdminPassword(OpenstackRequestContext context, Instance instance, String adminPass) throws Exception;
+	void setAdminPassword(OpenstackRequestContext context, Server instance, String adminPass) throws Exception;
 
-	void rebuild(OpenstackRequestContext context, Instance instance, String imageHref, String password, String accessIpV4,
+	void rebuild(OpenstackRequestContext context, Server instance, String imageHref, String password, String accessIpV4,
 			String accessIpV6, String name, Map<String, String> metadata, String diskConfig) throws Exception;
 
-	void snapshot(OpenstackRequestContext context, Instance instance, String imageName, Map<String, String> metadata)
+	void snapshot(OpenstackRequestContext context, Server instance, String imageName, Map<String, String> metadata)
 			throws Exception;
 
-	void pause(OpenstackRequestContext context, Instance instance) throws Exception;
+	void pause(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void unpause(OpenstackRequestContext context, Instance instance) throws Exception;
+	void unpause(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void suspend(OpenstackRequestContext context, Instance instance) throws Exception;
+	void suspend(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void resume(OpenstackRequestContext context, Instance instance) throws Exception;
+	void resume(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void start(OpenstackRequestContext context, Instance instance) throws Exception;
+	void start(OpenstackRequestContext context, Server instance) throws Exception;
 
-	void stop(OpenstackRequestContext context, Instance instance) throws Exception;
+	void stop(OpenstackRequestContext context, Server instance) throws Exception;
 
-	Entry<List<Instance>, UUID> create(OpenstackRequestContext context, String flavorId, String imageHref, String kernelId,
+	Entry<List<Server>, UUID> create(OpenstackRequestContext context, String flavorId, String imageHref, String kernelId,
 			String ramDiskId, Integer minCount, Integer maxCount, String displayName, String displayDescription,
 			String keyName, String keyData, List<String> securityGroup, String availabilityZone, String userData,
 			Map<String, String> metadata, List<Entry<String, String>> injectedFiles, String adminPassword,

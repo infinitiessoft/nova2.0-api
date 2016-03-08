@@ -19,8 +19,6 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.infinities.nova.response.model.Image;
-
 @XmlRootElement
 public class ImageTemplate implements Serializable {
 

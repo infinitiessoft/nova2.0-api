@@ -18,16 +18,16 @@ package com.infinities.nova.flavors.api;
 import java.util.List;
 
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
-import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.flavors.controller.FlavorsFilter;
+import com.infinities.nova.flavors.model.Flavor;
 
 public interface FlavorsApi {
 
-	List<InstanceType> getAllFlavorsSortedList(OpenstackRequestContext context, FlavorsFilter filter, String sortKey,
+	List<Flavor> getAllFlavorsSortedList(OpenstackRequestContext context, FlavorsFilter filter, String sortKey,
 			String sortDir, Integer limit, String marker) throws Exception;
 
 	// context=null,readDeleted = yes
-	InstanceType getFlavorByFlavorId(String flavorid, OpenstackRequestContext context, String readDeleted) throws Exception;
+	Flavor getFlavorByFlavorId(String flavorid, OpenstackRequestContext context, String readDeleted) throws Exception;
 
 	// InstanceType getDefaultFlavor() throws Exception;
 }

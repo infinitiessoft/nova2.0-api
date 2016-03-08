@@ -31,7 +31,7 @@ import com.infinities.api.openstack.commons.context.Context;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.nova.AbstractPaginableController.PaginationParams;
 import com.infinities.nova.images.controller.ImagesFilter;
-import com.infinities.nova.response.model.Image;
+import com.infinities.nova.images.model.Image;
 import com.infinities.skyport.async.AsyncResult;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedMachineImageSupport;

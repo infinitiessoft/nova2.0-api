@@ -30,8 +30,8 @@ import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
 import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
 import com.infinities.api.openstack.commons.exception.http.HTTPNotFoundException;
 import com.infinities.nova.AbstractPaginableController;
-import com.infinities.nova.db.model.InstanceType;
 import com.infinities.nova.flavors.api.FlavorsApi;
+import com.infinities.nova.flavors.model.Flavor;
 import com.infinities.nova.flavors.model.FlavorTemplate;
 import com.infinities.nova.flavors.model.FlavorsTemplate;
 import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
@@ -55,13 +55,13 @@ public class FlavorsControllerImpl extends AbstractPaginableController implement
 
 	@Override
 	public MinimalFlavorsTemplate index(ContainerRequestContext requestContext) throws Exception {
-		List<InstanceType> limitedFlavors = getFlavors(requestContext);
+		List<Flavor> limitedFlavors = getFlavors(requestContext);
 		return builder.index(requestContext, limitedFlavors);
 	}
 
 	@Override
 	public FlavorsTemplate detail(ContainerRequestContext requestContext) throws Exception {
-		List<InstanceType> limitedFlavors = getFlavors(requestContext);
+		List<Flavor> limitedFlavors = getFlavors(requestContext);
 		// requestContext.cache_db_flavors(limitedFlavors);
 		return builder.detail(requestContext, limitedFlavors);
 	}
@@ -70,7 +70,7 @@ public class FlavorsControllerImpl extends AbstractPaginableController implement
 	public FlavorTemplate show(String flavorid, ContainerRequestContext requestContext) throws Exception {
 		try {
 			OpenstackRequestContext context = (OpenstackRequestContext) requestContext.getProperty("nova.context");
-			InstanceType flavor = flavorsApi.getFlavorByFlavorId(flavorid, context, "yes");
+			Flavor flavor = flavorsApi.getFlavorByFlavorId(flavorid, context, "yes");
 			// requestContext.cache_db_flavor(flavor);
 			return builder.show(requestContext, flavor);
 		} catch (Exception e) {
@@ -78,7 +78,7 @@ public class FlavorsControllerImpl extends AbstractPaginableController implement
 		}
 	}
 
-	private List<InstanceType> getFlavors(ContainerRequestContext requestContext) {
+	private List<Flavor> getFlavors(ContainerRequestContext requestContext) {
 		FlavorsFilter filter = new FlavorsFilter();
 		UriInfo uriInfo = requestContext.getUriInfo();
 		String sortKey = uriInfo.getQueryParameters().getFirst("sort_key");
@@ -129,7 +129,7 @@ public class FlavorsControllerImpl extends AbstractPaginableController implement
 		}
 
 		try {
-			List<InstanceType> limitedFlavors =
+			List<Flavor> limitedFlavors =
 					flavorsApi.getAllFlavorsSortedList(context, filter, sortKey, sortDir, limit, marker);
 			return limitedFlavors;
 		} catch (Exception e) {
