@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.exception.http.HTTPMethodNotAllowException;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.common.model.MetaItemTemplate;
@@ -45,6 +46,7 @@ import com.infinities.nova.images.model.MinimalImagesTemplate;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class ImagesResource {
 
 	private final ImagesController controller;

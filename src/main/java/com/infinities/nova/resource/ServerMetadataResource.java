@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.common.model.MetaItemTemplate;
 import com.infinities.nova.common.model.MetadataTemplate;
@@ -41,6 +42,7 @@ import com.infinities.nova.servers.metadata.controller.ServerMetadataController;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class ServerMetadataResource {
 
 	private final ServerMetadataController controller;

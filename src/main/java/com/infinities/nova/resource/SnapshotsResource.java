@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.snapshots.controller.SnapshotsController;
 import com.infinities.nova.snapshots.model.SnapshotForCreateTemplate;
@@ -45,6 +46,7 @@ import com.infinities.nova.snapshots.model.Snapshots;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class SnapshotsResource {
 
 	private SnapshotsController controller;

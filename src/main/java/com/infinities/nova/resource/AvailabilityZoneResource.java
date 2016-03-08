@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.availablityzone.controller.AvailabilityZoneController;
 import com.infinities.nova.availablityzone.model.AvailabilityZoneTemplate;
@@ -39,6 +40,7 @@ import com.infinities.nova.availablityzone.model.AvailabilityZoneTemplate;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class AvailabilityZoneResource {
 
 	private final AvailabilityZoneController controller;

@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.response.model.Extension;
 import com.infinities.nova.response.model.Extensions;
@@ -38,6 +39,7 @@ import com.infinities.skyport.util.FormatUtil;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class ExtensionsResource {
 
 	private final static Extensions extensions = new Extensions();

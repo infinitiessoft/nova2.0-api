@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.flavors.controller.FlavorsController;
 import com.infinities.nova.flavors.model.FlavorTemplate;
@@ -37,6 +38,7 @@ import com.infinities.nova.flavors.model.MinimalFlavorsTemplate;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class FlavorsResource {
 
 	private final FlavorsController controller;

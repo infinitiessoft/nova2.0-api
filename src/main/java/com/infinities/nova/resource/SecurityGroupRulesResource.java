@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.securitygroups.rules.controller.SecurityGroupRulesController;
 import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleForCreateTemplate;
@@ -39,6 +40,7 @@ import com.infinities.nova.securitygroups.rules.model.SecurityGroupRuleTemplate;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class SecurityGroupRulesResource {
 
 	private final SecurityGroupRulesController controller;

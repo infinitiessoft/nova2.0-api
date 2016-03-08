@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.servers.interfaces.controller.InterfaceAttachmentsController;
 import com.infinities.nova.servers.interfaces.model.InterfaceAttachmentForCreateTemplate;
@@ -45,6 +46,7 @@ import com.infinities.nova.servers.interfaces.model.InterfaceAttachments;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class InterfaceAttachmentsResource {
 
 	private final InterfaceAttachmentsController controller;

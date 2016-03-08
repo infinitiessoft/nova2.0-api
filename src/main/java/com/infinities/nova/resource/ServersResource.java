@@ -44,6 +44,7 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.exception.http.HTTPBadRequestException;
 import com.infinities.api.openstack.commons.exception.http.HTTPNotImplementedException;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
@@ -70,6 +71,7 @@ import com.infinities.nova.servers.model.ServersTemplate;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class ServersResource {
 
 	private final ServersController controller;

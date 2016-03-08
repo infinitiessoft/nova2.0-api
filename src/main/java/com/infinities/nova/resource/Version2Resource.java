@@ -27,11 +27,13 @@ import javax.ws.rs.core.UriInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.nova.versions.v2.api.Version2Api;
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@OpenstackContext
 public class Version2Resource {
 
 	private Version2Api versionApi;

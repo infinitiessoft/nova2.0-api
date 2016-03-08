@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.response.model.Server.Addresses;
 import com.infinities.nova.response.model.Server.Addresses.Address;
@@ -39,6 +40,7 @@ import com.infinities.nova.servers.ips.controller.ServerIpsController;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class ServerIpsResource {
 
 	private final ServerIpsController controller;

@@ -29,6 +29,7 @@ import javax.ws.rs.core.UriInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.nova.versions.api.VersionsApi;
 
 // [composite:osapi_compute]
@@ -53,6 +54,7 @@ public class NovaResource {
 
 	// /v2: openstack_compute_api_v2
 	@Path("/v2")
+	@OpenstackContext
 	public Class<Version2Resource> getApiV2Resource() {
 		return Version2Resource.class;
 	}

@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.infinities.api.openstack.commons.dynamicfeature.OpenstackContext;
 import com.infinities.api.openstack.commons.namebinding.CheckProjectId;
 import com.infinities.nova.keypairs.controller.KeyPairsController;
 import com.infinities.nova.keypairs.model.KeyPairTemplate;
@@ -45,6 +46,7 @@ import com.infinities.nova.keypairs.model.MinimalKeyPairsTemplate;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @CheckProjectId
+@OpenstackContext
 public class KeyPairsResource {
 
 	private final KeyPairsController controller;
