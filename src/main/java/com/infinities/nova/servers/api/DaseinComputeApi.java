@@ -55,6 +55,7 @@ import com.infinities.nova.servers.controller.ServersFilter;
 import com.infinities.nova.servers.model.Server;
 import com.infinities.nova.servers.model.ServerForCreate;
 import com.infinities.skyport.async.AsyncResult;
+import com.infinities.skyport.async.service.AsyncDataCenterServices;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedMachineImageSupport;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
@@ -159,7 +160,7 @@ public class DaseinComputeApi implements ComputeApi {
 		List<Server> instances = new ArrayList<Server>();
 		while (iterator.hasNext()) {
 			NovaStyleVirtualMachine vm = iterator.next();
-			instances.add(ServerUtils.toServer(vm));
+			instances.add(ServerUtils.toServer(vm, getDataCenterServices(context.getProjectId())));
 		}
 
 		return instances;
@@ -189,7 +190,7 @@ public class DaseinComputeApi implements ComputeApi {
 		if (vm == null) {
 			throw new InstanceNotFoundException(null, serverId);
 		}
-		server = ServerUtils.toServer(vm);
+		server = ServerUtils.toServer(vm, getDataCenterServices(context.getProjectId()));
 		// checkPolicy(context, "get", instance, null);
 		return server;
 	}
@@ -492,6 +493,13 @@ public class DaseinComputeApi implements ComputeApi {
 		}
 		throw new UnsupportedOperationException("service not supported for " + id);
 
+	}
+
+	private AsyncDataCenterServices getDataCenterServices(String id) throws ConcurrentException {
+		CachedServiceProvider provider = configurationHome.findById(id);
+
+		Preconditions.checkArgument(provider != null, "invalid project id:" + id);
+		return provider.getDataCenterServices();
 	}
 
 	@Override

@@ -135,6 +135,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 			projectId = "";
 		}
 		server.setTenantId(projectId);
+		server.setAvailabilityZone(instance.getAvailabilityZone());
 		String userId = instance.getUserId();
 		if (Strings.isNullOrEmpty(userId)) {
 			userId = "";

@@ -39,6 +39,7 @@ import com.infinities.nova.images.model.Image;
 import com.infinities.nova.servers.model.Server;
 import com.infinities.nova.servers.model.Server.Flavor;
 import com.infinities.nova.servers.model.ServerForCreate;
+import com.infinities.skyport.async.service.AsyncDataCenterServices;
 import com.infinities.skyport.async.service.network.AsyncFirewallSupport;
 import com.infinities.skyport.cache.CachedServiceProvider;
 import com.infinities.skyport.cache.service.compute.CachedVirtualMachineSupport;
@@ -136,7 +137,8 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	public Server updateInstance(OpenstackRequestContext context, String serverId, String name, String ipv4, String ipv6)
 			throws Exception {
 		getSupport(context.getProjectId()).updateVirtualMachine(serverId, VMUpdateOptions.getInstance(name)).get();
-		return ServerUtils.toServer(getSupport(context.getProjectId()).getNovaStyleVirtualMachine(serverId).get());
+		return ServerUtils.toServer(getSupport(context.getProjectId()).getNovaStyleVirtualMachine(serverId).get(),
+				getDataCenterServices(context.getProjectId()));
 	}
 
 	@Override
@@ -198,6 +200,13 @@ public class DaseinComputeTaskApi implements ComputeTaskApi {
 	public void resizeInstance(OpenstackRequestContext context, Server instance, String newInstanceTypeId,
 			boolean cleanShutdown) throws Exception {
 		getSupport(context.getProjectId()).alterVirtualMachineProduct(instance.getId(), newInstanceTypeId).get();
+	}
+
+	private AsyncDataCenterServices getDataCenterServices(String id) throws ConcurrentException {
+		CachedServiceProvider provider = configurationHome.findById(id);
+
+		Preconditions.checkArgument(provider != null, "invalid project id:" + id);
+		return provider.getDataCenterServices();
 	}
 
 }

@@ -31,6 +31,7 @@ import com.google.common.base.Strings;
 import com.infinities.nova.servers.model.Server;
 import com.infinities.nova.servers.model.Server.Addresses;
 import com.infinities.nova.servers.model.Server.Addresses.Address;
+import com.infinities.skyport.async.service.AsyncDataCenterServices;
 import com.infinities.skyport.compute.entity.NovaStyleVirtualMachine;
 import com.infinities.skyport.network.SkyportRawAddress;
 
@@ -102,7 +103,7 @@ public class ServerUtils {
 	 * @param vm
 	 * @return
 	 */
-	public static Server toServer(NovaStyleVirtualMachine vm) {
+	public static Server toServer(NovaStyleVirtualMachine vm, AsyncDataCenterServices services) {
 		String ipV4 = null;
 		String ipV6 = null;
 		Server server = new Server();
@@ -124,6 +125,18 @@ public class ServerUtils {
 		if (Strings.isNullOrEmpty(hostId)) {
 			hostId = "";
 		}
+		if (!Strings.isNullOrEmpty(vm.getProviderDataCenterId())) {
+			try {
+				String dataCenterId = vm.getProviderDataCenterId();
+				com.infinities.skyport.async.AsyncResult<org.dasein.cloud.dc.DataCenter> result =
+						services.getDataCenter(dataCenterId);
+				org.dasein.cloud.dc.DataCenter dc = result.get();
+				server.setAvailabilityZone(dc.getName());
+			} catch (Exception e) {
+				logger.debug("get datacenter failed.", e);
+			}
+		}
+
 		server.setHostId(hostId);
 		com.infinities.nova.servers.model.Server.Image image = new com.infinities.nova.servers.model.Server.Image();
 		image.setId(vm.getProviderMachineImageId());
