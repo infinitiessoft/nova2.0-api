@@ -120,6 +120,7 @@ public class ServerUtils {
 		server.setUserId("");
 		server.setMetadata(vm.getTags());
 		String hostId = vm.getTags().get("host");
+		logger.debug("hostId:{}", hostId);
 		if (Strings.isNullOrEmpty(hostId)) {
 			hostId = "";
 		}

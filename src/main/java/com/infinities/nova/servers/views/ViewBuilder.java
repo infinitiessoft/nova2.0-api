@@ -17,9 +17,7 @@ package com.infinities.nova.servers.views;
 
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,9 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.container.ContainerRequestContext;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
 
 import com.google.common.base.Strings;
 import com.infinities.api.openstack.commons.context.OpenstackRequestContext;
@@ -146,7 +141,7 @@ public class ViewBuilder extends AbstractViewBuilder {
 		}
 		server.setUserId(instance.getUserId());
 		server.setMetadata(instance.getMetadata());
-		String hostId = getHostId(instance);
+		String hostId = instance.getHostId();
 		if (Strings.isNullOrEmpty(hostId)) {
 			hostId = "";
 		}
@@ -249,18 +244,19 @@ public class ViewBuilder extends AbstractViewBuilder {
 		return image;
 	}
 
-	private String getHostId(Server instance) throws NoSuchAlgorithmException {
-		String host = instance.getHost();
-		String project = instance.getTenantId();
-		if (!Strings.isNullOrEmpty(host)) {
-			Security.addProvider(new BouncyCastleProvider());
-			MessageDigest md = MessageDigest.getInstance("SHA-224");
-			String word = project + host;
-			byte[] digest = md.digest(word.getBytes());
-			return new String(Hex.encode(digest));
-		}
-		return null;
-	}
+	// private String getHostId(Server instance) throws NoSuchAlgorithmException
+	// {
+	// String host = instance.getHost();
+	// String project = instance.getTenantId();
+	// if (!Strings.isNullOrEmpty(host)) {
+	// Security.addProvider(new BouncyCastleProvider());
+	// MessageDigest md = MessageDigest.getInstance("SHA-224");
+	// String word = project + host;
+	// byte[] digest = md.digest(word.getBytes());
+	// return new String(Hex.encode(digest));
+	// }
+	// return null;
+	// }
 
 	private List<Link> getCollectionLinks(ContainerRequestContext requestContext, List<Server> instances,
 			String collectionName) throws URISyntaxException {
